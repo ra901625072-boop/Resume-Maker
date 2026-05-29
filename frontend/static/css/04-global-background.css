@@ -51,6 +51,14 @@
     backdrop-filter: blur(var(--global-bg-blur-mobile));
     -webkit-backdrop-filter: blur(var(--global-bg-blur-mobile));
   }
+  
+  html[data-theme="light"] .bg-layer-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(248, 250, 252, 0.88),
+      rgba(255, 255, 255, 0.96)
+    );
+  }
 }
 
 /* ===== GRADIENT ACCENT LAYER ===== */

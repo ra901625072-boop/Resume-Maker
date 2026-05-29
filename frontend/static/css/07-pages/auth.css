@@ -53,11 +53,11 @@
 }
 
 html[data-theme="light"] .auth-orb-1 {
-  background: radial-gradient(circle, rgba(30, 58, 138, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, transparent 70%);
 }
 
 html[data-theme="light"] .auth-orb-2 {
-  background: radial-gradient(circle, rgba(5, 150, 105, 0.06) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
 }
 
 /* ===== MAIN LAYOUT ===== */
@@ -98,9 +98,9 @@ html[data-theme="light"] .auth-orb-2 {
 }
 
 html[data-theme="light"] .auth-card {
-  background: rgba(255, 255, 255, 0.90);
-  border-color: rgba(15, 23, 42, 0.08);
-  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.10), 0 2px 8px rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.70);
+  border-color: rgba(255, 255, 255, 0.50);
+  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.08), 0 4px 12px rgba(79, 70, 229, 0.04);
 }
 
 /* ===== AUTH BRAND HEADER ===== */
