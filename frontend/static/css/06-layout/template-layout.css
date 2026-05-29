@@ -1,0 +1,589 @@
+/* ==========================================================
+   WISAXIS — TEMPLATE SHELL LAYOUT
+   Body, template scroll sidebar, resume container, action bar.
+   Consolidates:
+     - base/template-background-desktop.css (body, sidebar, actions)
+     - base/template-background-mobile.css  (mobile layout)
+   Mobile-first approach with desktop overrides.
+   ========================================================== */
+
+/* ===== GLOBAL LINKS IN TEMPLATE SHELL ===== */
+.template-shell a {
+  color: inherit;
+}
+
+/* Global color fix to prevent body.template-shell (#fff) from cascading into the white resume pages */
+.page, .resume-page, .container, .resume {
+  color: var(--text-color, #222);
+}
+
+.content, .right {
+  color: var(--text-color, #222);
+}
+
+/* ===== TEMPLATE SCROLL SIDEBAR ===== */
+
+/* Mobile: horizontal scroll strip */
+/* Spacing system:
+   ┌─────────────────────┐  ← 0
+   │ Navbar (76px)       │
+   ├─────────────────────┤  ← 76px
+   │ gap (--g = 16px)    │
+   ├─────────────────────┤  ← 92px
+   │ Scroll Strip (130px)│
+   ├─────────────────────┤  ← 222px
+   │ gap (--g = 16px)    │
+   ├─────────────────────┤  ← 238px
+   │ Resume Card         │  fills remaining
+   ├─────────────────────┤
+   │ gap (--g = 16px)    │
+   ├─────────────────────┤
+   │ Download (56px)     │
+   ├─────────────────────┤
+   │ safe-area + 16px    │
+   └─────────────────────┘
+*/
+.template-scroll {
+  position: fixed;
+  /* gap below navbar */
+  top: calc(var(--mobile-navbar-height, 76px) + var(--g, 16px));
+  left: 0;
+  right: 0;
+  height: var(--mobile-template-height, 130px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  z-index: var(--z-template-scroll, 500);
+  background: linear-gradient(
+    180deg,
+    rgba(12, 16, 26, 0.80),
+    rgba(12, 16, 26, 0.10)
+  );
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+/* Mobile template track: animated horizontal scroll */
+.template-track {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: max-content;
+  padding: 0 18px;
+  will-change: transform;
+  animation: templateLoop 28s linear infinite;
+  animation-play-state: running;
+  transform: translate3d(0, 0, 0);
+}
+
+.template-track:hover,
+.template-track:active {
+  animation-play-state: paused;
+}
+
+@keyframes templateLoop {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* ===== BODY — Mobile ===== */
+@media screen and (max-width: 500px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    background: var(--mobile-bg, #09090f);
+  }
+
+  body.template-shell {
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    overflow: hidden;
+    padding-left:   max(0px, env(safe-area-inset-left));
+    padding-right:  max(0px, env(safe-area-inset-right));
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
+}
+
+/* ===== RESUME CONTAINER — Mobile ===== */
+@media screen and (max-width: 500px) {
+  .resume-container {
+    position: fixed;
+    /* top = navbar + gap + scroll-strip + gap */
+    top: calc(
+      var(--mobile-navbar-height, 76px)
+      + var(--g, 16px)
+      + var(--mobile-template-height, 130px)
+      + var(--g, 16px)
+    );
+    left: 0;
+    right: 0;
+    /* bottom = safe-area-pad + gap + download-btn */
+    bottom: calc(
+      max(16px, env(safe-area-inset-bottom))
+      + var(--g, 16px)
+      + var(--mobile-download-height, 56px)
+      + var(--g, 16px)
+    );
+    z-index: var(--z-resume-container, 200);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    touch-action: pan-y;
+  }
+
+  .resume-container::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ===== RESUME WRAPPER — Mobile ===== */
+@media screen and (max-width: 500px) {
+  /* The wrapper fills the full viewport slot and centers the card */
+  .resume-preview-wrapper,
+  .resume:not([data-resume-root]) {
+    flex: none;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  /* Templates 1,2,5,6,7 use .page */
+  /* Template 3 uses .wrap */
+  /* Template 4 uses .container */
+  /* Template 8 uses main.resume */
+  .page,
+  .resume-page,
+  .wrap,
+  [data-resume-root].resume {
+    /* A4 proportion: 210mm × 297mm = 1:1.414 */
+    width: min(88vw, 360px) !important;
+    max-width: min(88vw, 360px) !important;
+    aspect-ratio: 1 / 1.414 !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: unset !important;
+    overflow: hidden !important;
+    border-radius: 16px !important;
+    background: #fff !important;
+    box-shadow:
+      0 20px 50px rgba(0, 0, 0, 0.48),
+      0 4px 12px rgba(0, 0, 0, 0.22) !important;
+    animation: pageEnter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    transform-origin: center center;
+    /* Centering safety net */
+    margin: auto !important;
+    flex-shrink: 0 !important;
+    /* Do NOT set flex-direction or internal layout here */
+  }
+
+  /* Template 4 uses .container instead of .page */
+  .container {
+    width: min(88vw, 360px) !important;
+    max-width: min(88vw, 360px) !important;
+    aspect-ratio: 1 / 1.414 !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: unset !important;
+    overflow: hidden !important;
+    border-radius: 16px !important;
+    box-shadow:
+      0 20px 50px rgba(0, 0, 0, 0.48),
+      0 4px 12px rgba(0, 0, 0, 0.22) !important;
+    animation: pageEnter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    transform-origin: center center;
+    margin: auto !important;
+    flex-shrink: 0 !important;
+    padding: 12px !important;
+  }
+
+  @keyframes pageEnter {
+    from {
+      opacity: 0;
+      transform: translateY(14px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* ===== RESUME ACTIONS (Download Bar) — Mobile ===== */
+@media screen and (max-width: 500px) {
+  .resume-actions {
+    position: fixed;
+    left: var(--g, 16px);
+    right: var(--g, 16px);
+    /* sits at safe-area + gap from bottom edge */
+    bottom: calc(max(16px, env(safe-area-inset-bottom)) + var(--g, 16px));
+    z-index: var(--z-actions, 1100);
+    transition: bottom 0.28s ease;
+  }
+
+  body.keyboard-active .resume-actions {
+    bottom: calc(500px + max(16px, env(safe-area-inset-bottom)) + var(--g, 16px));
+  }
+}
+
+/* ===== BODY — Desktop ===== */
+@media (min-width: 501px) {
+  body.template-shell {
+    overflow-x: hidden;
+    padding: 0 32px 40px;
+  }
+}
+
+/* ===== TEMPLATE SCROLL — Desktop sidebar ===== */
+@media (min-width: 501px) {
+  .template-scroll {
+    position: fixed;
+    top: 108px;
+    left: 24px;
+    right: auto;
+    width: var(--desktop-sidebar-width, 148px);
+    height: calc(100vh - 132px);
+    overflow-y: hidden;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    mask-image: none;
+    -webkit-mask-image: none;
+    padding-right: 6px;
+    scrollbar-width: none;
+  }
+
+  .template-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .template-track {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    padding: 0;
+    will-change: transform;
+    animation: templateLoopDesktop 35s linear infinite;
+  }
+
+  .template-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes templateLoopDesktop {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(0, -50%, 0); }
+  }
+}
+
+/* ===== RESUME CONTAINER — Desktop ===== */
+@media (min-width: 501px) {
+  .resume-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: var(--desktop-page-top, 118px);
+    padding-left: calc(var(--desktop-sidebar-width, 148px) + 42px);
+  }
+}
+
+/* ===== RESUME ACTIONS — Desktop ===== */
+@media (min-width: 501px) {
+  .resume-actions {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: var(--z-actions, 1100);
+  }
+
+  .nav-icons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .nav-icons a,
+  .nav-icons .download-btn {
+    border: none;
+    color: #fff;
+    background: rgba(15, 23, 42, 0.74);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
+  }
+
+  .nav-icons a {
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-decoration: none;
+  }
+}
+
+/* ===== TEMPLATE PREVIEW THUMBNAILS (Background images) ===== */
+.thumb-template-1 { background-image: url("/static/images/templateA.webp"); }
+.thumb-template-2 { background-image: url("/static/images/templateB.webp"); }
+.thumb-template-3 { background-image: url("/static/images/templateC.webp"); }
+.thumb-template-4 { background-image: url("/static/images/templateD.webp"); }
+.thumb-template-5 { background-image: url("/static/images/templateE.webp"); }
+.thumb-template-6 { background-image: url("/static/images/templateF.webp"); }
+.thumb-template-7 { background-image: url("/static/images/templateG.webp"); }
+.thumb-template-8 { background-image: url("/static/images/templateH.webp"); }
+
+/* ===== PRINT MODE ===== */
+@media print {
+  .app-header,
+  .template-scroll,
+  .resume-actions,
+  .background-layer,
+  .overlay-layer,
+  .gradient-layer,
+  .noise-layer,
+  .particles-layer {
+    display: none !important;
+  }
+
+  body.template-shell {
+    overflow: visible;
+    background: #fff;
+    padding: 0;
+    margin: 0;
+  }
+
+  .resume-container {
+    position: static;
+    display: block;
+    overflow: visible;
+    padding: 0;
+    margin: 0;
+  }
+
+  .resume-preview-wrapper,
+  .resume {
+    flex: none;
+    width: 100%;
+    display: block;
+    padding: 0;
+  }
+
+  .page,
+  .resume-page {
+    width: 210mm;
+    height: 297mm;
+    page-break-after: always;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}
+
+/* ==========================================================
+   THEME TOGGLE BUTTON
+   ========================================================== */
+
+.theme-toggle-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-main, #fff);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.35s ease,
+    box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Sun/moon icon visibility — dark mode shows sun, light mode shows moon */
+.theme-toggle-btn .icon-sun  { display: block; }
+.theme-toggle-btn .icon-moon { display: none;  }
+
+.theme-toggle-btn.is-light .icon-sun  { display: none;  }
+.theme-toggle-btn.is-light .icon-moon { display: block; }
+
+.theme-toggle-btn:hover {
+  background: var(--primary, #6366f1);
+  border-color: var(--primary, #6366f1);
+  color: #fff;
+  transform: rotate(20deg) scale(1.08);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+/* Desktop size */
+@media (min-width: 501px) {
+  .theme-toggle-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+  }
+}
+
+/* ==========================================================
+   LIGHT MODE — TEMPLATE SHELL
+   All shell chrome adapts. Resume card stays white (unchanged).
+   ========================================================== */
+
+/* ── Body ── */
+html[data-theme="light"] body.template-shell {
+  background: #e8ecf4;
+}
+
+/* ── Background overlay layers (lighter, airy) ── */
+html[data-theme="light"] .bg-layer-base {
+  filter: brightness(1.15) saturate(0.8);
+  opacity: 0.35;
+}
+
+html[data-theme="light"] .bg-layer-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(220, 228, 244, 0.82),
+    rgba(200, 212, 236, 0.92)
+  );
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+html[data-theme="light"] .bg-layer-gradient {
+  background:
+    radial-gradient(circle at top left, rgba(99, 102, 241, 0.10), transparent 36%),
+    radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.08), transparent 38%),
+    radial-gradient(circle at center, rgba(16, 185, 129, 0.06), transparent 44%);
+}
+
+html[data-theme="light"] .bg-layer-noise {
+  opacity: 0.03;
+}
+
+html[data-theme="light"] .bg-layer-particles {
+  opacity: 0.12;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(99, 102, 241, .14) 0 2px, transparent 2px),
+    radial-gradient(circle at 84% 26%, rgba(56, 189, 248, .12) 0 1.5px, transparent 1.5px),
+    radial-gradient(circle at 32% 76%, rgba(16, 185, 129, .10) 0 2px, transparent 2px),
+    radial-gradient(circle at 72% 66%, rgba(99, 102, 241, .10) 0 1.5px, transparent 1.5px);
+}
+
+/* ── Template scroll strip ── */
+html[data-theme="light"] .template-scroll {
+  background: linear-gradient(
+    180deg,
+    rgba(220, 228, 244, 0.88),
+    rgba(200, 212, 236, 0.20)
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ── Template thumbnails ── */
+html[data-theme="light"] .template-thumb {
+  border-color: rgba(30, 41, 59, 0.12);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+}
+
+/* ── Resume card shadow (softer in light) ── */
+html[data-theme="light"] .page,
+html[data-theme="light"] .resume-page,
+html[data-theme="light"] .wrap,
+html[data-theme="light"] [data-resume-root].resume,
+html[data-theme="light"] .container {
+  box-shadow:
+    0 8px 32px rgba(15, 23, 42, 0.14),
+    0 2px 8px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* ── Download button ── */
+html[data-theme="light"] .download-btn {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(30, 41, 59, 0.12);
+  color: #1e293b;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.14);
+}
+
+html[data-theme="light"] .download-btn:hover {
+  background: var(--primary, #1e3a8a);
+  border-color: var(--primary, #1e3a8a);
+  color: #fff;
+}
+
+/* ── Download options panel ── */
+html[data-theme="light"] .download-options {
+  background: rgba(255, 255, 255, 0.97);
+  border-color: rgba(30, 41, 59, 0.10);
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.16);
+}
+
+html[data-theme="light"] .download-options .option {
+  color: #1e293b;
+}
+
+html[data-theme="light"] .download-options .option:hover {
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--primary, #1e3a8a);
+}
+
+/* ── Theme toggle button in light mode ── */
+html[data-theme="light"] .theme-toggle-btn {
+  background: rgba(15, 23, 42, 0.06);
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #1e293b;
+}
+
+html[data-theme="light"] .theme-toggle-btn:hover {
+  background: var(--primary, #1e3a8a);
+  border-color: var(--primary, #1e3a8a);
+  color: #fff;
+}
+
+/* ── Mobile scroll strip in light mode ── */
+@media screen and (max-width: 500px) {
+  html[data-theme="light"] body.template-shell {
+    background: #dde4f0;
+  }
+
+  html[data-theme="light"] .bg-layer-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(215, 224, 240, 0.90),
+      rgba(195, 208, 232, 0.96)
+    );
+  }
+}

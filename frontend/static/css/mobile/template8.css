@@ -1,0 +1,295 @@
+/* =========================================
+   TEMPLATE 8 — MOBILE CSS
+   Optimized Full A4 Mobile Preview
+========================================= */
+
+:root {
+  --mobile-radius: 14px;
+
+  /*
+    A4 Ratio
+    210 / 297 = 1 : 1.414
+  */
+  --a4-ratio: 210 / 297;
+}
+
+/* =========================================
+   MOBILE RESET
+========================================= */
+
+/* Body and .resume outer sizing are managed by template-layout.css */
+
+/* Internal layout: single column with beige background */
+[data-resume-root].resume {
+  background: #e9e6e2 !important;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+  gap: 12px;
+  align-items: center;
+}
+
+.header-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.header h1 {
+  font-size: 20px;
+  line-height: 1.1;
+  word-break: break-word;
+}
+
+.header p {
+  margin: 3px 0 6px;
+  font-size: 9px;
+  line-height: 1.3;
+}
+
+/* =========================================
+   CONTACT
+========================================= */
+
+.contact span {
+  font-size: 7px;
+  line-height: 1.4;
+
+  word-break: break-word;
+}
+
+/* =========================================
+   PHOTO
+========================================= */
+
+.header-right img,
+.photo-placeholder {
+  width: 62px;
+  height: 62px;
+
+  min-width: 62px;
+
+  border-width: 2px;
+}
+
+.photo-placeholder {
+  font-size: 16px;
+}
+
+/* =========================================
+   GRID LAYOUT
+========================================= */
+
+.grid {
+  display: grid;
+
+  grid-template-columns: 58% 42%;
+
+  gap: 12px;
+
+  margin-top: 14px;
+}
+
+/* =========================================
+   SECTION
+========================================= */
+
+.section {
+  margin-bottom: 12px;
+}
+
+.section-title {
+  padding: 3px 10px;
+
+  font-size: 7px;
+
+  letter-spacing: 0.6px;
+
+  margin-bottom: 8px;
+
+  border-width: 1px;
+}
+
+/* =========================================
+   ITEMS
+========================================= */
+
+.item {
+  margin-bottom: 10px;
+}
+
+.item h3 {
+  margin: 1px 0 2px;
+
+  font-size: 8px;
+
+  line-height: 1.3;
+}
+
+.item strong {
+  font-size: 7px;
+
+  line-height: 1.3;
+
+  display: block;
+}
+
+.item p {
+  font-size: 7px;
+
+  line-height: 1.45;
+
+  margin-top: 3px;
+
+  word-break: break-word;
+}
+
+/* =========================================
+   DATE
+========================================= */
+
+.date {
+  font-size: 6px;
+  line-height: 1.3;
+}
+
+/* =========================================
+   SUMMARY / GENERAL TEXT
+========================================= */
+
+.section p,
+.section div,
+.section li {
+  font-size: 7px;
+  line-height: 1.45;
+}
+
+/* =========================================
+   SKILLS
+========================================= */
+
+.skill {
+  margin-bottom: 10px;
+}
+
+.skill span {
+  font-size: 7px;
+  line-height: 1.3;
+}
+
+.bar {
+  height: 4px;
+  margin-top: 3px;
+  border-radius: 999px;
+}
+
+/* =========================================
+   STRENGTH CIRCLES
+========================================= */
+
+.circles {
+  gap: 8px;
+}
+
+.circle {
+  width: 42px;
+  height: 42px;
+
+  padding-top: 7px;
+
+  border-width: 1px;
+}
+
+.circle strong {
+  font-size: 9px;
+  line-height: 1;
+}
+
+.circle span {
+  font-size: 5px;
+
+  line-height: 1.2;
+
+  display: block;
+
+  margin-top: 2px;
+}
+
+/* =========================================
+   DOWNLOAD BUTTON
+========================================= */
+
+.btn {
+  right: 14px;
+  bottom: 14px;
+
+  padding: 10px 16px;
+
+  font-size: 13px;
+
+  border-radius: 40px;
+}
+
+/* =========================================
+   EXTRA SMALL DEVICES
+========================================= */
+
+@media screen and (max-width: 380px) {
+
+  body {
+    padding: 8px !important;
+  }
+
+  .resume {
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  .header h1 {
+    font-size: 18px;
+  }
+
+  .header p {
+    font-size: 8px;
+  }
+
+  .header-right img,
+  .photo-placeholder {
+    width: 56px;
+  flex-shrink: 0;
+    height: 56px;
+    min-width: 56px;
+  flex-shrink: 0;
+  }
+
+  .grid {
+    gap: 10px;
+  }
+
+  .circle {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* =========================================
+   LANDSCAPE MODE
+========================================= */
+
+@media screen and (orientation: landscape) {
+
+  body {
+    padding: 14px !important;
+  }
+
+  .resume {
+    max-width: 340px;
+  }
+}

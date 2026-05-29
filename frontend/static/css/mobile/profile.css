@@ -1,0 +1,159 @@
+/* ==========================================================
+   WISAXIS RESUME MAKER - MOBILE RESPONSIVE PROFILE
+   ========================================================== */
+
+
+.history-grid {
+  grid-template-columns: 1fr;
+}
+
+/* Profile page overrides */
+html body .profile-container,
+html body .profile-card {
+  padding: var(--space-4);
+  margin: var(--space-2) auto;
+  border-radius: var(--card-radius);
+}
+
+html body .profile-stat {
+  padding-left: 0;
+  padding-top: var(--space-3);
+  border-left: none;
+  border-top: 1px solid var(--border-subtle);
+  width: 100%;
+}
+
+html body .resume-actions {
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+}
+
+html body .clone-row {
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+html body .clone-row select,
+html body .clone-row .btn-duplicate {
+  width: 100%;
+  min-height: 48px;
+}
+
+
+@media (max-width: 540px) {
+  .profile-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+  .profile-stat {
+    border-left: none;
+    border-top: 1px solid var(--border-medium);
+    padding-left: 0;
+    padding-top: var(--space-3);
+    width: 100%;
+  }
+}
+
+/* ==========================================================
+   JSON Features Mobile Optimizations
+   ========================================================== */
+html body .json-features-container {
+  padding: var(--space-2) var(--space-4) var(--space-6) !important;
+  box-sizing: border-box !important;
+}
+
+html body .page-header {
+  margin-bottom: var(--space-4) !important;
+  box-sizing: border-box !important;
+}
+
+html body .page-title {
+  font-size: 1.75rem !important;
+}
+
+html body .page-subtitle {
+  font-size: 0.85rem !important;
+}
+
+html body .json-utilities {
+  padding: var(--space-5) var(--space-4) !important;
+  margin-top: var(--space-4) !important;
+  border-radius: 16px !important;
+  box-sizing: border-box !important;
+}
+
+html body .json-utilities h2 {
+  font-size: 1.4rem !important;
+  margin-bottom: var(--space-2) !important;
+}
+
+html body .json-utilities p {
+  margin-bottom: var(--space-4) !important;
+  font-size: var(--text-sm) !important;
+}
+
+html body .upload-zone {
+  padding: var(--space-6) var(--space-4) !important;
+  margin-bottom: var(--space-5) !important;
+  gap: var(--space-3) !important;
+  border-radius: 14px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+html body .upload-zone svg {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+html body .upload-text {
+  font-size: var(--text-sm) !important;
+  text-align: center !important;
+}
+
+html body .upload-hint {
+  font-size: var(--text-xs) !important;
+  text-align: center !important;
+}
+
+html body .process-btn {
+  width: 100% !important;
+  min-width: unset !important;
+  padding: var(--space-3) var(--space-4) !important;
+  font-size: var(--text-sm) !important;
+  border-radius: 12px !important;
+  box-sizing: border-box !important;
+}
+
+html body .schema-card {
+  padding: var(--space-4) !important;
+  margin-top: var(--space-4) !important;
+  border-radius: 16px !important;
+  box-sizing: border-box !important;
+}
+
+html body .schema-header {
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: var(--space-2) !important;
+  padding-bottom: var(--space-2) !important;
+  box-sizing: border-box !important;
+}
+
+html body .schema-title {
+  font-size: var(--text-sm) !important;
+}
+
+html body .schema-badge {
+  font-size: 10px !important;
+  padding: 2px 8px !important;
+}
+
+html body .code-block {
+  padding: var(--space-3) !important;
+  font-size: 0.75rem !important;
+  border-radius: 10px !important;
+  box-sizing: border-box !important;
+}

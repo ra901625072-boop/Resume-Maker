@@ -1,0 +1,397 @@
+/* ===============================
+   Root Variables
+=============================== */
+:root {
+  --banner: #e6ebdf;
+  --accent: #7b5a2b;
+  --muted: #666;
+  --gap: 28px;
+  --sidebar-width: 280px;
+  --page-w: 210mm;
+  --page-h: 297mm;
+  --padding: 36px;
+  --thumb-width: 120px;
+  --thumb-height: 120px;
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+}
+
+/* ===============================
+   Global Reset
+=============================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+/* ===============================
+   Body
+=============================== */
+body {
+  font-family: "Open Sans", Arial, sans-serif;
+  color: #222;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  min-height: 100vh;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Background Overlay for Depth */
+
+/* ===============================
+   Template Thumbnails (fixed)
+=============================== */
+:root {
+  --thumb-width: 110px;
+  --thumb-height: 130px;
+  --gap: 14px;
+}
+
+/* Container */
+
+/* Track */
+
+/* Thumbnails */
+
+
+/* Images */
+
+
+
+
+
+
+
+
+/* ===============================
+   Resume Wrapper (A4)
+=============================== */
+.wrap {
+  width: var(--page-w);
+  min-height: var(--page-h);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  /* ðŸ”¥ REQUIRED FOR MULTI-PAGE */
+}
+
+
+/* ===============================
+   Banner
+=============================== */
+.banner {
+  background: var(--banner);
+  padding: 34px var(--padding);
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.name-block {
+  flex: 1;
+  text-align: center;
+}
+
+.name {
+  text-transform: uppercase;
+  white-space: pre-line;
+  font-family: "Playfair Display", serif;
+  font-size: 40px;
+  letter-spacing: 1px;
+  color: #2f3f34;
+}
+
+.title {
+  margin-top: 6px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+.photo,
+.placeholder-photo {
+  width: 130px;
+  height: 130px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: 3.5px solid rgba(255, 255, 255, 0.45);
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder-photo {
+  background: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ===============================
+   Content Layout
+=============================== */
+.content {
+  display: flex;
+  gap: var(--gap);
+  padding: 26px var(--padding);
+  flex: 1;
+}
+
+.left {
+  width: var(--sidebar-width);
+  /* border-right: 3px solid #efe6da; */
+  padding-right: 22px;
+}
+
+.right {
+  flex: 1;
+  padding-left: 24px;
+}
+
+/* ===============================
+   Sections
+=============================== */
+.section {
+  margin-bottom: 22px;
+}
+
+.sec-title {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 1px;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+/* ===============================
+   Text Blocks
+=============================== */
+.contact p,
+.skill-list li,
+.lang-list li {
+  font-size: 13px;
+  color: #333;
+  margin: 9px 0;
+}
+
+.edu-item,
+.exp-item {
+  font-size: 13px;
+  color: #333;
+  margin: 6px 0;
+}
+
+.edu-item .school {
+  font-weight: 600;
+}
+
+.skill-list,
+.lang-list {
+  list-style: none;
+}
+
+/* ===============================
+   Experience
+=============================== */
+.exp-item {
+  margin-bottom: 18px;
+}
+
+.exp-title {
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.exp-company {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.exp-body {
+  line-height: 1.5;
+}
+
+/* ===============================
+   Summary
+=============================== */
+.summary {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+/* ===============================
+   Download Button
+=============================== */
+/* ===============================
+   Download Button
+=============================== */
+.btn {
+  position: fixed;
+  right: 30px;
+  bottom: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2563eb;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.5);
+}
+
+.btn svg {
+  stroke-width: 2.5px;
+}
+
+/* ===============================
+   Responsive
+=============================== */
+@media (max-width: 900px) {
+  .wrap {
+    width: 95%;
+  }
+
+  .content {
+    flex-direction: column;
+  }
+
+  .left {
+    width: 100%;
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .right {
+    padding-left: 0;
+  }
+
+  .banner {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #template1,
+  #template2,
+  #template4 {
+    display: none;
+  }
+}
+
+/* ===============================
+   PRINT / PDF â€” MULTI PAGE FIX
+=============================== */
+@media print {
+
+  html,
+  body {
+    width: 210mm;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    background: #fff !important;
+  }
+
+  body {
+    display: block !important;
+  }
+
+  .wrap {
+    width: 210mm !important;
+    min-height: auto !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+  }
+
+  /* ðŸ”¥ MULTI-PAGE SAFE TWO COLUMN + DIVIDER */
+  .content {
+    display: grid !important;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    column-gap: 28px;
+    padding: 18mm 18mm !important;
+
+    background-image: linear-gradient(to right,
+        transparent calc(var(--sidebar-width) + 12px),
+        #efe6da calc(var(--sidebar-width) + 12px),
+        #efe6da calc(var(--sidebar-width) + 14px),
+        transparent calc(var(--sidebar-width) + 14px));
+    background-repeat: repeat-y;
+    background-position: top left;
+  }
+
+  .left {
+    padding-right: 22px !important;
+  }
+
+  .right {
+    padding-left: 24px !important;
+  }
+
+  /* Prevent content splitting */
+  .section,
+  .exp-item,
+  .edu-item,
+  .summary {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .banner {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Hide UI */
+  .template-scroll,
+  .template-track,
+  .template-thumb,
+  .btn {
+    display: none !important;
+  }
+
+  * {
+    animation: none !important;
+    transform: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    overflow: visible !important;
+  }
+}
+
+
+@page {
+  size: A4;
+  margin: 0mm;
+}

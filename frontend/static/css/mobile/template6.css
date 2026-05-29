@@ -1,0 +1,311 @@
+/* =========================================
+   TEMPLATE 6 — MOBILE CSS
+   Modern Split Layout A4 Preview
+========================================= */
+
+:root {
+  --mobile-radius: 14px;
+
+  /*
+    A4 Ratio
+    210 / 297
+  */
+  --a4-ratio: 210 / 297;
+}
+
+/* =========================================
+   MOBILE RESET
+========================================= */
+
+/* Body and .page outer sizing are managed by template-layout.css */
+
+/* Internal layout: single column */
+.page {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.sidebar {
+  padding: 14px 16px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.sidebar-inner {
+  max-width: 65%;
+
+  flex: 1;
+}
+
+/* =========================================
+   PHOTO
+========================================= */
+
+.header-photo {
+  width: auto;
+}
+
+.header-photo img,
+.photo-placeholder {
+  width: 58px;
+  height: 58px;
+
+  border-radius: 8px;
+
+  border-width: 2px;
+}
+
+.photo-placeholder {
+  font-size: 18px;
+
+  letter-spacing: 1px;
+}
+
+/* =========================================
+   NAME / ROLE
+========================================= */
+
+.name-role .name {
+  text-transform: uppercase;
+  white-space: pre-line;
+  font-size: 14px;
+
+  line-height: 1.15;
+
+  word-break: break-word;
+}
+
+.name-role .role {
+  font-size: 6px;
+
+  margin-top: 4px;
+
+  letter-spacing: 1px;
+
+  line-height: 1.3;
+}
+
+/* =========================================
+   CONTACT
+========================================= */
+
+.side-section {
+  margin-top: 8px;
+}
+
+.side-section h3 {
+  font-size: 7px;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 5px;
+}
+
+.side-list {
+  font-size: 6px;
+
+  line-height: 1.4;
+}
+
+.side-list li {
+  margin-bottom: 3px;
+
+  word-break: break-word;
+}
+
+/* =========================================
+   CONTENT GRID
+========================================= */
+
+.content {
+  display: grid;
+
+  grid-template-columns: 64% 36%;
+
+  padding: 14px 16px;
+
+  position: relative;
+}
+
+.content::before {
+  left: 64%;
+}
+
+/* =========================================
+   COLUMNS
+========================================= */
+
+.left-column {
+  padding-right: 10px;
+}
+
+.right-column {
+  padding-left: 10px;
+}
+
+/* =========================================
+   SECTIONS
+========================================= */
+
+.section {
+  margin-bottom: 12px;
+}
+
+.section h2 {
+  font-size: 8px;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 7px;
+
+  line-height: 1.3;
+}
+
+/* =========================================
+   TEXT
+========================================= */
+
+.section p,
+.job-desc,
+.job-desc p,
+.job-desc li,
+.job-desc div {
+  font-size: 6px !important;
+
+  line-height: 1.45 !important;
+}
+
+.muted {
+  font-size: 5px;
+
+  line-height: 1.3;
+}
+
+/* =========================================
+   JOB / EDUCATION
+========================================= */
+
+.section-block {
+  margin-bottom: 8px;
+}
+
+.job-title {
+  font-size: 7px;
+
+  line-height: 1.35;
+}
+
+.job-company {
+  font-size: 6px;
+
+  line-height: 1.35;
+}
+
+.job-meta {
+  font-size: 5px;
+
+  margin-bottom: 4px;
+
+  line-height: 1.3;
+}
+
+/* =========================================
+   LISTS
+========================================= */
+
+.section ul {
+  padding-left: 0;
+}
+
+.section ul li {
+  font-size: 6px;
+
+  margin-bottom: 4px;
+
+  line-height: 1.4;
+
+  word-break: break-word;
+}
+
+/* =========================================
+   DOWNLOAD BUTTON
+========================================= */
+
+.btn {
+  right: 14px;
+  bottom: 14px;
+
+  padding: 10px 16px;
+
+  font-size: 13px;
+
+  border-radius: 40px;
+}
+
+/* =========================================
+   SMALL DEVICES
+========================================= */
+
+@media screen and (max-width: 380px) {
+
+  body {
+    padding: 8px !important;
+  }
+
+  .page {
+    border-radius: 10px;
+  }
+
+  .sidebar {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .content {
+    padding: 12px;
+  }
+
+  .header-photo img,
+  .photo-placeholder {
+    width: 52px;
+    height: 52px;
+  }
+
+  .name-role .name {
+  text-transform: uppercase;
+  white-space: pre-line;
+    font-size: 12px;
+  }
+
+  .name-role .role {
+    font-size: 5px;
+  }
+
+  .section h2 {
+    font-size: 7px;
+  }
+}
+
+/* =========================================
+   LANDSCAPE MODE
+========================================= */
+
+@media screen and (orientation: landscape) {
+
+  body {
+    padding: 14px !important;
+  }
+
+  .page {
+    max-width: 340px;
+  }
+}

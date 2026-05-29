@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder | Resume Maker</title>
+    <!-- 1. Design Tokens (MUST be first) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/00-variables.css') }}">
+
+    <!-- 2. Reset & Baseline -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/01-reset.css') }}">
+
+    <!-- 3. Body & Theme -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/02-theme.css') }}">
+
+    <!-- 4. Global Effects & Animations -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/03-global-effects.css') }}">
+
+    <!-- 4.1 Global Background -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/04-global-background.css') }}">
+
+    <!-- 5. Components -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/05-components/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/05-components/footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/05-components/buttons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/05-components/modals.css') }}">
+
+    <!-- 6. Page-specific dashboard CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/desktop/dashboard.css') }}">
+    <link rel="stylesheet" media="screen and (max-width: 500px)" href="{{ url_for('static', filename='css/mobile/dashboard.css') }}">
+
+    <!-- 7. Wizard styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/07-pages/template.css') }}">
+
+    <!-- 8. Utilities -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/09-utilities.css') }}">
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="/js/theme-controller.js"></script>
+    {% include 'partials/sentry.html' %}
+</head>
+
+<body>
+
+    {% include 'partials/global_bg.html' %}
+
+    <header class="app-header" role="banner">
+        <!-- Header Content omitted for brevity, same as original -->
+        <div class="header-inner">
+            <a href="/" class="brand" aria-label="Wisaxis Resume Maker Home">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="" class="brand-logo" width="32" height="32">
+                <span class="brand-text">WISAXIS <span>Resume Maker</span></span>
+            </a>
+
+            <div class="header-actions-wrap">
+                <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" type="button">
+                    <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+
+                <div class="user-dropdown">
+                    <button class="user-dropdown-trigger" id="userDropdownBtn" aria-label="User menu" aria-haspopup="true" aria-expanded="false" type="button">
+                        <span class="user-avatar">{{ user[0].upper() if user else '?' }}</span>
+                        <span class="user-name">{{ user | e }}</span>
+                        <svg class="dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="dropdown-menu" id="userDropdownMenu" role="menu" aria-labelledby="userDropdownBtn">
+                        <a href="{{ url_for('main.profile') }}" role="menuitem">Profile</a>
+                        <a href="{{ url_for('main.chat') }}" role="menuitem">AI Chat Assistant</a>
+                        <a href="{{ url_for('main.json_features') }}" role="menuitem">JSON Format</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ url_for('auth.logout') }}" class="dropdown-logout" role="menuitem">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="flashData" style="display:none;" aria-live="polite" role="alert">
+        {% for category, msg in messages %}
+        <span data-category="{{ category }}">{{ msg }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <div id="vueApp" class="form-container form-page adaptive-card fade-up">
+        <h2>{% if editing %}Edit Resume{% else %}Create Resume{% endif %}</h2>
+
+        <div class="form-section" style="margin-bottom: 2rem; padding: 1.5rem; text-align: center; border: 1px dashed var(--border-strong);">
+            <p style="margin-bottom: 1rem; color: var(--text-secondary); font-size: var(--text-sm);">Already have your data in JSON format? Import it here.</p>
+            <button type="button" class="add-btn" @click="$refs.jsonFile.click()" :disabled="isImporting">
+                <span v-if="isImporting">Importing...</span>
+                <span v-else>Import from JSON</span>
+            </button>
+            <input type="file" ref="jsonFile" accept=".json" style="display: none;" @change="handleJsonImport">
+        </div>
+
+        <!-- Sticky Progress -->
+        <div class="wizard-sticky" role="navigation" aria-label="Resume builder steps">
+            <div class="wizard-track" id="wizardTrack">
+                <div class="wizard-step" :class="{'completed': currentStep > 1}" :aria-current="currentStep === 1 ? 'step' : null">
+                    <span class="step-num" aria-hidden="true">1</span>
+                    <span class="step-label">Personal</span>
+                </div>
+                <div class="wizard-connector" aria-hidden="true"></div>
+                <div class="wizard-step" :class="{'completed': currentStep > 2}" :aria-current="currentStep === 2 ? 'step' : null">
+                    <span class="step-num" aria-hidden="true">2</span>
+                    <span class="step-label">Experience</span>
+                </div>
+                <div class="wizard-connector" aria-hidden="true"></div>
+                <div class="wizard-step" :class="{'completed': currentStep > 3}" :aria-current="currentStep === 3 ? 'step' : null">
+                    <span class="step-num" aria-hidden="true">3</span>
+                    <span class="step-label">Summary & Skills</span>
+                </div>
+                <div class="wizard-connector" aria-hidden="true"></div>
+                <div class="wizard-step" :class="{'completed': currentStep > 4}" :aria-current="currentStep === 4 ? 'step' : null">
+                    <span class="step-num" aria-hidden="true">4</span>
+                    <span class="step-label">Template</span>
+                </div>
+            </div>
+        </div>
+
+        <form id="resumeForm" @submit.prevent="submitForm" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <!-- STEP 1: PERSONAL -->
+            <div class="form-step" :class="{active: currentStep === 1}" v-show="currentStep === 1">
+                <div class="form-section">
+                    <h3 class="form-section-title">Personal Information</h3>
+                    <div class="input-group">
+                        <label class="required" for="name">Full Name</label>
+                        <input id="name" v-model="formData.name" :class="{invalid: errors.name}" :aria-invalid="errors.name ? 'true' : 'false'" required placeholder="John Doe">
+                        <div class="error-msg" v-show="errors.name" aria-live="polite">Please enter your full name.</div>
+                    </div>
+                    <div class="input-group">
+                        <label class="required" for="title">Job Title</label>
+                        <input id="title" v-model="formData.title" :class="{invalid: errors.title}" :aria-invalid="errors.title ? 'true' : 'false'" required placeholder="Senior Software Engineer">
+                        <div class="error-msg" v-show="errors.title" aria-live="polite">Please enter a job title.</div>
+                    </div>
+                    <div class="grid-2-col">
+                        <div class="input-group">
+                            <label class="required" for="email">Email</label>
+                            <input id="email" type="email" v-model="formData.email" :class="{invalid: errors.email}" :aria-invalid="errors.email ? 'true' : 'false'" required placeholder="john@example.com">
+                            <div class="error-msg" v-show="errors.email" aria-live="polite">Please enter a valid email.</div>
+                        </div>
+                        <div class="input-group">
+                            <label class="required" for="phone">Phone</label>
+                            <input id="phone" v-model="formData.phone" :class="{invalid: errors.phone}" :aria-invalid="errors.phone ? 'true' : 'false'" required placeholder="1234567890">
+                            <div class="error-msg" v-show="errors.phone" aria-live="polite">Please enter numbers only.</div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="required" for="address">Address</label>
+                        <input id="address" v-model="formData.address" :class="{invalid: errors.address}" :aria-invalid="errors.address ? 'true' : 'false'" required placeholder="123 Main St, New York, NY">
+                        <div class="error-msg" v-show="errors.address" aria-live="polite">Please enter your address.</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="photo">Photo <span style="font-size:0.75rem; font-weight:400; color:var(--text-muted); margin-left:4px;">(optional)</span></label>
+                        <div class="photo-upload-wrap">
+                            <div class="photo-preview" :class="{'has-photo': photoPreviewUrl}" :style="photoPreviewUrl ? {backgroundImage: 'url(' + photoPreviewUrl + ')', backgroundSize: 'cover', backgroundPosition: 'center'} : {}">
+                                <svg v-if="!photoPreviewUrl" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            </div>
+                            <input type="file" id="photo" accept=".jpg,.jpeg,.png" @change="handlePhotoUpload">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: EXPERIENCE & EDUCATION -->
+            <div class="form-step" :class="{active: currentStep === 2}" v-show="currentStep === 2">
+                <div class="form-section">
+                    <h3 class="form-section-title">Work Experience</h3>
+                    <div>
+                        <div class="exp-item" v-for="(exp, index) in formData.experience" :key="index" :style="index > 0 ? 'margin-top: 2rem; border-top: 1px solid var(--border-subtle); padding-top: 2rem;' : ''">
+                            <div class="grid-2-col" style="margin-bottom: 1rem;">
+                                <div>
+                                    <input v-model="exp.title" placeholder="Job Title" :class="{invalid: errors['exp_' + index + '_title']}" :aria-invalid="errors['exp_' + index + '_title'] ? 'true' : 'false'">
+                                    <div class="error-msg" v-show="errors['exp_' + index + '_title']" aria-live="polite">Job Title is required.</div>
+                                </div>
+                                <div>
+                                    <input v-model="exp.company" placeholder="Company Name" :class="{invalid: errors['exp_' + index + '_company']}" :aria-invalid="errors['exp_' + index + '_company'] ? 'true' : 'false'">
+                                    <div class="error-msg" v-show="errors['exp_' + index + '_company']" aria-live="polite">Company Name is required.</div>
+                                </div>
+                            </div>
+                            <input v-model="exp.duration" placeholder="Duration (e.g. Jan 2020 - Present)" style="margin-bottom: 1rem;">
+                            <div class="input-group">
+                                <textarea v-model="exp.description" :class="{'skeleton-loader': exp.isGenerating}" :readonly="exp.isGenerating" :aria-busy="exp.isGenerating" placeholder="Describe your responsibilities and achievements..."></textarea>
+                                <div class="ai-btn-wrapper">
+                                    <button type="button" class="ai-btn" @click="generateExperience(index)" :disabled="exp.isGenerating">
+                                        <span v-if="exp.isGenerating" class="spinner" style="width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;"></span>
+                                        <span v-else>AI Generate</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" v-if="index > 0" class="remove-btn" @click="removeExperience(index)">Remove Experience</button>
+                        </div>
+                    </div>
+                    <div class="section-actions">
+                        <button type="button" class="add-btn" @click="addExperience">Add Experience</button>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Education</h3>
+                    <div>
+                        <div class="edu-item" v-for="(edu, index) in formData.education" :key="index" :style="index > 0 ? 'margin-top: 2rem; border-top: 1px solid var(--border-subtle); padding-top: 2rem;' : ''">
+                            <div class="grid-2-col" style="margin-bottom: 1rem;">
+                                <input v-model="edu.degree" placeholder="Degree / Certification">
+                                <input v-model="edu.university" placeholder="Institution / University">
+                            </div>
+                            <input v-model="edu.year" placeholder="Year of Completion">
+                            <button type="button" v-if="index > 0" class="remove-btn" @click="removeEducation(index)">Remove Education</button>
+                        </div>
+                    </div>
+                    <div class="section-actions">
+                        <button type="button" class="add-btn" @click="addEducation">Add Education</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: SUMMARY & SKILLS -->
+            <div class="form-step" :class="{active: currentStep === 3}" v-show="currentStep === 3">
+                <div class="form-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px;">
+                        <h3 class="form-section-title" style="margin: 0;">Professional Summary</h3>
+                        <button type="button" class="ai-btn" @click="generateSummary" :disabled="isGeneratingSummary">
+                            <span v-if="isGeneratingSummary" class="spinner" style="width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle;margin-right:5px;"></span>
+                            <span v-else>Auto Generate</span>
+                        </button>
+                    </div>
+                    <div class="input-group">
+                        <textarea v-model="formData.summary" :class="{'skeleton-loader': isGeneratingSummary}" :readonly="isGeneratingSummary" :aria-busy="isGeneratingSummary" placeholder="Briefly describe your professional background and key achievements..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Core Skills</h3>
+                    <div class="input-group">
+                        <label for="skills">Skills (Comma separated)</label>
+                        <input id="skills" v-model="formData.skills" placeholder="Python, Flask, JavaScript, SQL, DevOps...">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Languages</h3>
+                    <div class="grid-2-col">
+                        <div v-for="(lang, index) in formData.languages" :key="index" style="position: relative;">
+                            <input v-model="lang.value" placeholder="e.g. English (Native)">
+                            <button v-if="index > 0" type="button" class="remove-btn" style="position: absolute; right: 0; top: 0;" @click="removeLanguage(index)">X</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-btn" style="margin-top: 1.5rem;" @click="addLanguage">Add Language</button>
+                </div>
+            </div>
+
+            <!-- STEP 4: TEMPLATE -->
+            <div class="form-step" :class="{active: currentStep === 4}" v-show="currentStep === 4">
+                <div class="form-section">
+                    <fieldset style="border: none; padding: 0; margin: 0;">
+                        <legend class="form-section-title" style="display:flex; align-items:center; gap:8px; margin-bottom:var(--space-4); width:100%;">
+                            Select Your Design Template <span style="color: var(--danger); margin-left:2px;">*</span>
+                        </legend>
+
+                        <div class="template-visual-grid">
+                            <label class="template-visual-card" for="t1">
+                                <input type="radio" v-model="formData.template" id="t1" value="template1" class="template-radio" required>
+                                <div class="tvc-thumb" style="background-image:url('{{ url_for('static', filename='images/templateA.webp') }}')"></div>
+                                <span class="tvc-name">Executive</span>
+                            </label>
+                            <label class="template-visual-card" for="t2">
+                                <input type="radio" v-model="formData.template" id="t2" value="template2" class="template-radio">
+                                <div class="tvc-thumb" style="background-image:url('{{ url_for('static', filename='images/templateB.webp') }}')"></div>
+                                <span class="tvc-name">Modern</span>
+                            </label>
+                            <label class="template-visual-card" for="t3">
+                                <input type="radio" v-model="formData.template" id="t3" value="template3" class="template-radio">
+                                <div class="tvc-thumb" style="background-image:url('{{ url_for('static', filename='images/templateC.webp') }}')"></div>
+                                <span class="tvc-name">Creative</span>
+                            </label>
+                            <label class="template-visual-card" for="t4">
+                                <input type="radio" v-model="formData.template" id="t4" value="template4" class="template-radio">
+                                <div class="tvc-thumb" style="background-image:url('{{ url_for('static', filename='images/templateD.webp') }}')"></div>
+                                <span class="tvc-name">Minimalist</span>
+                            </label>
+                            <label class="template-visual-card" for="t5">
+                                <input type="radio" v-model="formData.template" id="t5" value="template5" class="template-radio">
+                                <div class="tvc-thumb" style="background-image:url('{{ url_for('static', filename='images/templateE.webp') }}')"></div>
+                                <span class="tvc-name">Academic</span>
+                            </label>
+                            <label class="template-visual-card" for="t6">
+                                <input type="radio" v-model="formData.template" id="t6" value="template6" class="template-radio">
+                                <div class="tvc-thumb" style="background-image:url('{{ url_for('static', filename='images/templateF.webp') }}')"></div>
+                                <span class="tvc-name">Professional</span>
+                            </label>
+                            <label class="template-visual-card" for="t7">
+                                <input type="radio" v-model="formData.template" id="t7" value="template7" class="template-radio">
+                                <div class="tvc-thumb" style="background-image:url('{{ url_for('static', filename='images/templateG.webp') }}')"></div>
+                                <span class="tvc-name">Classic</span>
+                            </label>
+                            <label class="template-visual-card" for="t8">
+                                <input type="radio" v-model="formData.template" id="t8" value="template8" class="template-radio">
+                                <div class="tvc-thumb" style="background-image:url('{{ url_for('static', filename='images/templateH.webp') }}')"></div>
+                                <span class="tvc-name">Compact</span>
+                            </label>
+                        </div>
+                        <div class="error-msg" v-show="errors.template" aria-live="polite">Please select a premium template.</div>
+                    </fieldset>
+                </div>
+
+                <button type="submit" class="btn-wizard btn-next" style="width: 100%; min-height: 52px; font-size: 1.1rem; border-radius: 12px; margin-top: 1.5rem;" :disabled="isSaving">
+                    <span v-if="isSaving">Saving...</span>
+                    <span v-else>{% if editing %}💾 Update Resume{% else %}🚀 Generate Resume{% endif %}</span>
+                </button>
+            </div>
+
+            <!-- Fixed Bottom Actions Toolbar -->
+            <div class="bottom-bar" role="toolbar" aria-label="Form navigation">
+                <button type="button" class="btn-wizard btn-prev" @click="changeStep(-1)" :style="{ visibility: currentStep === 1 ? 'hidden' : 'visible' }">Back</button>
+                <button type="button" class="btn-wizard btn-primary btn-next" v-if="currentStep < totalSteps" @click="changeStep(1)">Next</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Inject initial data -->
+    {% if resume_data %}
+    <script>
+        window.INITIAL_RESUME_DATA = {{ resume_data | tojson | safe }};
+    </script>
+    {% endif %}
+
+    <script src="/js/wizard-vue.js"></script>
+    <script src="/js/header-scroll.js"></script>
+    <script src="/js/toast.js"></script>
+    <script src="/js/global-effects.js"></script>
+    <script>
+        // Interactive User Dropdown
+        const dropdownTrigger = document.getElementById('userDropdownBtn');
+        const dropdownContainer = document.querySelector('.user-dropdown');
+        if (dropdownTrigger && dropdownContainer) {
+            dropdownTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isActive = dropdownContainer.classList.toggle('active');
+                dropdownTrigger.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+            });
+            document.addEventListener('click', () => {
+                dropdownContainer.classList.remove('active');
+                dropdownTrigger.setAttribute('aria-expanded', 'false');
+            });
+        }
+    </script>
+</body>
+</html>

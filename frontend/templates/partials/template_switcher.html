@@ -1,0 +1,56 @@
+<nav
+    class="template-scroll"
+    aria-label="Resume template switcher"
+>
+    <div
+        class="template-track"
+        id="template-track"
+    >
+        {# ---------- LOOP SET 1 ---------- #}
+        {% for template_number in range(1,9) %}
+            {% if template_number|string != (template_id | default('1'))|string %}
+            <form
+                method="POST"
+                action="{{ url_for('resume.switch_template', resume_id=resume_id or request.view_args.get('resume_id')) }}"
+                style="display:block; width: 100%;"
+            >
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="template" value="template{{ template_number }}">
+                <button
+                    type="submit"
+                    class="template-link"
+                    aria-label="Switch to template {{ template_number }}"
+                    data-template="{{ template_number }}"
+                    style="background:none;border:none;cursor:pointer;padding:0; width:100%;"
+                >
+                    <div class="template-thumb thumb-template-{{ template_number }}"></div>
+                </button>
+            </form>
+            {% endif %}
+        {% endfor %}
+
+        {# ---------- LOOP SET 2 (duplicate for infinite scroll effect) ---------- #}
+        {% for template_number in range(1,9) %}
+            {% if template_number|string != (template_id | default('1'))|string %}
+            <form
+                method="POST"
+                action="{{ url_for('resume.switch_template', resume_id=resume_id or request.view_args.get('resume_id')) }}"
+                style="display:block; width: 100%;"
+                aria-hidden="true"
+                tabindex="-1"
+            >
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="template" value="template{{ template_number }}">
+                <button
+                    type="submit"
+                    class="template-link"
+                    style="background:none;border:none;cursor:pointer;padding:0; width:100%;"
+                    tabindex="-1"
+                >
+                    <div class="template-thumb thumb-template-{{ template_number }}"></div>
+                </button>
+            </form>
+            {% endif %}
+        {% endfor %}
+    </div>
+</nav>

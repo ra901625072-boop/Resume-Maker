@@ -1,0 +1,80 @@
+/* ==========================================================
+   WISAXIS RESUME MAKER - MOBILE RESPONSIVE HOME
+   ========================================================== */
+
+
+.desktop-nav {
+  display: none;
+}
+
+/* Landing hero mobile */
+html body .hero {
+  padding: var(--space-7) var(--space-4) var(--space-6);
+  padding-top: calc(var(--space-6) + 70px);
+}
+
+html body .hero-title {
+  font-size: var(--text-2xl);
+  line-height: 1.15;
+  margin-bottom: var(--space-3);
+}
+
+html body .hero-lead {
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-4);
+}
+
+html body .hero-actions {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+  max-width: 100%;
+}
+
+/* Showcases */
+html body .template-section {
+  padding: var(--space-6) var(--space-4);
+}
+
+html body .section-header h2 {
+  font-size: var(--text-xl);
+}
+
+html body .template-card {
+  width: 200px;
+  height: 260px;
+}
+
+/* Info & Tech Pill mobile */
+html body .info-section {
+  padding: var(--space-6) var(--space-4);
+}
+
+html body .info-section h2 {
+  font-size: var(--text-2xl);
+}
+
+html body .tech-stack {
+  gap: var(--space-2);
+}
+
+html body .tech-pill {
+  font-size: var(--text-xs);
+  padding: var(--space-2) var(--space-3);
+}
+
+
+@media (max-width: 400px) {
+  html body .site-title {
+    font-size: var(--text-sm);
+  }
+
+  html body .hero-title {
+    font-size: var(--text-xl);
+  }
+
+  html body .template-card {
+    width: 170px;
+    height: 220px;
+  }
+}

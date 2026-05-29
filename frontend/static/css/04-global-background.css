@@ -1,0 +1,91 @@
+/* ==========================================================
+   WISAXIS — GLOBAL BACKGROUND LAYERS
+   Background visual layers for the entire application.
+   ========================================================== */
+
+/* ===== GLOBAL BG CONTAINER ===== */
+.global-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -10;
+  overflow: hidden;
+}
+
+/* ===== LAYER BASE ===== */
+.bg-layer-base,
+.bg-layer-overlay,
+.bg-layer-gradient,
+.bg-layer-noise,
+.bg-layer-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ===== BACKGROUND IMAGE LAYER ===== */
+.bg-layer-base {
+  z-index: 1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: translateZ(0);
+}
+
+/* ===== OVERLAY (darkening + blur) ===== */
+.bg-layer-overlay {
+  z-index: 2;
+  background: var(--global-bg-overlay);
+  backdrop-filter: blur(var(--global-bg-blur));
+  -webkit-backdrop-filter: blur(var(--global-bg-blur));
+}
+
+/* Mobile overlay: stronger gradient blur */
+@media screen and (max-width: 500px) {
+  .bg-layer-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(8, 10, 20, 0.78),
+      rgba(14, 16, 24, 0.94)
+    );
+    backdrop-filter: blur(var(--global-bg-blur-mobile));
+    -webkit-backdrop-filter: blur(var(--global-bg-blur-mobile));
+  }
+}
+
+/* ===== GRADIENT ACCENT LAYER ===== */
+.bg-layer-gradient {
+  z-index: 3;
+  background:
+    radial-gradient(circle at top left, var(--global-bg-gradient-1), transparent 32%),
+    radial-gradient(circle at bottom right, var(--global-bg-gradient-2), transparent 34%),
+    radial-gradient(circle at center, var(--global-bg-gradient-3), transparent 42%);
+}
+
+/* ===== NOISE TEXTURE LAYER ===== */
+.bg-layer-noise {
+  z-index: 4;
+  opacity: 0.05;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 3px 3px, 3px 3px;
+}
+
+/* ===== FLOATING PARTICLES LAYER ===== */
+.bg-layer-particles {
+  z-index: 5;
+  opacity: 0.42;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(255,255,255,.18) 0 2px, transparent 2px),
+    radial-gradient(circle at 84% 26%, rgba(255,255,255,.14) 0 1.5px, transparent 1.5px),
+    radial-gradient(circle at 32% 76%, rgba(255,255,255,.14) 0 2px, transparent 2px),
+    radial-gradient(circle at 72% 66%, rgba(255,255,255,.12) 0 1.5px, transparent 1.5px);
+  animation: bgFloat 18s linear infinite;
+}
+
+@keyframes bgFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}

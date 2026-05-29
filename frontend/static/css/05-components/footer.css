@@ -1,0 +1,177 @@
+/* ==========================================================
+   WISAXIS — FOOTER COMPONENT
+   App footer with brand, two-column links, and copyright.
+   ========================================================== */
+
+.app-footer {
+  background: var(--surface-paper);
+  border-top: 1px solid var(--glass-border);
+  padding: 3rem 24px 0;
+}
+
+/* ===== FOOTER TOP ===== */
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto 2rem;
+}
+
+.footer-brand h4 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--text-main);
+  margin: 0 0 6px;
+}
+
+.footer-brand h4 span {
+  color: var(--primary);
+}
+
+.footer-brand p {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0;
+  max-width: 220px;
+  line-height: 1.5;
+}
+
+/* ===== TWO-COLUMN LINKS ===== */
+.footer-cols {
+  display: flex;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-col h5 {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  margin: 0 0 4px;
+}
+
+.footer-col a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: color 0.25s ease, transform 0.25s ease;
+  display: inline-block;
+}
+
+.footer-col a:hover {
+  color: var(--text-main);
+  transform: translateX(3px);
+}
+
+/* Legacy flat links (backward compat) */
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: color 0.25s ease;
+}
+
+.footer-links a:hover {
+  color: var(--text-main);
+}
+
+/* ===== FOOTER BOTTOM ===== */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-top: 1px solid var(--glass-border);
+  padding: 1.25rem 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.footer-bottom p {
+  margin: 0;
+}
+
+.footer-bottom-links {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.footer-bottom-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: color 0.25s ease;
+}
+
+.footer-bottom-links a:hover {
+  color: var(--primary);
+}
+
+/* ===== MOBILE FOOTER (≤ 768px) ===== */
+@media (max-width: 768px) {
+  .footer-top {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .footer-cols {
+    gap: 2rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+    padding: 1rem 0 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-top {
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-brand p {
+    max-width: none;
+  }
+
+  .footer-cols {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .footer-col {
+    align-items: center;
+  }
+
+  .footer-col a:hover {
+    transform: none;
+  }
+}

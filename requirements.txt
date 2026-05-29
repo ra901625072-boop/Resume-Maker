@@ -1,0 +1,52 @@
+# ============================================================
+#  WISAXIS Resume Maker — Python Dependencies
+# ============================================================
+#
+# !! IMPORTANT — Use Python 3.11 (venv311), NOT Python 3.14 !!
+#    Pillow 11.x has no pre-built wheel for Python 3.14 on Windows.
+#
+# Correct commands to run the app:
+#   & d:/resume2.0/venv311/Scripts/python.exe d:/resume2.0/app.py
+#
+# Or activate the venv first:
+#   d:/resume2.0/venv311/Scripts/Activate.ps1
+#   python app.py
+#
+# To install / update packages (use venv311 pip, not system pip):
+#   & d:/resume2.0/venv311/Scripts/pip.exe install -r requirements.txt
+
+# Core
+Flask==3.1.1
+Flask-SQLAlchemy==3.1.1
+Flask-Login==0.6.3
+Flask-WTF==1.2.2
+Flask-Limiter==4.1.1
+Flask-Cors==5.0.1
+Werkzeug==3.1.3
+
+# HTTP client for OpenRouter AI API
+requests==2.32.3
+
+# Production WSGI server
+gunicorn==23.0.0
+
+# Environment variable loading
+python-dotenv==1.1.0
+
+# ── PDF parsing (required for AI file analysis) ──────────────────────────────
+pdfplumber==0.11.4
+
+# ── DOCX parsing (required for AI file analysis) ─────────────────────────────
+python-docx==1.1.2
+
+# ── Image processing — relaxed pin so pre-built wheels are used ───────────────
+# Pillow 11.2.1 has NO pre-built wheel for Python 3.14 on Windows.
+# Using >=10.4.0 lets pip pick the latest compatible wheel automatically.
+Pillow>=10.4.0
+
+# ── Scanned PDF → image conversion (optional, enables vision fallback) ────────
+# PyMuPDF==1.25.5
+
+# ── Optional: Redis-backed rate limiting (faster than in-memory) ─────────────
+# redis==5.2.1
+# limits==3.14.0

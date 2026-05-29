@@ -1,0 +1,62 @@
+/* Shared global styles for all resume templates */
+
+/* Prevent horizontal overflow on all devices */
+html, body {
+  overflow-x: hidden;
+}
+
+/* A4 scaling container for preview */
+.resume-wrapper {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+
+.resume-page {
+  width: min(100vw - 24px, 210mm);
+  aspect-ratio: 210 / 297; /* A4 ratio */
+}
+
+/* Word‑wrap and break handling */
+* {
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Print optimizations */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  /* Hide UI elements */
+  .template-scroll,
+  .template-track,
+  .template-thumb,
+  .btn {
+    display: none !important;
+  }
+
+  html, body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Ensure no page breaks inside crucial sections */
+  .section,
+  .experience-item,
+  .education-item {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Remove animations/transitions for print */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

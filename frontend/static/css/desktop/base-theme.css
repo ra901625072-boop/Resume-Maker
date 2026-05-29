@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap');
+@import url('../base/global-effects.css');
+
+:root {
+    /* --- Modern Dark (Default) --- */
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Outfit', 'Inter', sans-serif;
+
+    --bg-primary: radial-gradient(circle at 0% 0%, #1e1b4b 0%, #0f172a 100%);
+    --bg-overlay: rgba(15, 23, 42, 0.85);
+    --surface-paper: rgba(15, 23, 42, 0.6);
+    --surface-card: rgba(255, 255, 255, 0.03);
+
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-inverse: #0f172a;
+
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --secondary: #10b981;
+    --accent: #f59e0b;
+    --danger: #ef4444;
+
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-blur: blur(25px);
+    --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+
+    --card-radius: 24px;
+    --input-radius: 14px;
+    --section-padding: 4rem;
+    --container-max-width: 1200px;
+    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-theme: background 0.5s ease-in-out, background-color 0.5s ease-in-out, color 0.3s ease-in-out, box-shadow 0.4s ease, border-color 0.4s ease, backdrop-filter 0.5s ease;
+
+    /* --- Spacing Scale (Unified 8pt Grid) --- */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
+
+    /* --- Typography Scale --- */
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-md: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+
+    /* --- Premium Inputs Theme --- */
+    --btn-radius: 12px;
+    --input-bg: rgba(255, 255, 255, 0.02);
+    --input-border: rgba(255, 255, 255, 0.08);
+    --input-focus-bg: rgba(255, 255, 255, 0.04);
+    --input-focus-border: #6366f1;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --card-radius: 16px;
+        --input-radius: 10px;
+        --section-padding: 1.5rem;
+    }
+}
+
+body {
+    transition: var(--transition-theme);
+}
+
+*, *::before, *::after {
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+html[data-theme="light"] {
+    /* --- Classic Light — matches template shell #e8ecf4 palette --- */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+
+    --bg-primary: #e8ecf4;       /* soft blue-grey — unified across ALL pages */
+    --bg-overlay: rgba(255, 255, 255, 0.90);
+    --surface-paper: rgba(255, 255, 255, 0.95);
+    --surface-card: rgba(255, 255, 255, 0.80);
+
+    --text-main: #1e293b;
+    --text-muted: #475569;
+    --text-inverse: #ffffff;
+
+    --primary: #1e3a8a; /* Deep Navy */
+    --primary-hover: #1e40af;
+    --secondary: #059669; /* Forest Green */
+    --accent: #475569; /* Slate */
+    --danger: #b91c1c;
+
+    --glass-border: #cbd5e1;
+    --glass-blur: none;
+    --glass-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+
+    --card-radius: 8px;
+    --input-radius: 6px;
+
+    /* --- Premium Inputs Theme (Light Mode) --- */
+    --input-bg: #f1f5f9;
+    --input-border: #cbd5e1;
+    --input-focus-bg: #ffffff;
+    --input-focus-border: #1e3a8a;
+}
+
+/* --- Toggle Button --- */
+#theme-toggle {
+    background: var(--surface-card);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+#theme-toggle:hover {
+    background: var(--primary);
+    color: var(--text-inverse);
+    transform: rotate(15deg);
+}
+
+.theme-icon-sun { display: none; }
+.theme-icon-moon { display: block; }
+
+html[data-theme="light"] .theme-icon-sun { display: block; }
+html[data-theme="light"] .theme-icon-moon { display: none; }

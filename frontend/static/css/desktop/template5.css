@@ -1,0 +1,423 @@
+/* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ================= PAGE SETUP ================= */
+@page {
+  size: A4 portrait;
+  margin: 10mm;
+}
+
+/* ================= BASE ================= */
+html,
+body {
+  width: 100%;
+  min-height: 100vh;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Background Overlay for Depth */
+
+/* ================= MAIN PAGE ================= */
+/* Use min-height (not fixed height) so page can expand to multiple pages if needed */
+.page {
+  width: 210mm;
+  /* A4 width */
+  min-height: 297mm;
+  /* visually match A4 on screen; allows stretching */
+  display: flex;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  overflow: visible;
+  /* small top/bottom margin to match screenshot spacing */
+  margin: 6mm 0;
+  page-break-after: avoid;
+}
+
+/* ================= SIDEBAR ================= */
+/* Sidebar will stretch to the height of the .page due to flex container */
+.sidebar {
+  width: 32%;
+  background: #1f1f1f;
+  color: #ccc;
+  padding: 45px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  /* ensure sidebar visually fills the page on screen */
+  align-self: stretch;
+  min-height: 100%;
+}
+
+/* Photo circle */
+.photo-wrap {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #333;
+  flex: 0 0 auto;
+  border: 4px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  color: #fff;
+}
+
+/* Name & role */
+.name-role {
+  text-align: center;
+  margin-bottom: 10px;
+  flex: 0 0 auto;
+}
+
+.name {
+  text-transform: uppercase;
+  white-space: pre-line;
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.role {
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  color: #f5c400;
+  margin-top: 6px;
+}
+
+/* Divider line in sidebar */
+.sidebar hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin: 18px 0;
+}
+
+/* ================= SIDEBAR SECTIONS ================= */
+.side-section {
+  margin-bottom: 14px;
+  flex: 0 0 auto;
+}
+
+.side-section h3 {
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+/* Lists in sidebar */
+.side-list {
+  list-style: none;
+}
+
+.side-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 9px;
+}
+
+.side-list i {
+  color: #f5c400;
+  min-width: 16px;
+}
+
+/* ================= SKILLS ================= */
+.skill-bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.skill-bars li {
+  margin-bottom: 12px;
+}
+
+.skill-bars span {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.bar {
+  width: 100%;
+  height: 6px;
+  background: #444;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  width: 80%;
+  /* adjust inline or via style attribute per-skill if needed */
+  background: #f5c400;
+  border-radius: 3px;
+}
+
+/* ================= MAIN CONTENT ================= */
+.content {
+  width: 68%;
+  padding: 50px 55px;
+  box-sizing: border-box;
+  display: block;
+  color: #222;
+}
+
+/* Section */
+.section {
+  margin-bottom: 36px;
+}
+
+.section h2 {
+  font-size: 16px;
+  letter-spacing: 2px;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.section h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 70px;
+  height: 5px;
+  background: #f5c400;
+}
+
+/* Jobs / Education */
+.job,
+.edu {
+  margin-bottom: 22px;
+  page-break-inside: avoid;
+}
+
+.job-title {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.job-company {
+  font-size: 14px;
+  color: #777;
+  margin: 4px 0;
+}
+
+.job-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.muted {
+  font-size: 12px;
+  color: #999;
+}
+
+/* ================= TEMPLATE THUMBNAILS (SCREEN ONLY) ================= */
+:root {
+  --thumb-width: 110px;
+  --thumb-height: 130px;
+  --gap: 14px;
+}
+
+
+
+
+
+/* Thumbnails (local images) */
+
+
+
+
+
+
+
+/* ================= DOWNLOAD BUTTON ================= */
+/* ================= DOWNLOAD BUTTON ================= */
+.btn {
+  position: fixed;
+  right: 30px;
+  bottom: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2563eb;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.5);
+}
+
+.btn svg {
+  stroke-width: 2.5px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 880px) {
+
+  html,
+  body {
+    align-items: flex-start;
+    padding: 12px 0;
+  }
+
+  .page {
+    width: 100%;
+    min-height: auto;
+    flex-direction: column;
+    box-shadow: none;
+    margin: 0;
+  }
+
+  .sidebar,
+  .content {
+    width: 100%;
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .photo-wrap {
+    margin-bottom: 18px;
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* ================= PRINT ================= */
+@media print {
+
+  @page {
+    size: A4;
+    margin: 0mm;
+  }
+
+  html,
+  body {
+    width: 210mm;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    background: #fff !important;
+  }
+
+  .template-scroll,
+  .template-track,
+  .template-thumb,
+  .btn {
+    display: none !important;
+  }
+
+  /* Keep two-column appearance but avoid flex forced-equal-height */
+  .page {
+    width: 210mm !important;
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    display: block !important;
+    /* don't use flex for print */
+    height: auto !important;
+    min-height: auto !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    overflow: visible !important;
+    page-break-after: always;
+  }
+
+  /* Make sidebar float so it doesn't get stretched by flex */
+  .sidebar {
+    float: left !important;
+    width: 65mm !important;
+    /* choose width that fits your content */
+    box-sizing: border-box;
+    padding: 18mm 12mm !important;
+    height: 297mm !important;
+    background: #1f1f1f !important;
+    color: #ccc !important;
+  }
+
+  .content {
+    margin-left: calc(65mm + 6mm) !important;
+    /* leave room for the sidebar */
+    box-sizing: border-box;
+    padding: 18mm 18mm !important;
+    width: calc(100% - (65mm + 6mm)) !important;
+    display: block !important;
+    height: auto !important;
+  }
+
+  .section,
+  .job,
+  .edu {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+.header-name-role { margin-bottom: 20px; }
+.header-name-role .name {
+  text-transform: uppercase;
+  white-space: pre-line; font-size: 32px; font-weight: 800; color: #222; margin-bottom: 4px; text-transform: uppercase; }
+.header-name-role .role { font-size: 14px; font-weight: 600; color: #ffb800; text-transform: uppercase; margin-bottom: 12px; }
+.header-accent-bar { border: none; border-top: 4px solid #ffb800; width: 60px;
+  flex-shrink: 0; margin: 0; }

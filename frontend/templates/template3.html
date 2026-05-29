@@ -1,0 +1,106 @@
+{% set template_id = 3 %}
+{% extends 'template_background.html' %}
+
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Open+Sans:300,400,600&display=swap" rel="stylesheet">
+{% endblock %}
+{% block template_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/desktop/template3.css') }}">
+<link rel="stylesheet" media="screen and (max-width: 500px)" href="{{ url_for('static', filename='css/mobile/template3.css') }}">
+{% endblock %}
+
+{% block template_content %}
+<div class="wrap" data-resume-root>
+
+        <header class="banner">
+            {% if data.photo %}
+            <img src="{{ data.photo }}" alt="Photo" class="photo">
+            {% else %}
+            <div class="placeholder-photo">{{ e(initials) }}</div>
+            {% endif %}
+            <div class="name-block">
+                <h1 class="name">{{ e(data.name) if data.name else 'Your Name' }}</h1>
+                <div class="title">{{ e(data.title) if data.title else 'Job Title' }}</div>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <aside class="left">
+                <div class="section contact">
+                    <div class="sec-title">CONTACT</div>
+                    {% if data.email %}<p>{{ render_inline(data.email) }}</p>{% endif %}
+                    {% if data.phone %}<p>{{ render_inline(data.phone) }}</p>{% endif %}
+                    {% if data.address %}<p>{{ render_html(data.address) }}</p>{% endif %}
+                </div>
+
+                {% if data.skills %}
+                <div class="section">
+                    <div class="sec-title">SKILLS</div>
+                    <ul class="skill-list">
+                        {% for skill in data.skills.split(',') if skill.strip() %}<li>{{ e(skill) }}</li>{% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                {% if data.languages %}
+                <div class="section">
+                    <div class="sec-title">LANGUAGES</div>
+                    <ul class="lang-list">
+                        {% for lang in data.languages %}<li>{{ e(lang) }}</li>{% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+            </aside>
+
+            <section class="right">
+
+                {% if data.summary %}
+                <div class="section summary">
+                    <div class="sec-title">SUMMARY / PROFILE / ABOUT ME</div>
+                    <div>{{ render_html(data.summary) }}</div>
+                </div>
+                {% endif %}
+
+                {% if data.education %}
+                <div class="section education">
+                    <div class="sec-title">EDUCATION</div>
+                    {% for edu in data.education %}
+                    <div class="edu-item">
+                        {% if edu.degree or edu.year %}
+                        <div class="edu-title">
+                            {{ e(edu.degree) if edu.degree else '' }}
+                            {% if edu.year %} â€” {{ e(edu.year) }}{% endif %}
+                        </div>
+                        {% endif %}
+                        {% if edu.university %}<div class="school">{{ e(edu.university) }}</div>{% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if data.experience %}
+                <div class="section experience">
+                    <div class="sec-title">EXPERIENCE / WORK HISTORY</div>
+                    {% for exp in data.experience %}
+                    <article class="exp-item">
+                        {% if exp.title or exp.duration %}
+                        <div class="exp-title">
+                            {{ e(exp.title) if exp.title else '' }}
+                            {% if exp.duration %} â€” {{ e(exp.duration) }}{% endif %}
+                        </div>
+                        {% endif %}
+                        {% if exp.company %}<div class="exp-company">{{ e(exp.company) }}</div>{% endif %}
+                        {% if exp.description %}<div class="exp-body">{{ render_html(exp.description) }}</div>{% endif
+                        %}
+                    </article>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </section>
+
+        </div>
+    </div>
+{% endblock %}

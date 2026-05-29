@@ -1,0 +1,326 @@
+@media screen and (max-width:500px){
+
+/* =========================
+RESET
+========================= */
+
+html,
+body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+/* =========================
+RESUME VIEWPORT
+========================= */
+
+/* .resume-container positioning is managed by template-layout.css */
+
+/* =========================
+PAGE
+========================= */
+
+.page{
+    /* Outer sizing is controlled by template-layout.css (1/1.414 ratio) */
+    display:flex;
+    flex-direction:row !important;
+    align-items:stretch;
+    overflow:hidden;
+}
+
+/* =========================
+SIDEBAR
+========================= */
+
+.sidebar{
+
+    width:112px !important;
+
+    min-width:112px !important;
+
+    max-width:112px !important;
+
+    background:#35597a;
+
+    color:#fff;
+
+    padding:
+    14px
+    12px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    overflow:hidden;
+}
+
+/* =========================
+PHOTO
+========================= */
+
+.photo-wrap,
+.photo-placeholder{
+
+    width:56px;
+    height:56px;
+    flex-shrink: 0;
+
+    margin:
+    0 auto 12px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 4px 10px rgba(0,0,0,.16);
+}
+
+.photo-wrap img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+/* =========================
+NAME
+========================= */
+
+.name{
+
+    font-size:11px !important;
+
+    font-weight:700;
+
+    line-height:1.15;
+
+    letter-spacing:.5px;
+
+    text-transform:uppercase;
+    white-space: pre-line;
+    word-spacing: 100vw;
+
+    word-break:normal !important;
+
+    overflow-wrap:break-word;
+
+    margin-bottom:4px;
+}
+
+.role{
+
+    font-size:7px;
+
+    line-height:1.35;
+
+    text-transform:uppercase;
+
+    opacity:.9;
+}
+
+/* =========================
+DIVIDER
+========================= */
+
+hr{
+
+    border:none;
+
+    border-top:
+    1px solid rgba(255,255,255,.2);
+
+    margin:
+    10px 0;
+}
+
+/* =========================
+SECTION TITLES
+========================= */
+
+.side-section h3{
+
+    font-size:8px;
+
+    font-weight:700;
+
+    letter-spacing:.8px;
+
+    margin:
+    0 0 6px;
+}
+
+/* =========================
+SIDEBAR LIST
+========================= */
+
+.side-list{
+
+    margin:0;
+
+    padding-left:12px;
+
+    list-style:disc;
+}
+
+.side-list li{
+
+    font-size:7px;
+
+    line-height:1.45;
+
+    margin-bottom:4px;
+
+    word-break:break-word;
+}
+
+.side-list li::before{
+    content:none;
+}
+
+/* =========================
+CONTENT
+========================= */
+
+.content{
+
+    width: calc(100% - 112px) !important;
+    max-width: calc(100% - 112px) !important;
+    min-width: calc(100% - 112px) !important;
+    flex: 1 !important;
+
+    padding:
+    14px
+    14px
+    18px;
+
+    overflow:hidden;
+}
+
+/* =========================
+MAIN TITLES
+========================= */
+
+.section{
+
+    margin-bottom:14px;
+}
+
+.section h2{
+
+    font-size:10px;
+
+    font-weight:700;
+
+    color:#35597a;
+
+    letter-spacing:.7px;
+
+    margin:
+    0 0 8px;
+
+    padding-bottom:4px;
+
+    border-bottom:
+    1px solid rgba(53,89,122,.35);
+}
+
+/* =========================
+TEXT
+========================= */
+
+.content p,
+.content div,
+.content li{
+
+    font-size:8px;
+
+    line-height:1.55;
+
+    color:#222;
+}
+
+/* =========================
+JOBS
+========================= */
+
+.job,
+.edu{
+
+    margin-bottom:10px;
+}
+
+.job-title{
+
+    font-size:8px;
+
+    font-weight:700;
+
+    line-height:1.4;
+}
+
+.job-company{
+
+    font-size:7.5px;
+
+    line-height:1.4;
+}
+
+.muted{
+
+    font-size:7px;
+
+    color:#7f8790;
+}
+
+/* =========================
+UL
+========================= */
+
+.job ul,
+.job ol{
+
+    margin:
+    4px 0 0;
+
+    padding-left:14px;
+}
+
+/* =========================
+IMPORTANT FIX
+========================= */
+
+.name,
+.role,
+.side-list li,
+.content,
+.section,
+.job,
+.edu{
+    min-width:0;
+}
+
+}
+
+.job-desc {
+    padding-left: 10px;
+    border-left: 2px solid var(--secondary);
+    margin-top: 4px;
+}

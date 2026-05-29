@@ -1,0 +1,272 @@
+/* =========================================
+   TEMPLATE 4 — DESKTOP CSS
+   Clean Corporate A4 Template (Template D)
+========================================= */
+
+:root {
+  --radius: 12px;
+}
+
+/* ==========================
+   PAGE / CONTAINER
+========================== */
+.container {
+  width: 210mm;
+  min-height: 297mm;
+  background: #fff;
+  color: #111827;
+  padding: 40px 50px;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  margin: 0 auto;
+}
+
+/* ==========================
+   HEADER
+========================== */
+.header-ref {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-text {
+  flex: 1;
+}
+
+.header-text h1 {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #111827;
+}
+
+.job-title {
+  font-size: 18px;
+  margin-top: 6px;
+  font-weight: 600;
+  color: #4b5563;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.summary {
+  margin-top: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.summary p,
+.summary div,
+.summary li {
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+/* ==========================
+   CONTACT ROW
+========================== */
+.contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.contact-row span {
+  display: flex;
+  align-items: center;
+}
+
+/* ==========================
+   PHOTO
+========================== */
+.header-photo {
+  flex: none;
+}
+
+.header-photo img,
+.photo-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: cover;
+  background: #ececec;
+  font-size: 36px;
+  font-weight: 800;
+  color: #9ca3af;
+  border: 4px solid #f3f4f6;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ==========================
+   DIVIDER
+========================== */
+.top-divider {
+  margin: 24px 0;
+  border: none;
+  border-top: 2px solid #e5e7eb;
+}
+
+/* ==========================
+   SECTIONS
+========================== */
+.block {
+  margin-bottom: 24px;
+}
+
+.label {
+  display: inline-block;
+  padding: 6px 14px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  background: #f3f4f6;
+  color: #111827;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* ==========================
+   LANGUAGES & SKILLS
+========================== */
+.lang-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.lang-row span {
+  width: 120px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.bar {
+  flex: 1;
+  max-width: 200px;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar i {
+  display: block;
+  height: 100%;
+  background: #111827;
+  border-radius: 999px;
+}
+
+/* ==========================
+   TWO COLUMN LAYOUT
+========================== */
+.two-col {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.date-col {
+  width: 120px;
+  min-width: 120px;
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.5;
+  font-weight: 600;
+  border-right: 2px solid #e5e7eb;
+  padding-right: 16px;
+  text-align: right;
+}
+
+/* ==========================
+   TEXT & JOBS
+========================== */
+.two-col > div:last-child {
+  flex: 1;
+}
+
+.two-col strong {
+  font-size: 16px;
+  color: #111827;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.two-col em {
+  font-size: 14px;
+  color: #4b5563;
+  font-style: normal;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.block p,
+.block li,
+.two-col div {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.job-block {
+  margin-bottom: 24px;
+}
+
+.job-block ul {
+  padding-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 0;
+  list-style-type: square;
+}
+
+.job-block li {
+  margin-bottom: 6px;
+}
+
+/* ==========================
+   PRINT OVERRIDES
+========================== */
+@media print {
+  .app-header,
+  .template-scroll,
+  .resume-actions {
+    display: none !important;
+  }
+  .resume-container {
+    padding: 0 !important;
+  }
+  .container {
+    width: 210mm !important;
+    height: 297mm !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 20mm !important;
+    page-break-after: always;
+  }
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}

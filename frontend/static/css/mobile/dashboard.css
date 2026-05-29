@@ -1,0 +1,218 @@
+/* ==========================================================
+   WISAXIS RESUME MAKER - MOBILE RESPONSIVE WIZARD
+   ========================================================== */
+
+
+.grid-2-col {
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+/* Wizard & Form inputs */
+html body .form-container {
+  padding: var(--space-4);
+  border-radius: 16px;
+}
+
+html body .wizard-track {
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  align-items: flex-start;
+}
+
+html body .step-num {
+  width: 32px;
+  height: 32px;
+  font-size: var(--text-xs);
+}
+
+html body .wizard-connector {
+  margin-top: 15px;
+  margin-bottom: 0;
+}
+
+html body .form-section {
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+html body .template-grid {
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+}
+
+html body .template-label {
+  min-height: 60px;
+  font-size: var(--text-sm);
+  padding: var(--space-2);
+}
+
+/* Touch accessibility sizes & font prevent iOS zoom */
+html[data-theme] input,
+html[data-theme] textarea,
+html[data-theme] select {
+  padding: var(--space-3);
+  font-size: 16px;
+  touch-action: manipulation;
+}
+
+html body textarea {
+  min-height: 90px;
+}
+
+/* Templates preview dynamic scaled viewports */
+html body.preview-mode-active {
+  padding: var(--space-3) 0 90px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+html body .template-scroll {
+  position: fixed;
+  left: 0;
+  top: auto;
+  bottom: 0;
+  width: 100%;
+  height: calc(80px + env(safe-area-inset-bottom, 0px));
+  overflow-x: auto;
+  overflow-y: hidden;
+  z-index: 999;
+  background: rgba(10, 14, 26, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border-medium);
+  padding: 0 0 env(safe-area-inset-bottom, 0px);
+  display: flex;
+  align-items: center;
+  touch-action: pan-x;
+  scrollbar-width: none;
+}
+
+html body .template-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+html body .template-scroll-track {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding: 10px 16px;
+  width: max-content;
+  transform: none;
+  will-change: transform;
+  touch-action: pan-x;
+}
+
+html body .template-thumb {
+  width: 44px;
+  height: 58px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  transition: transform var(--duration-fast) var(--ease-spring);
+}
+
+html body .template-thumb:hover,
+html body .template-thumb:active {
+  transform: scale(1.12) translateY(-4px);
+}
+
+/* Resume Preview Scaling to A4 Aspect Ratios */
+html body .resume-preview-page {
+  transform: scale(0.43);
+  transform-origin: top center;
+  margin-top: 0;
+  margin-bottom: calc(297mm * 0.43 - 297mm);
+  border-radius: 4px;
+  width: 210mm;
+  height: 297mm;
+}
+
+html body .resume-preview-wrap {
+  padding: 12px 0 90px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+html body .resume-preview-container {
+  transform: scale(0.43);
+  transform-origin: top center;
+  margin-bottom: calc(297mm * 0.43 - 297mm);
+}
+
+/* Floating controls adjustment */
+html body .floating-download-menu {
+  right: 12px;
+  bottom: 90px;
+}
+
+html body .floating-btn {
+  padding: 10px 18px;
+  font-size: var(--text-xs);
+  border-radius: 40px;
+}
+
+
+@media (max-width: 480px) {
+  .template-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 400px) {
+  /* Collapse progress track labels for perfect single-line fit */
+  html body .wizard-step .step-label {
+    display: none;
+  }
+
+  html body .wizard-step[aria-current="step"] .step-label {
+    display: inline-block;
+    font-size: 11px;
+  }
+
+  html body .wizard-sticky {
+    padding: var(--space-2) var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  html body .form-section {
+    padding: var(--space-4) var(--space-3) var(--space-4);
+  }
+
+  /* Snug fit bottom bar actions */
+  html body .bottom-bar {
+    padding: var(--space-2);
+  }
+
+  html body .btn-wizard {
+    min-height: 48px;
+    font-size: var(--text-sm);
+  }
+
+  html body .resume-preview-page,
+  html body .resume-preview-container {
+    transform: scale(0.38);
+    margin-bottom: calc(297mm * 0.38 - 297mm);
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  html body .resume-preview-page,
+  html body .resume-preview-container {
+    transform: scale(0.55);
+    margin-bottom: calc(297mm * 0.55 - 297mm);
+  }
+}
+
+/* Vertical spacing for inputs in dynamic wizard rows on mobile */
+html body .exp-item input,
+html body .exp-item textarea,
+html body .edu-item input {
+  margin-bottom: var(--space-3);
+}
+
+html body .exp-item :last-child,
+html body .edu-item :last-child {
+  margin-bottom: 0;
+}

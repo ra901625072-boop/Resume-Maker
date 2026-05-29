@@ -1,0 +1,122 @@
+{% set template_id = 4 %}
+{% extends 'template_background.html' %}
+
+{% block template_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/desktop/template4.css') }}">
+<link rel="stylesheet" media="screen and (max-width: 500px)" href="{{ url_for('static', filename='css/mobile/template4.css') }}">
+{% endblock %}
+
+{% block template_content %}
+<article class="container" data-resume-root role="document" aria-label="Resume">
+
+      <!-- HEADER -->
+      <header class="header-ref">
+        <div class="header-text">
+          <h1>
+            {{ e(data.name) if data.name else 'NAME SURNAME' }}
+          </h1>
+
+          <h2 class="job-title">
+            {{ e(data.title) if data.title else 'Financial Analyst' }}
+          </h2>
+
+          {% if data.summary %}
+          <p class="summary">
+            {{ render_html(data.summary) }}
+          </p>
+          {% endif %}
+
+          <div class="contact-row">
+            {% if data.email %}<span>{{ e(data.email) }}</span>{% endif %}
+            {% if data.address %}<span>{{ render_html(data.address) }}</span>{% endif %}
+            {% if data.phone %}<span>{{ e(data.phone) }}</span>{% endif %}
+          </div>
+        </div>
+
+        <div class="header-photo">
+          {% if data.photo %}
+          <img src="{{ data.photo }}" alt="Profile photo">
+          {% else %}
+          <div class="photo-placeholder">{{ initials | e }}</div>
+          {% endif %}
+        </div>
+      </header>
+
+      <hr class="top-divider">
+
+      <!-- LANGUAGES -->
+      {% if data.languages %}
+      <section class="block">
+        <div class="label">LANGUAGES</div>
+
+        {% for lang in data.languages %}
+        <div class="lang-row">
+          <span>{{ lang.name if lang.name else lang }}</span>
+          <div class="bar">
+            <i style="width: {{ (lang.level if lang.level else 70) | string + '%' }}"></i>
+          </div>
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <!-- EDUCATION -->
+      {% if data.education %}
+      <section class="block">
+        <div class="label">EDUCATION</div>
+
+        {% for edu in data.education %}
+        <div class="two-col">
+          <div class="date-col">
+            {{ e(edu.year) }}<br>
+            {{ e(edu.location) if edu.location }}
+          </div>
+          <div>
+            <strong>{{ e(edu.degree) }}</strong><br>
+            {{ e(edu.university) }}
+          </div>
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <!-- SKILLS -->
+      {% if data.skills %}
+      <section class="block">
+        <div class="label">SKILLS</div>
+        <p>{{ data.skills | join(', ') }}</p>
+      </section>
+      {% endif %}
+
+      <!-- EXPERIENCE -->
+      {% if data.experience %}
+      <section class="block">
+        <div class="label">PROFESSIONAL EXPERIENCE</div>
+
+        {% for job in data.experience %}
+        <div class="job-block">
+          <div class="two-col">
+            <div class="date-col">
+              {{ e(job.duration) }}<br>
+              {{ e(job.location) if job.location }}
+            </div>
+            <div>
+              <strong>{{ e(job.company) }}</strong><br>
+              <em>{{ e(job.title) }}</em>
+            </div>
+          </div>
+
+          {% if job.description %}
+          <ul>
+            {{ render_html(job.description) }}
+          </ul>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+    </article>
+
+  </div>
+{% endblock %}

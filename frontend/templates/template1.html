@@ -1,0 +1,133 @@
+{% set template_id = 1 %}
+{% extends 'template_background.html' %}
+
+{% block template_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/desktop/template1.css') }}">
+<link rel="stylesheet" media="screen and (max-width: 500px)"
+      href="{{ url_for('static', filename='css/mobile/template1.css') }}">
+{% endblock %}
+
+{% block template_content %}
+
+<article class="page">
+
+  <aside class="sidebar">
+
+    <!-- Photo -->
+    <div class="photo-wrap">
+      {% if photo_exists and photo %}
+      <img src="{{ photo }}" alt="Photo">
+      {% else %}
+      <div class="photo-placeholder">{{ initials }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Name & Role -->
+    <div class="name-role">
+      <div class="name">{{ e(name) }}</div>
+      <div class="role">{{ e(title) }}</div>
+    </div>
+
+    <hr>
+
+    <!-- Contact -->
+    <section class="side-section contact">
+      <h3>CONTACT</h3>
+      <ul class="side-list">
+        {% if phone %}<li>{{ render_inline(phone) }}</li>{% endif %}
+        {% if email %}<li>{{ render_inline(email) }}</li>{% endif %}
+        {% if address %}<li>{{ render_inline(address) }}</li>{% endif %}
+      </ul>
+    </section>
+
+    <hr>
+
+    <!-- Skills -->
+    <section class="side-section skills">
+      <h3>SKILLS</h3>
+      {% if skills %}
+      <ul class="side-list">
+        {% for s in skills.split(',') if s.strip() %}
+        <li>{{ e(s) }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="muted">No skills</p>
+      {% endif %}
+    </section>
+
+    <hr>
+
+    <!-- Languages -->
+    <section class="side-section languages">
+      <h3>LANGUAGES</h3>
+      {% if languages %}
+      <ul class="side-list">
+        {% for l in languages %}
+        <li>{{ e(l) }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="muted">No languages</p>
+      {% endif %}
+    </section>
+
+  </aside>
+
+  <main class="content">
+
+    <!-- Summary -->
+    <section class="section summary">
+      <h2>PROFESSIONAL SUMMARY</h2>
+      {% if summary %}
+      <div>{{ render_html(summary) }}</div>
+      {% else %}
+      <p class="muted">No profile summary</p>
+      {% endif %}
+    </section>
+
+    <!-- Education -->
+    <section class="section education">
+      <h2>EDUCATION</h2>
+
+      {% if education %}
+      {% for ed in education %}
+      <div class="edu">
+        {% if ed.year %}
+        <div class="muted">{{ ed.year | e }}</div>
+        {% endif %}
+        <div class="job-title">{{ ed.degree | e }}</div>
+        <div class="job-company">{{ ed.university | e }}</div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="muted">No education provided</p>
+      {% endif %}
+    </section>
+
+    <!-- Experience -->
+    <section class="section experience">
+      <h2>EXPERIENCE</h2>
+
+      {% if experience %}
+      {% for exp in experience %}
+      <div class="job">
+        <div class="muted">{{ exp.duration | e }}</div>
+        <div class="job-title">{{ exp.title | e }}</div>
+        <div class="job-company">{{ exp.company | e }}</div>
+
+        {% if exp.description %}
+        <div class="job-desc">{{ exp.description | nl2br | safe }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="muted">No experience provided</p>
+      {% endif %}
+    </section>
+
+  </main>
+
+</article>
+
+{% endblock %}

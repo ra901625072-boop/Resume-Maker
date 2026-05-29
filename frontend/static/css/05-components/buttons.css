@@ -1,0 +1,166 @@
+/* ==========================================================
+   WISAXIS — BUTTON COMPONENTS
+   All button variants in one place.
+   Sources: desktop/home.css (btn-primary/outline/secondary, cta-*),
+            desktop/components.css (btn-primary in nav),
+            base/template-background-desktop.css (download-btn)
+   ========================================================== */
+
+/* ===== BASE BUTTON ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--btn-radius, 12px);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition);
+}
+
+/* ===== PRIMARY BUTTON ===== */
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.40);
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 20px 40px -5px rgba(99, 102, 241, 0.60);
+  filter: brightness(1.1);
+}
+
+/* ===== OUTLINE BUTTON ===== */
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--text-main);
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--primary);
+}
+
+/* ===== SECONDARY BUTTON ===== */
+.btn-secondary {
+  background: var(--accent);
+  color: white;
+}
+
+/* ===== CTA PRIMARY (hero call-to-action) ===== */
+.cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--primary), #4f46e5);
+  color: white;
+  padding: 1.1rem 2.25rem;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  box-shadow: 0 16px 36px -8px rgba(99, 102, 241, 0.50);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+}
+
+.cta-primary:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 24px 48px -8px rgba(99, 102, 241, 0.60);
+  filter: brightness(1.05);
+}
+
+/* ===== CTA SECONDARY ===== */
+.cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-main);
+  padding: 1.1rem 2.25rem;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: 1px solid var(--glass-border);
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.cta-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.20);
+  transform: translateY(-2px);
+}
+
+html[data-theme="light"] .cta-secondary {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+html[data-theme="light"] .cta-secondary:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+  transform: translateY(-2px);
+}
+
+html[data-theme="light"] .cta-primary {
+  box-shadow: 0 10px 28px -5px rgba(30, 58, 138, 0.30);
+}
+
+html[data-theme="light"] .cta-primary:hover {
+  box-shadow: 0 18px 38px -5px rgba(30, 58, 138, 0.40);
+}
+
+/* ===== DOWNLOAD BUTTON (template shell) ===== */
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  color: #fff;
+  background: rgba(15, 23, 42, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
+  cursor: pointer;
+  font-weight: 700;
+  transition: var(--transition);
+}
+
+/* Desktop download button shape */
+@media (min-width: 501px) {
+  .download-btn {
+    height: 56px;
+    padding: 0 24px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Mobile download button shape */
+@media screen and (max-width: 500px) {
+  .download-btn {
+    width: 100%;
+    height: 56px;
+    border-radius: 22px;
+    font-size: 15px;
+    background: var(--mobile-download-bg, transparent);
+    box-shadow: 0 12px 24px rgba(79, 70, 229, 0.32);
+  }
+}
+
+/* ===== MOBILE CTA OVERRIDES ===== */
+@media (max-width: 768px) {
+  .cta-primary,
+  .cta-secondary {
+    padding: 1rem 1.8rem;
+    font-size: 1.05rem;
+  }
+}

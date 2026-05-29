@@ -1,0 +1,390 @@
+/* ===============================
+   Root Variables
+=============================== */
+:root {
+  --accent: #2f5363;
+  --accent-dark: #254650;
+  --muted: #6b6f75;
+  --sidebar-width: 300px;
+  --gutter: 32px;
+  --page-width: 210mm;
+  --page-height: 297mm;
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+
+  /* Template thumbs */
+  --thumb-width: 110px;
+  --thumb-height: 130px;
+  --gap: 14px;
+}
+
+/* ===============================
+   Global Reset
+=============================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+/* ===============================
+   Body
+=============================== */
+body {
+  font-family: "Open Sans", Arial, sans-serif;
+  color: #222;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Background Overlay for Depth */
+
+/* ===============================
+   Page Container (A4)
+=============================== */
+.page {
+  width: var(--page-width);
+  min-height: var(--page-height);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
+}
+
+/* ===============================
+   Header
+=============================== */
+.header {
+  background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  padding: 26px 28px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.photo {
+  width: 110px;
+  height: 110px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #eee;
+  border: 2.5px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.head-left {
+  flex: 1;
+}
+
+.name {
+  text-transform: uppercase;
+  white-space: pre-line;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 30px;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.title {
+  font-size: 13px;
+  opacity: 0.95;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ===============================
+   Body Layout
+   (screen: keep original flex)
+=============================== */
+.body {
+  display: flex;
+  gap: var(--gutter);
+  padding: 22px 28px;
+  flex: 1;
+  /* ensure stacking context for pseudo lines if needed */
+  position: relative;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  border-right: 2px solid #e6e8ea;
+  padding-right: 18px;
+}
+
+.main {
+  flex: 1;
+}
+
+/* ===============================
+   Sidebar Blocks
+=============================== */
+.block {
+  margin-bottom: 22px;
+}
+
+.block h4 {
+  font-size: 14px;
+  color: var(--accent-dark);
+  font-weight: 700;
+  margin-bottom: 8px;
+  border-bottom: 2px solid #e6e8ea;
+  padding-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.contact .item {
+  font-size: 13px;
+  margin: 9px 0;
+}
+
+.list {
+  list-style: none;
+}
+
+.list li {
+  font-size: 13px;
+  margin: 9px 0;
+}
+
+/* ===============================
+   Sections
+=============================== */
+.section {
+  margin-bottom: 18px;
+}
+
+.section h3 {
+  font-size: 18px;
+  color: var(--accent-dark);
+  margin-bottom: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 6px;
+}
+
+.education-item,
+.exp-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.edu-years,
+.exp-years {
+  width: 96px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.edu-body .deg,
+.exp-body .role {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.edu-body .inst,
+.exp-body .company {
+  font-size: 13px;
+  color: #666;
+}
+
+/* ===============================
+   Footer Strip
+=============================== */
+.footer-strip {
+  height: 26px;
+  background: linear-gradient(180deg, var(--accent-dark), var(--accent));
+}
+
+/* ===============================
+   Template Thumbnails (UI only)
+=============================== */
+
+
+
+
+
+
+
+
+
+
+
+/* ===============================
+   Download Button
+=============================== */
+/* ===============================
+   Download Button
+=============================== */
+.btn {
+  position: fixed;
+  right: 30px;
+  bottom: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2563eb;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.5);
+}
+
+.btn svg {
+  stroke-width: 2.5px;
+}
+
+/* ===============================
+   Responsive
+/* =============================== */
+/* @media (max-width: 880px) {
+  .body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    padding-right: 0;
+  }
+}  */
+
+/* ===============================
+   ðŸ”¥ PERFECT PRINT / PDF MODE
+   (force stable grid + manual divider)
+=============================== */
+@media print {
+
+  /* A4 page setup */
+  @page {
+    size: A4;
+    margin: 0mm;
+  }
+
+  /* Hide EVERYTHING except resume */
+  body * {
+    visibility: hidden !important;
+  }
+
+  .page,
+  .page * {
+    visibility: visible !important;
+  }
+
+  /* Reset body for print */
+  body {
+    background: #fff !important;
+    padding: 0 !important;
+  }
+
+  /* Ensure exact A4 page sizing for resume */
+  .page {
+    position: static !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  /* Remove UI elements that are only for the editor */
+  .template-scroll,
+  .template-track,
+  .template-thumb,
+  .btn {
+    display: none !important;
+  }
+
+  /*
+    FORCE a fixed two-column grid for print:
+    - prevents browsers from recalculating flex and expanding sidebar
+    - guarantees consistent divider position
+  */
+  .body {
+    display: grid !important;
+    grid-template-columns: var(--sidebar-width) 1fr !important;
+    column-gap: var(--gutter) !important;
+    position: relative !important;
+    padding: 22px 28px !important;
+  }
+
+  /* Draw the vertical divider as a pseudo-element (won't disappear in PDF) */
+  .body::after {
+    content: "";
+    position: absolute;
+    left: calc(var(--sidebar-width));
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: #e6e8ea;
+    /* keep it behind content if any stacking issues */
+    z-index: 0;
+  }
+
+  /* Keep sidebar column fixed width and remove right border (we draw divider) */
+  .sidebar {
+    border-right: none !important;
+    min-width: var(--sidebar-width) !important;
+    max-width: var(--sidebar-width) !important;
+    padding-right: 18px !important;
+    z-index: 1;
+    /* ensure content sits above pseudo-divider visually */
+  }
+
+  /* main column sits above the divider */
+  .main {
+    z-index: 1;
+  }
+
+  /* Prevent ugly page breaks inside important blocks */
+  .header,
+  .body,
+  .footer-strip,
+  .section,
+  .block,
+  .education-item,
+  .exp-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Exact colors in print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

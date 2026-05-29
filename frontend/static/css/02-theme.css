@@ -1,0 +1,68 @@
+/* ==========================================================
+   WISAXIS RESUME MAKER — GLOBAL BODY & THEME
+   Sets base body appearance, transitions, and dark/light
+   theme application using variables from 00-variables.css.
+   ========================================================== */
+
+/* ===== BODY BASE ===== */
+body {
+  font-family: var(--font-body);
+  color: var(--text-main);
+  line-height: 1.6;
+  background: var(--bg-primary);
+  transition: var(--transition-theme);
+}
+
+/* Radial highlight over background */
+
+
+/* Remove legacy glow effects */
+body::after,
+.auth-glow,
+.mouse-light {
+  display: none !important;
+}
+
+/* Per-component transitions are defined within each component.
+   A universal * transition was removed to avoid overrides and reduce paint overhead. */
+
+
+/* ===== THEME TOGGLE BUTTON ===== */
+#theme-toggle {
+  background: var(--surface-card);
+  border: 1px solid var(--glass-border);
+  color: var(--text-main);
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  transition: var(--transition);
+}
+
+#theme-toggle:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  transform: rotate(15deg) scale(1.05);
+  box-shadow: 0 0 18px rgba(99, 102, 241, 0.45);
+}
+
+/* Theme icon switching */
+.theme-icon-sun  { display: none; }
+.theme-icon-moon { display: block; }
+
+html[data-theme="light"] .theme-icon-sun  { display: block; }
+html[data-theme="light"] .theme-icon-moon { display: none; }
+
+/* ===== TEMPLATE SHELL BODY ===== */
+body.template-shell {
+  min-height: 100vh;
+  position: relative;
+  background: #09090f;
+  color: var(--shell-text);
+  font-family: Inter, system-ui, sans-serif;
+}

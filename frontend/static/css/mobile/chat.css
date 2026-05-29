@@ -1,0 +1,186 @@
+/* ==========================================================================
+   Wisaxis AI Resume Assistant Chat Stylesheet (Premium Redesign - Mobile)
+   ========================================================================== */
+
+/* Full mobile layout lock and viewport matching */
+body.chat-page {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+}
+
+.chat-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 0.75rem;
+    padding: calc(70px + 0.5rem) 0.50rem 0.50rem; /* Clears fixed glass header perfectly */
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Transform Sidebar into an elegant floating horizontal pill-row */
+.chat-sidebar {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 0.2rem 0.5rem !important;
+    gap: 0.5rem !important;
+    height: auto !important;
+    border-radius: 0 !important;
+    align-items: center !important;
+    white-space: nowrap;
+    scrollbar-width: none; /* Hide scrollbar for clean visual aesthetic */
+}
+
+.chat-sidebar::-webkit-scrollbar {
+    display: none; /* Webkit browser scrollbar hiding */
+}
+
+.sidebar-title,
+.assistant-info-box,
+.sidebar-section h4 {
+    display: none !important; /* Hide layout clutter to save space on mobile */
+}
+
+.sidebar-section {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 0.5rem !important;
+    width: auto !important;
+}
+
+.suggestion-pill {
+    background: var(--surface-card);
+    border: 1px solid var(--glass-border);
+    padding: 0.55rem 0.95rem;
+    font-size: 0.76rem;
+    font-weight: 700;
+    border-radius: 20px; /* High rounding pill style for mobile touch targets */
+    white-space: nowrap;
+    display: inline-block;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.suggestion-pill::before {
+    display: none; /* Hide side-accent bars to optimize mobile width */
+}
+
+.suggestion-pill:hover,
+.suggestion-pill:active {
+    transform: scale(0.96); /* Touch feedback bounce */
+    background: rgba(99, 102, 241, 0.06);
+    border-color: var(--primary);
+}
+
+/* Chat window mobile adaptation */
+.chat-window {
+    border-radius: 16px;
+    height: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.chat-header {
+    padding: 0.8rem 1rem;
+    background: var(--surface-card);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.assistant-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 1rem;
+    background-image: url('/static/images/CSK.webp');
+    background-size: cover;
+    background-position: center;
+}
+
+.assistant-name {
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.assistant-status {
+    font-size: 0.68rem;
+}
+
+.btn-clear-chat {
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 0.72rem;
+}
+
+/* Message pane bounds and scaling */
+.chat-messages {
+    padding: 1rem 0.85rem;
+    gap: 1.25rem;
+}
+
+.chat-bubble-wrap {
+    max-width: 90%;
+    gap: 10px;
+}
+
+.bubble-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+}
+
+.chat-bubble {
+    padding: 0.85rem 1.05rem;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    border-radius: 16px;
+}
+
+.chat-bubble code {
+    font-size: 0.8rem;
+    padding: 1px 4px;
+}
+
+.chat-bubble pre {
+    padding: 0.85rem;
+    border-radius: 10px;
+    margin: 8px 0;
+}
+
+/* Action widgets position */
+.bubble-actions {
+    bottom: -20px;
+}
+
+.btn-bubble-action {
+    padding: 1px 6px;
+    font-size: 0.64rem;
+}
+
+/* Input Area Float */
+.chat-input-area {
+    padding: 0.75rem 0.85rem;
+    border-top: 1px solid var(--glass-border);
+    background: var(--surface-paper);
+}
+
+.chat-form {
+    gap: 10px;
+}
+
+.chat-input {
+    padding: 12px 16px;
+    font-size: 0.88rem;
+    height: 46px;
+    border-radius: 12px;
+}
+
+.chat-submit-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+}

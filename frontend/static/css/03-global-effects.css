@@ -1,0 +1,252 @@
+/* ==========================================================
+   WISAXIS RESUME MAKER — ANIMATIONS & GLOBAL EFFECTS
+   All keyframes, entrance animations, scroll effects, cards.
+   Replaces: base/global-effects.css
+   ========================================================== */
+
+/* ===== PAGE ENTRY ===== */
+.page-enter {
+  animation: pageReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes pageReveal {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ===== CINEMATIC REVEAL (scroll-triggered) ===== */
+.cinematic-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.cinematic-reveal.active,
+.cinematic-reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 768px) {
+  .cinematic-reveal {
+    transform: translateY(16px);
+  }
+}
+
+/* ===== FADE UP (home page sections) ===== */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-up.visible,
+.fade-up.active {
+  opacity: 1;
+  transform: none;
+}
+
+/* ===== GLASS CARD ===== */
+.classic-card,
+.adaptive-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 22px;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(10px);
+  transition: var(--transition);
+}
+
+@media (hover: hover) {
+  .classic-card:hover,
+  .adaptive-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+  }
+}
+
+@media (max-width: 768px) {
+  .classic-card,
+  .adaptive-card {
+    backdrop-filter: blur(6px);
+  }
+}
+
+/* ===== BUTTON BASE ===== */
+.btn-classic,
+.btn-adaptive {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 14px 22px;
+  border-radius: 16px;
+  font-weight: 600;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+html:not([data-theme="light"]) .btn-classic,
+html:not([data-theme="light"]) .btn-adaptive {
+  background: #fff;
+  color: #090a0f;
+}
+
+html[data-theme="light"] .btn-classic,
+html[data-theme="light"] .btn-adaptive {
+  background: #111827;
+  color: #fff;
+}
+
+@media (hover: hover) {
+  .btn-classic:hover,
+  .btn-adaptive:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-classic,
+  .btn-adaptive {
+    width: 100%;
+  }
+}
+
+/* ===== HERO TITLE ===== */
+.hero-title {
+  font-size: clamp(2.6rem, 7vw, 5.4rem);
+  line-height: 0.95;
+  letter-spacing: -2px;
+}
+
+.hero-subtitle {
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+/* ===== TEMPLATE SCROLL (home page infinite carousel) ===== */
+.template-scroll-wrapper {
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+}
+
+.template-scroll-track {
+  display: flex;
+  gap: 18px;
+  width: max-content;
+  animation: cinematicScroll 42s linear infinite;
+}
+
+.template-scroll-wrapper:hover .template-scroll-track {
+  animation-play-state: paused;
+}
+
+@keyframes cinematicScroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .template-scroll-track {
+    animation-duration: 60s;
+  }
+}
+
+/* ===== RESUME TEMPLATE CARD (home scroll) ===== */
+.resume-template {
+  border-radius: 18px;
+  transition: transform 0.28s ease;
+}
+
+@media (hover: hover) {
+  .resume-template:hover {
+    transform: translateY(-5px);
+  }
+}
+
+/* ===== TEMPLATE BACKGROUND FLOAT ANIMATION ===== */
+@keyframes shellFloat {
+  0%   { transform: translate3d(0, 0, 0); }
+  50%  { transform: translate3d(0, -12px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+/* ===== LOADING SPINNER ===== */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+/* ===== TOUCH FEEDBACK ===== */
+.nav-icon-btn:active,
+.user-dropdown-trigger:active,
+.download-btn:active,
+.template-thumb:active,
+.download-options .option:active,
+.template-link:active {
+  transform: scale(0.97);
+  opacity: 0.85;
+}
+
+/* ===== DOWNLOAD BUTTON LOADING STATE ===== */
+.download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ===== ACCESSIBILITY — FOCUS INDICATORS ===== */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--shell-purple, #7c5cff);
+  outline-offset: 2px;
+}
+
+.download-btn:focus-visible,
+.nav-icon-btn:focus-visible,
+.option:focus-visible {
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.24),
+    0 0 0 3px rgba(124, 92, 255, 0.4);
+}
+
+/* ===== ACCESSIBILITY — REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

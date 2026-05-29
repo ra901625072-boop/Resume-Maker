@@ -1,0 +1,343 @@
+/* ===============================
+   Google Fonts
+=============================== */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;800&display=swap');
+
+/* ===============================
+   CSS Variables
+=============================== */
+:root {
+  --primary: #2f5970;
+  --secondary: #eef4f7;
+  --text-color: #222;
+  --muted: #7d8892;
+  --white: #fff;
+  --shadow-light: rgba(0, 0, 0, 0.06);
+  --shadow-medium: rgba(0, 0, 0, 0.12);
+  --shadow-strong: rgba(0, 0, 0, 0.18);
+
+  --thumb-width: 110px;
+  --thumb-height: 130px;
+  --gap: 14px;
+}
+
+/* ===============================
+   Global Styles
+=============================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  line-height: 1.5;
+  color: var(--text-color);
+  position: relative;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Background Overlay for Depth */
+
+/* ===============================
+   Resume Page Layout
+=============================== */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--white);
+  display: flex;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px var(--shadow-light);
+}
+
+/* ===============================
+   Sidebar
+=============================== */
+.sidebar {
+  width: 78mm;
+  background: var(--primary);
+  color: var(--white);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.photo-wrap,
+.photo-placeholder {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.photo-placeholder {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.name {
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  white-space: pre-line;
+  word-spacing: 100vw;
+}
+
+.role {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin: 14px 0;
+}
+
+.side-section h3 {
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.side-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.side-list li {
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.side-list li::before {
+  content: "• ";
+}
+
+/* ===============================
+   Main Content
+=============================== */
+.content {
+  flex: 1;
+  padding: 28px 36px;
+}
+
+.section {
+  margin-bottom: 18px;
+}
+
+.section h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  border-bottom: 1px solid rgba(47, 89, 112, 0.3);
+  padding-bottom: 6px;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.job,
+.edu {
+  margin-bottom: 14px;
+  page-break-inside: avoid;
+}
+
+.job-title {
+  font-weight: 700;
+}
+
+.job-desc {
+  padding-left: 14px;
+  border-left: 2px solid var(--secondary);
+  margin-top: 6px;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ===============================
+   Template Thumbnail Scroll
+=============================== */
+
+
+
+
+/* Thumbnail Images */
+
+
+
+
+
+
+
+/* ===============================
+   Download Button
+=============================== */
+.btn {
+  position: fixed;
+  right: 30px;
+  bottom: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2563eb;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.5);
+}
+
+.btn svg {
+  stroke-width: 2.5px;
+}
+
+/* ===============================
+   PRINT â€” SPACING OPTIMIZED
+=============================== */
+@page {
+  size: A4;
+  margin: 0mm;
+}
+
+@media print {
+
+  /* Hide UI */
+  .template-scroll,
+  .template-track,
+  .template-thumb,
+  .btn {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Disable flex in print */
+  .page {
+    display: table !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 auto !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+  }
+
+  .sidebar,
+  .content {
+    display: table-cell !important;
+    vertical-align: top !important;
+  }
+
+  .sidebar {
+    width: 76mm !important;
+
+    padding: 12mm !important;
+
+  }
+
+  .content {
+    padding: 12mm 14mm !important;
+
+  }
+
+  /* Typography tightening */
+  body {
+    font-size: 11.5pt;
+    line-height: 1.35;
+
+  }
+
+  .name {
+    font-size: 22pt;
+    margin-bottom: 4mm;
+  }
+
+  .section h2 {
+    font-size: 13pt;
+    margin-bottom: 4px;
+  }
+
+  .section {
+    margin-bottom: 10px;
+
+  }
+
+  .job,
+  .edu {
+    margin-bottom: 8px;
+
+  }
+
+  .side-list li {
+    margin-bottom: 3px;
+  }
+
+  hr {
+    margin: 8px 0;
+  }
+
+  .muted {
+    font-size: 10.5pt;
+  }
+
+
+  .job,
+  .edu,
+  .section {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  * {
+    animation: none !important;
+    transition: none !important;
+  }

@@ -1,0 +1,23 @@
+/* ==========================================================
+   WISAXIS RESUME MAKER - MOBILE RESPONSIVE BASE THEME
+   ========================================================== */
+@import url('../base/global-effects.css');
+
+
+html body {
+  padding-top: calc(62px + var(--space-3));
+}
+
+html body .btn {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  border-radius: var(--btn-radius);
+}
+
+
+@media (max-width: 400px) {
+  html body {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}

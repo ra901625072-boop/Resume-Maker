@@ -1,0 +1,430 @@
+/* ==========================================
+WISAXIS — Premium Minimal Motion System
+Optimized UI/UX Edition
+========================================== */
+
+/* ---------- GPU OPTIMIZATION ---------- */
+
+*{
+box-sizing:border-box;
+-webkit-font-smoothing:antialiased;
+text-rendering:optimizeLegibility;
+}
+
+/* Apply GPU only to animated elements */
+.cinematic-reveal,
+.template-scroll-track,
+.resume-template{
+will-change:transform;
+}
+
+
+/* ---------- THEME ---------- */
+
+:root{
+
+--bg-primary:#090a0f;
+
+--surface:
+rgba(20,24,34,.62);
+
+--surface-border:
+rgba(255,255,255,.08);
+
+--text-primary:#f8fafc;
+
+--text-secondary:#94a3b8;
+
+--shadow-soft:
+0 12px 30px rgba(0,0,0,.24);
+
+--shadow-hover:
+0 20px 42px rgba(0,0,0,.34);
+
+--transition:
+all .32s cubic-bezier(.22,1,.36,1);
+
+}
+
+
+html[data-theme="light"]{
+
+/* Same soft blue-grey palette as the template shell light mode */
+--bg-primary:#e8ecf4;
+
+--surface:
+rgba(255,255,255,.85);
+
+--surface-border:
+rgba(15,23,42,.07);
+
+--text-primary:#0f172a;
+
+--text-secondary:#475569;
+
+--shadow-soft:
+0 8px 28px rgba(15,23,42,.08);
+
+--shadow-hover:
+0 18px 40px rgba(15,23,42,.12);
+
+}
+
+
+/* ---------- BODY ---------- */
+
+body{
+
+overflow-x:hidden;
+
+background:
+radial-gradient(
+  circle at top left,
+  rgba(255,255,255,.03),
+  transparent 34%
+),
+var(--bg-primary);
+
+color:var(--text-primary);
+
+transition:
+background .45s ease,
+color .35s ease;
+
+}
+
+/* Light mode body: airy blue-grey */
+html[data-theme="light"] body {
+  background:
+    radial-gradient(
+      circle at 20% 0%,
+      rgba(99, 102, 241, 0.06),
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 100%,
+      rgba(56, 189, 248, 0.05),
+      transparent 50%
+    ),
+    #e8ecf4;
+}
+
+
+/* remove old glow */
+body::before,
+body::after,
+.auth-glow,
+.mouse-light{
+display:none!important;
+}
+
+
+/* ---------- CINEMATIC ENTRY ---------- */
+
+.page-enter{
+
+animation:
+pageReveal .7s cubic-bezier(.22,1,.36,1);
+
+}
+
+@keyframes pageReveal{
+
+from{
+
+opacity:0;
+
+transform:
+translateY(22px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:none;
+
+}
+
+}
+
+
+/* ---------- REVEAL ---------- */
+
+.cinematic-reveal{
+
+opacity:0;
+
+transform:
+translateY(28px);
+
+transition:
+opacity .7s ease,
+transform .7s ease;
+
+}
+
+.cinematic-reveal.active{
+
+opacity:1;
+
+transform:none;
+
+}
+
+
+/* ---------- CARD ---------- */
+
+.classic-card,
+.adaptive-card{
+
+background:
+var(--surface);
+
+border:
+1px solid
+var(--surface-border);
+
+border-radius:22px;
+
+box-shadow:
+var(--shadow-soft);
+
+backdrop-filter:
+blur(10px);
+
+transition:
+var(--transition);
+
+}
+
+@media (hover:hover){
+
+.classic-card:hover,
+.adaptive-card:hover{
+
+transform:
+translateY(-4px);
+
+box-shadow:
+var(--shadow-hover);
+
+}
+
+}
+
+
+/* ---------- BUTTON ---------- */
+
+.btn-classic,
+.btn-adaptive{
+
+display:inline-flex;
+
+align-items:center;
+
+justify-content:center;
+
+min-height:52px;
+
+padding:14px 22px;
+
+border-radius:16px;
+
+font-weight:600;
+
+transition:
+transform .2s ease,
+opacity .2s ease;
+
+}
+
+html:not([data-theme="light"])
+.btn-classic,
+
+html:not([data-theme="light"])
+.btn-adaptive{
+
+background:#fff;
+
+color:#090a0f;
+
+}
+
+html[data-theme="light"]
+.btn-classic,
+
+html[data-theme="light"]
+.btn-adaptive{
+
+background:#111827;
+
+color:#fff;
+
+}
+
+@media (hover:hover){
+
+.btn-classic:hover,
+.btn-adaptive:hover{
+
+transform:
+translateY(-2px);
+
+}
+
+}
+
+
+/* ---------- HERO ---------- */
+
+.hero-title{
+
+font-size:
+clamp(2.6rem,7vw,5.4rem);
+
+line-height:.95;
+
+letter-spacing:-2px;
+
+}
+
+.hero-subtitle{
+
+line-height:1.7;
+
+color:
+var(--text-secondary);
+
+}
+
+
+/* ---------- TEMPLATE SCROLL ---------- */
+
+.template-scroll-wrapper{
+
+overflow:hidden;
+
+mask-image:
+linear-gradient(
+to right,
+transparent,
+black 10%,
+black 90%,
+transparent
+);
+
+}
+
+.template-scroll-track{
+
+display:flex;
+
+gap:18px;
+
+width:max-content;
+
+animation:
+cinematicScroll 42s linear infinite;
+
+}
+
+.template-scroll-wrapper:hover
+.template-scroll-track{
+
+animation-play-state:paused;
+
+}
+
+@keyframes cinematicScroll{
+
+to{
+
+transform:
+translateX(-50%);
+
+}
+
+}
+
+
+/* ---------- RESUME ---------- */
+
+.resume-template{
+
+border-radius:18px;
+
+transition:
+transform .28s ease;
+
+}
+
+@media (hover:hover){
+
+.resume-template:hover{
+
+transform:
+translateY(-5px);
+
+}
+
+}
+
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width:768px){
+
+.template-scroll-track{
+
+animation-duration:60s;
+
+}
+
+.cinematic-reveal{
+
+transform:
+translateY(16px);
+
+}
+
+.btn-classic,
+.btn-adaptive{
+
+width:100%;
+
+}
+
+.classic-card,
+.adaptive-card{
+
+backdrop-filter:
+blur(6px);
+
+}
+
+}
+
+
+/* ==========================================
+   FIX #9: ACCESSIBILITY — FOCUS INDICATORS
+========================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--shell-purple, #7c5cff);
+    outline-offset: 2px;
+}
+
+.download-btn:focus-visible,
+.nav-icon-btn:focus-visible,
+.option:focus-visible {
+    box-shadow:
+        0 16px 34px rgba(0, 0, 0, 0.24),
+        0 0 0 3px rgba(124, 92, 255, 0.4);
+}

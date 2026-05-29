@@ -1,0 +1,302 @@
+/* ================= RESET & BASE ================= */
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 40px 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Background Overlay for Depth */
+
+/* ================= RESUME (A4) ================= */
+.resume {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background: #e9e6e2;
+  padding: 30px;
+  font-size: 13px;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 34px;
+}
+
+.header p {
+  margin: 5px 0;
+  font-weight: 500;
+}
+
+.contact span {
+  display: block;
+  font-size: 13px;
+  color: #333;
+}
+
+.header-right img,
+.photo-placeholder {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 3px solid rgba(51, 51, 51, 0.85);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  object-fit: cover;
+}
+
+.photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  background: #cfcfcf;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  gap: 25px;
+  margin-top: 30px;
+}
+
+/* SECTIONS */
+.section {
+  margin-bottom: 25px;
+}
+
+.section-title {
+  background: #f7f5f2;
+  border: 1.5px solid rgba(51, 51, 51, 0.9);
+  border-radius: 30px;
+  padding: 4px 14px;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 14px;
+  color: #333;
+}
+
+/* ITEMS */
+.item {
+  margin-bottom: 18px;
+}
+
+.item h3 {
+  margin: 2px 0 4px;
+  font-size: 15px;
+  color: #222;
+}
+
+.item strong {
+  font-size: 13px;
+  color: #444;
+}
+
+.date {
+  font-size: 11px;
+  color: #666;
+}
+
+/* SKILLS */
+.skill {
+  margin-bottom: 14px;
+}
+
+.skill span {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.bar {
+  background: #cfcfcf;
+  height: 6px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.bar div {
+  height: 100%;
+  width: var(--level, 50%);
+  /* uses inline --level value */
+  background: #333;
+  transition: width 0.5s ease;
+}
+
+/* CIRCLES */
+.circles {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.circle {
+  width: 70px;
+  height: 70px;
+  border: 1.5px solid rgba(51, 51, 51, 0.85);
+  border-radius: 50%;
+  text-align: center;
+  padding-top: 12px;
+  background: transparent;
+  transition: all 0.25s ease;
+}
+
+.circle:hover {
+  transform: scale(1.05);
+  border-color: #2563eb;
+}
+
+.circle strong {
+  display: block;
+  font-size: 16px;
+  color: #222;
+}
+
+.circle span {
+  font-size: 10px;
+  color: #555;
+}
+
+/* PRINT BUTTON */
+/* ================= DOWNLOAD BUTTON ================= */
+.btn {
+  position: fixed;
+  right: 30px;
+  bottom: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2563eb;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.5);
+}
+
+.btn svg {
+  stroke-width: 2.5px;
+}
+
+/* ================= TEMPLATE THUMBNAILS (UI) ================= */
+:root {
+  --thumb-width: 110px;
+  --thumb-height: 130px;
+  --gap: 14px;
+}
+
+
+
+
+
+/* Thumbnail images (example paths) */
+
+
+
+
+
+
+
+/* ================= PRINT RULES (A4) ================= */
+@page {
+  size: A4;
+  margin: 0mm;
+}
+
+@media print {
+
+  /* hide UI elements */
+  .template-scroll,
+  .btn {
+    display: none !important;
+  }
+
+  /* Ask browser to include background colors (user must enable background graphics) */
+  html,
+  body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Force resume to exact A4, remove shadows/rounded corners for printer */
+  .resume {
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 auto !important;
+    padding: 20mm !important;
+    /* keep inner padding in mm for predictable layout */
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    page-break-after: always;
+  }
+
+  /* avoid breaking important blocks across pages */
+  .section,
+  .item,
+  .grid,
+  .circles {
+    page-break-inside: avoid;
+  }
+
+  /* ensure perfect print legibility in grayscale */
+  .date,
+  .item strong,
+  .circle span,
+  .contact span {
+    color: #111 !important;
+  }
+
+  /* ensure skill bars render full width as set */
+  .bar div {
+    background: #333 !important;
+  }
+}

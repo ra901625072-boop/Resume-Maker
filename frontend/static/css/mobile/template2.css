@@ -1,0 +1,294 @@
+/* =========================================
+   TEMPLATE 2 — MOBILE CSS
+   Optimized A4 Preview for Mobile
+========================================= */
+
+:root {
+  --mobile-page-width: 100vw;
+  --mobile-radius: 14px;
+
+  /*
+    A4 Ratio
+    210 / 297 = 1 : 1.414
+  */
+  --a4-ratio: 1 / 1.414;
+}
+
+/* =========================================
+   MOBILE RESET
+========================================= */
+
+/* Body layout is handled by template-layout.css */
+
+/* =========================================
+   A4 MOBILE PAGE
+========================================= */
+
+/* .page outer sizing (width, aspect-ratio, overflow, shadow) is controlled
+   by template-layout.css. This file only handles internal layout. */
+.page {
+  /* Internal layout only */
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+  padding: 14px 16px;
+  gap: 12px;
+  align-items: center;
+}
+
+.photo {
+  width: 58px;
+  height: 58px;
+  min-width: 58px;
+  border-width: 2px;
+}
+
+.photo-placeholder {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.name {
+  text-transform: uppercase;
+  white-space: pre-line;
+  font-size: 18px;
+  line-height: 1.1;
+  margin-bottom: 4px;
+  word-break: break-word;
+}
+
+.title {
+  font-size: 9px;
+  letter-spacing: 0.4px;
+  line-height: 1.3;
+}
+
+/* =========================================
+   MAIN LAYOUT
+========================================= */
+
+.body {
+  display: flex;
+  flex-direction: row !important;
+
+  gap: 10px;
+
+  padding: 12px 14px;
+
+  flex: 1;
+}
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+.sidebar {
+  width: 35% !important;
+  min-width: 35% !important;
+  max-width: 35% !important;
+
+  padding-right: 8px;
+
+  border-right: 1px solid #e5e7eb;
+}
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
+
+.main {
+  width: 65% !important;
+  min-width: 65% !important;
+  max-width: 65% !important;
+  flex: 1 !important;
+}
+
+/* =========================================
+   BLOCKS
+========================================= */
+
+.block {
+  margin-bottom: 12px;
+}
+
+.block h4 {
+  font-size: 9px;
+  margin-bottom: 5px;
+  padding-bottom: 4px;
+  border-bottom-width: 1px;
+  letter-spacing: 0.4px;
+}
+
+.contact .item {
+  font-size: 7px;
+  line-height: 1.35;
+  margin: 5px 0;
+
+  word-break: break-word;
+}
+
+.list {
+  padding-left: 0;
+}
+
+.list li {
+  font-size: 7px;
+  line-height: 1.35;
+  margin: 4px 0;
+
+  word-break: break-word;
+}
+
+/* =========================================
+   SECTIONS
+========================================= */
+
+.section {
+  margin-bottom: 12px;
+}
+
+.section h3 {
+  font-size: 11px;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom-width: 1px;
+}
+
+/* =========================================
+   EDUCATION / EXPERIENCE
+========================================= */
+
+.education-item,
+.exp-item {
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.edu-years,
+.exp-years {
+  width: 52px;
+
+  font-size: 7px;
+  line-height: 1.3;
+
+  flex-shrink: 0;
+}
+
+.edu-body .deg,
+.exp-body .role {
+  font-size: 8px;
+  line-height: 1.3;
+}
+
+.edu-body .inst,
+.exp-body .company {
+  font-size: 7px;
+  line-height: 1.35;
+}
+
+/* =========================================
+   SUMMARY
+========================================= */
+
+.section p,
+.section div,
+.section li {
+  font-size: 7px !important;
+  line-height: 1.45 !important;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.footer-strip {
+  height: 12px;
+}
+
+/* =========================================
+   DOWNLOAD BUTTON
+========================================= */
+
+.btn {
+  right: 14px;
+  bottom: 14px;
+
+  padding: 10px 16px;
+
+  font-size: 13px;
+
+  border-radius: 40px;
+}
+
+/* =========================================
+   EXTRA SMALL DEVICES
+========================================= */
+
+@media screen and (max-width: 380px) {
+
+  body {
+    padding: 8px !important;
+  }
+
+  .page {
+    border-radius: 10px;
+  }
+
+  .header {
+    padding: 12px;
+  }
+
+  .photo {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+  }
+
+  .name {
+  text-transform: uppercase;
+  white-space: pre-line;
+    font-size: 16px;
+  }
+
+  .title {
+    font-size: 8px;
+  }
+
+  .body {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .sidebar {
+    padding-right: 6px;
+  }
+
+  .section h3 {
+    font-size: 10px;
+  }
+
+  .block h4 {
+    font-size: 8px;
+  }
+}
+
+/* =========================================
+   LANDSCAPE MODE
+========================================= */
+
+@media screen and (orientation: landscape) {
+
+  body {
+    padding: 14px !important;
+  }
+
+  .page {
+    max-width: 340px;
+  }
+}
