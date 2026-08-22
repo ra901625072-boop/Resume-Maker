@@ -33,11 +33,12 @@
 
     <style>
         .json-features-container {
-            max-width: 960px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: var(--space-4) var(--space-3) var(--space-8);
+            padding: var(--space-4) var(--space-4) var(--space-8);
         }
 
+        /* ── Page Header (Symmetrical Hero) ── */
         .page-header {
             margin-bottom: var(--space-6);
             text-align: center;
@@ -47,16 +48,16 @@
         .ai-model-badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             background: rgba(99, 102, 241, 0.12);
             border: 1px solid rgba(99, 102, 241, 0.3);
             color: var(--accent-indigo);
-            padding: 5px 14px;
+            padding: 6px 16px;
             border-radius: 99px;
             font-size: var(--text-xs);
             font-weight: 700;
             margin-bottom: var(--space-3);
-            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.15);
+            box-shadow: 0 2px 12px rgba(99, 102, 241, 0.15);
         }
 
         .ai-model-badge .pulse-dot {
@@ -70,30 +71,53 @@
 
         .page-title {
             font-family: var(--font-heading);
-            font-size: var(--text-3xl);
+            font-size: 2.25rem;
             font-weight: 900;
             letter-spacing: -0.03em;
             margin-bottom: var(--space-2);
             color: var(--text-main);
+            line-height: 1.2;
         }
 
         .page-subtitle {
             color: var(--text-muted);
             font-size: var(--text-sm);
-            max-width: 660px;
-            margin: 0 auto;
+            max-width: 680px;
+            margin: 0 auto 18px;
             line-height: 1.6;
+        }
+
+        .header-feature-pills {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .header-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--surface-2);
+            border: 1px solid var(--surface-border);
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 99px;
         }
 
         /* ── Upload Card ── */
         .ai-upload-card {
             background: var(--surface-paper);
             border: 1px solid var(--surface-border);
-            border-radius: var(--card-radius);
-            padding: var(--space-6);
+            border-radius: 16px;
+            padding: 28px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
             position: relative;
             overflow: hidden;
+            margin-bottom: 24px;
         }
 
         .upload-controls-row {
@@ -123,24 +147,25 @@
             background: var(--surface-2);
             border: 1px solid var(--surface-border);
             color: var(--text-main);
-            padding: 6px 12px;
+            padding: 7px 14px;
             border-radius: 8px;
             font-size: var(--text-xs);
             font-weight: 600;
             cursor: pointer;
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .mode-select:focus {
             border-color: var(--accent-indigo);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
         }
 
         /* Upload Zone */
         .upload-zone {
             border: 2px dashed var(--border-strong);
             border-radius: 14px;
-            padding: 44px 24px;
+            padding: 40px 24px;
             text-align: center;
             cursor: pointer;
             transition: border-color 0.25s, background 0.25s, transform 0.2s;
@@ -166,11 +191,11 @@
         }
 
         .upload-icon-wrap {
-            width: 60px;
-            height: 60px;
+            width: 64px;
+            height: 64px;
             margin: 0 auto 14px;
             border-radius: 16px;
-            background: rgba(99, 102, 241, 0.1);
+            background: rgba(99, 102, 241, 0.12);
             color: var(--accent-indigo);
             display: flex;
             align-items: center;
@@ -184,9 +209,9 @@
 
         .upload-text {
             display: block;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--text-main);
-            font-size: var(--text-base);
+            font-size: 1.05rem;
             margin-bottom: 6px;
         }
 
@@ -194,7 +219,7 @@
             display: block;
             color: var(--text-muted);
             font-size: var(--text-xs);
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .file-type-badges {
@@ -390,7 +415,7 @@
         .result-card {
             background: var(--surface-paper);
             border: 1px solid var(--surface-border);
-            border-radius: var(--card-radius);
+            border-radius: 16px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
             overflow: hidden;
         }
@@ -457,7 +482,7 @@
 
         .view-panel {
             display: none;
-            padding: 20px;
+            padding: 24px;
         }
 
         .view-panel.active {
@@ -468,7 +493,7 @@
         .json-code-wrap {
             position: relative;
             background: #0d1117;
-            border-radius: 10px;
+            border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
         }
@@ -478,15 +503,16 @@
             justify-content: space-between;
             align-items: center;
             background: #161b22;
-            padding: 8px 16px;
+            padding: 10px 18px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             font-size: 11px;
             color: #8b949e;
+            font-weight: 600;
         }
 
         .json-code-block {
             display: block;
-            padding: 18px;
+            padding: 20px;
             font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
             font-size: 13px;
             color: #c9d1d9;
@@ -494,7 +520,7 @@
             white-space: pre-wrap;
             word-break: break-word;
             line-height: 1.6;
-            max-height: 520px;
+            max-height: 540px;
         }
 
         /* Syntax colors */
@@ -504,27 +530,45 @@
         .json-boolean { color: #ff7b72; font-weight: 600; }
         .json-null { color: #8b949e; font-style: italic; }
 
-        /* Visual Card View */
+        /* ── Symmetrical Visual Dashboard Grid ── */
         .visual-tree-container {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
+        }
+
+        .visual-dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .visual-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .visual-card {
             background: var(--surface-2);
             border: 1px solid var(--surface-border);
-            border-radius: 12px;
-            padding: 18px;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .visual-card:hover {
+            border-color: rgba(99, 102, 241, 0.35);
         }
 
         .visual-card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             border-bottom: 1px solid var(--surface-border);
-            padding-bottom: 8px;
+            padding-bottom: 10px;
         }
 
         .visual-card-title {
@@ -538,23 +582,23 @@
 
         .visual-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
         }
 
         .visual-item {
             background: var(--surface);
             padding: 10px 14px;
-            border-radius: 8px;
+            border-radius: 10px;
             border: 1px solid var(--surface-border);
         }
 
         .visual-item-label {
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 10px;
+            font-weight: 800;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
             margin-bottom: 4px;
         }
 
@@ -568,7 +612,7 @@
         .timeline-item {
             border-left: 2px solid var(--accent-indigo);
             padding-left: 14px;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
             position: relative;
         }
 
@@ -580,23 +624,28 @@
             content: '';
             position: absolute;
             left: -6px;
-            top: 2px;
+            top: 4px;
             width: 10px;
             height: 10px;
             border-radius: 50%;
             background: var(--accent-indigo);
+            box-shadow: 0 0 6px rgba(99, 102, 241, 0.6);
         }
 
         .timeline-title {
-            font-weight: 700;
+            font-weight: 800;
             font-size: var(--text-sm);
             color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .timeline-sub {
             font-size: var(--text-xs);
             color: var(--text-muted);
             margin: 2px 0 6px;
+            font-weight: 600;
         }
 
         .timeline-desc {
@@ -609,17 +658,17 @@
         .skill-tag-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
         }
 
         .skill-chip {
-            background: rgba(99, 102, 241, 0.12);
+            background: rgba(99, 102, 241, 0.1);
             color: var(--accent-indigo);
-            border: 1px solid rgba(99, 102, 241, 0.25);
+            border: 1px solid rgba(99, 102, 241, 0.22);
             padding: 4px 10px;
             border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 11px;
+            font-weight: 700;
         }
 
         /* Buttons */
@@ -627,10 +676,10 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 8px 18px;
+            padding: 8px 16px;
             border-radius: 9px;
-            border: 1px solid rgba(99, 102, 241, 0.5);
-            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            background: rgba(99, 102, 241, 0.1);
             color: var(--accent-indigo);
             font-size: var(--text-xs);
             font-weight: 700;
@@ -639,10 +688,10 @@
         }
 
         .btn-action-primary:hover {
-            background: rgba(99, 102, 241, 0.22);
+            background: rgba(99, 102, 241, 0.2);
             border-color: var(--accent-indigo);
             transform: translateY(-1px);
-            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
         }
 
         .btn-action-builder {
@@ -658,29 +707,29 @@
             font-weight: 700;
             cursor: pointer;
             transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
-            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
         }
 
         .btn-action-builder:hover {
             opacity: 0.95;
             transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.45);
+            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.5);
         }
 
         /* Schema Reference Card */
         .schema-card {
             background: var(--surface-paper);
             border: 1px solid var(--surface-border);
-            border-radius: var(--card-radius);
-            padding: var(--space-5);
-            margin-top: var(--space-6);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 24px;
         }
 
         .schema-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--space-4);
+            margin-bottom: var(--space-3);
             border-bottom: 1px solid var(--surface-border);
             padding-bottom: var(--space-3);
         }
@@ -695,7 +744,7 @@
         .schema-badge {
             background: rgba(99, 102, 241, 0.1);
             color: var(--accent-indigo);
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 20px;
             font-size: var(--text-xs);
             font-weight: 800;
@@ -704,7 +753,7 @@
         .code-block {
             background: var(--surface);
             border: 1px solid var(--surface-border);
-            border-radius: 8px;
+            border-radius: 10px;
             padding: var(--space-4);
             font-family: 'SFMono-Regular', Consolas, monospace;
             font-size: var(--text-xs);
@@ -714,9 +763,15 @@
             line-height: 1.6;
         }
 
+        @media (max-width: 860px) {
+            .visual-dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 600px) {
             .page-title {
-                font-size: var(--text-2xl);
+                font-size: 1.75rem;
             }
             .result-header {
                 flex-direction: column;
@@ -790,13 +845,22 @@
 
     <div class="profile-container" style="padding-top: calc(var(--desktop-navbar-height, 76px) + var(--space-4));">
         <div class="json-features-container">
+            <!-- Hero Header -->
             <div class="page-header">
                 <div class="ai-model-badge">
                     <span class="pulse-dot"></span>
-                    <span>Multimodal AI Model: Google Gemini 2.0 Flash / Qwen 2.5 VL</span>
+                    <span>Multimodal AI Model: Google Gemma / NVIDIA Nemotron / Gemini</span>
                 </div>
-                <h1 class="page-title">AI JSON Extractor</h1>
-                <p class="page-subtitle">Upload any document, scanned image, or text file. Our AI reads all tables, sections, and metadata to return 100% clean, structured JSON instantly.</p>
+                <h1 class="page-title">Universal AI JSON Extractor</h1>
+                <p class="page-subtitle">Upload any resume, document, or scanned image. Multimodal AI parses all sections, tables, and credentials into clean 4-tier structured JSON with real-time ATS intelligence.</p>
+                
+                <div class="header-feature-pills">
+                    <span class="header-pill">⚡ Multimodal OCR</span>
+                    <span class="header-pill">🎯 ATS Scoring</span>
+                    <span class="header-pill">📄 PDF / Word / TXT / Images</span>
+                    <span class="header-pill">🧱 4-Tier Schema</span>
+                    <span class="header-pill">🔒 Zero Data Retention</span>
+                </div>
             </div>
 
             <!-- ── AI Upload Card ── -->
@@ -809,7 +873,7 @@
                     <div class="mode-selector-wrap">
                         <span class="mode-label">Extraction Schema:</span>
                         <select id="extract-mode-select" class="mode-select" aria-label="Extraction Mode">
-                            <option value="auto">🌟 Smart Resume (Builder Compatible)</option>
+                            <option value="auto">🌟 4-Tier Production Resume (ATS Compatible)</option>
                             <option value="universal">📄 Universal Document JSON</option>
                         </select>
                     </div>
@@ -825,7 +889,7 @@
                             <line x1="12" y1="3" x2="12" y2="15" />
                         </svg>
                     </div>
-                    <span class="upload-text" id="file-name-display">Click, drag & drop, or paste your file here</span>
+                    <span class="upload-text" id="file-name-display">Drag & drop your document here, or click to browse</span>
                     <span class="upload-hint">High-accuracy OCR • Multi-column layouts • Table parsing • Zero manual entry</span>
                     
                     <div class="file-type-badges">
@@ -870,7 +934,7 @@
 
                 <button class="extract-btn" id="extract-btn" disabled>
                     <span id="extract-btn-icon">⚡</span>
-                    <span id="extract-btn-label">Extract JSON</span>
+                    <span id="extract-btn-label">Extract 4-Tier JSON</span>
                 </button>
             </div>
 
@@ -880,7 +944,7 @@
                     <div class="result-header">
                         <h3>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span>Extracted Structured JSON</span>
+                            <span>Extracted 4-Tier Production JSON</span>
                         </h3>
                         <div class="result-header-actions">
                             <button class="btn-action-primary" id="copy-json-btn">📋 Copy JSON</button>
@@ -896,7 +960,7 @@
                             <span>💻 Formatted Code</span>
                         </button>
                         <button class="view-tab" data-view="visual">
-                            <span>👁️ Visual Card View</span>
+                            <span>👁️ Symmetrical Card Explorer</span>
                         </button>
                         <button class="view-tab" data-view="rawtext">
                             <span>📄 Extracted Plain Text</span>
@@ -908,16 +972,16 @@
                         <div class="json-code-wrap">
                             <div class="json-code-toolbar">
                                 <span id="json-stats-display">JSON Object · 0 keys</span>
-                                <span>UTF-8 Validated</span>
+                                <span>UTF-8 Validated · 4-Tier Standard</span>
                             </div>
                             <pre class="json-code-block" id="formatted-json-code"></pre>
                         </div>
                     </div>
 
-                    <!-- Panel 2: Visual Card View -->
+                    <!-- Panel 2: Symmetrical Visual Card View -->
                     <div class="view-panel" id="view-visual">
                         <div class="visual-tree-container" id="visual-tree-container">
-                            <!-- Injected dynamically -->
+                            <!-- Injected dynamically in 2-column layout -->
                         </div>
                     </div>
 
@@ -1273,49 +1337,72 @@
             const loc = pi.location || {};
             const analysis = rootData.analysis || {};
             const skills = cand.skills || {};
+            const addInfo = cand.additional_information || {};
 
             let locStr = [loc.city, loc.state, loc.country].filter(Boolean).join(', ') || pi.address || '—';
 
             let html = '';
 
-            // 1. AI Analysis & ATS Intelligence Card
-            if (analysis && (analysis.ats_score || analysis.overall_quality_score)) {
+            // ── 1. Top Full-Width AI Quality & ATS Intelligence Card ────────────────
+            if (analysis && (analysis.ats_score || analysis.overall_quality_score || analysis.completeness_score)) {
+                const atsVal = analysis.ats_score || 88;
+                const qualVal = analysis.overall_quality_score || 90;
+                const compVal = analysis.completeness_score || 95;
+                const isPassed = atsVal >= 75;
+
                 html += `
-                <div class="visual-card" style="background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(16,185,129,0.08)); border-color: rgba(99,102,241,0.3);">
+                <div class="visual-card" style="background: linear-gradient(135deg, rgba(99,102,241,0.09), rgba(16,185,129,0.09)); border-color: rgba(99,102,241,0.35);">
                     <div class="visual-card-header">
-                        <span class="visual-card-title">🎯 AI Quality & ATS Intelligence Score</span>
-                        <span class="file-type-badge" style="background:#10b981; color:#fff; font-weight:800;">ATS Passed</span>
+                        <span class="visual-card-title">🎯 AI Quality & ATS Intelligence Evaluation</span>
+                        <span class="file-type-badge" style="background:${isPassed ? '#10b981' : '#f59e0b'}; color:#fff; font-weight:800;">
+                            ${isPassed ? '✓ ATS Optimized' : '⚠ Review Needed'}
+                        </span>
                     </div>
-                    <div class="visual-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
-                        <div class="visual-item" style="text-align:center;">
+                    <div class="visual-grid" style="grid-template-columns: repeat(3, 1fr); gap: 14px;">
+                        <div class="visual-item" style="text-align:center; padding: 14px;">
                             <div class="visual-item-label">ATS Score</div>
-                            <div style="font-size:1.8rem; font-weight:900; color:var(--accent-indigo);">${analysis.ats_score || 85}<span style="font-size:1rem; color:var(--text-muted);">/100</span></div>
+                            <div style="font-size:2rem; font-weight:900; color:var(--accent-indigo); line-height:1.2;">${atsVal}<span style="font-size:1.1rem; color:var(--text-muted); font-weight:600;">/100</span></div>
+                            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Standard Keyword Match</div>
                         </div>
-                        <div class="visual-item" style="text-align:center;">
-                            <div class="visual-item-label">Quality Score</div>
-                            <div style="font-size:1.8rem; font-weight:900; color:#10b981;">${analysis.overall_quality_score || 88}<span style="font-size:1rem; color:var(--text-muted);">/100</span></div>
+                        <div class="visual-item" style="text-align:center; padding: 14px;">
+                            <div class="visual-item-label">Executive Quality</div>
+                            <div style="font-size:2rem; font-weight:900; color:#10b981; line-height:1.2;">${qualVal}<span style="font-size:1.1rem; color:var(--text-muted); font-weight:600;">/100</span></div>
+                            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Formatting & Readability</div>
                         </div>
-                        <div class="visual-item" style="text-align:center;">
+                        <div class="visual-item" style="text-align:center; padding: 14px;">
                             <div class="visual-item-label">Completeness</div>
-                            <div style="font-size:1.8rem; font-weight:900; color:#a78bfa;">${analysis.completeness_score || 90}<span style="font-size:1rem; color:var(--text-muted);">%</span></div>
+                            <div style="font-size:2rem; font-weight:900; color:#a78bfa; line-height:1.2;">${compVal}<span style="font-size:1.1rem; color:var(--text-muted); font-weight:600;">%</span></div>
+                            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">All Sections Populated</div>
                         </div>
                     </div>
                     ${Array.isArray(analysis.recommendations) && analysis.recommendations.length > 0 ? `
-                        <div style="margin-top:12px; font-size:12px; color:var(--text-muted);">
-                            <strong style="color:var(--text-main);">💡 AI Recommendations:</strong>
-                            <ul style="margin:6px 0 0 16px; padding:0; line-height:1.5;">
-                                ${analysis.recommendations.map(r => `<li>${esc(r)}</li>`).join('')}
-                            </ul>
+                        <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--surface-border); font-size:12px; color:var(--text-muted);">
+                            <strong style="color:var(--text-main); display:flex; align-items:center; gap:6px; margin-bottom:8px;">
+                                <span>💡</span> Key AI Improvement Recommendations:
+                            </strong>
+                            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px;">
+                                ${analysis.recommendations.map(r => `
+                                    <div style="background:var(--surface); padding:8px 12px; border-radius:8px; border:1px solid var(--surface-border); line-height:1.4;">
+                                        <span style="color:var(--accent-indigo); font-weight:700;">•</span> ${esc(r)}
+                                    </div>
+                                `).join('')}
+                            </div>
                         </div>
                     ` : ''}
                 </div>`;
             }
 
-            // 2. Candidate Info
+            // ── 2. Symmetrical 2-Column Layout ────────────────────────────────────
+            html += `<div class="visual-dashboard-grid">`;
+
+            // ── LEFT COLUMN ───────────────────────────────────────────────────────
+            html += `<div class="visual-column">`;
+
+            // Card 1: Candidate Personal Info
             html += `
             <div class="visual-card">
                 <div class="visual-card-header">
-                    <span class="visual-card-title">👤 Candidate Personal Information</span>
+                    <span class="visual-card-title">👤 Candidate Profile & Contact</span>
                 </div>
                 <div class="visual-grid">
                     <div class="visual-item">
@@ -1323,29 +1410,36 @@
                         <div class="visual-item-value">${esc(pi.full_name || pi.name || '—')}</div>
                     </div>
                     <div class="visual-item">
-                        <div class="visual-item-label">Job Title / Target Role</div>
+                        <div class="visual-item-label">Target Role / Title</div>
                         <div class="visual-item-value">${esc(pi.job_title || pi.title || '—')}</div>
                     </div>
                     <div class="visual-item">
-                        <div class="visual-item-label">Email Address</div>
+                        <div class="visual-item-label">Email</div>
                         <div class="visual-item-value">${esc(pi.email || '—')}</div>
                     </div>
                     <div class="visual-item">
-                        <div class="visual-item-label">Phone Number</div>
+                        <div class="visual-item-label">Phone</div>
                         <div class="visual-item-value">${esc(pi.phone || '—')}</div>
                     </div>
-                    <div class="visual-item">
-                        <div class="visual-item-label">Location / City</div>
+                    <div class="visual-item" style="grid-column: span 2;">
+                        <div class="visual-item-label">Location / Address</div>
                         <div class="visual-item-value">${esc(locStr)}</div>
                     </div>
-                    <div class="visual-item">
-                        <div class="visual-item-label">LinkedIn / Website</div>
-                        <div class="visual-item-value">${esc(pi.linkedin || pi.website || pi.github || pi.portfolio || '—')}</div>
+                    ${pi.linkedin || pi.github || pi.website || pi.portfolio ? `
+                    <div class="visual-item" style="grid-column: span 2;">
+                        <div class="visual-item-label">Web & Social Links</div>
+                        <div class="visual-item-value" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:2px;">
+                            ${pi.linkedin ? `<a href="${esc(pi.linkedin)}" target="_blank" rel="noopener" style="color:var(--accent-indigo); text-decoration:none;">🔗 LinkedIn</a>` : ''}
+                            ${pi.github ? `<a href="${esc(pi.github)}" target="_blank" rel="noopener" style="color:var(--accent-indigo); text-decoration:none;">💻 GitHub</a>` : ''}
+                            ${pi.portfolio ? `<a href="${esc(pi.portfolio)}" target="_blank" rel="noopener" style="color:var(--accent-indigo); text-decoration:none;">🌐 Portfolio</a>` : ''}
+                            ${pi.website && pi.website !== pi.portfolio ? `<a href="${esc(pi.website)}" target="_blank" rel="noopener" style="color:var(--accent-indigo); text-decoration:none;">🌍 Website</a>` : ''}
+                        </div>
                     </div>
+                    ` : ''}
                 </div>
             </div>`;
 
-            // 3. Summary & Objective
+            // Card 2: Professional Summary & Objective
             const sumText = cand.professional_summary || cand.summary || '';
             const objText = cand.career_objective || '';
             if (sumText || objText) {
@@ -1354,12 +1448,22 @@
                     <div class="visual-card-header">
                         <span class="visual-card-title">📝 Summary & Objective</span>
                     </div>
-                    ${sumText ? `<p style="font-size:var(--text-xs); color:var(--text-main); line-height:1.6; margin:0 0 8px 0;"><strong>Professional Summary:</strong> ${esc(sumText)}</p>` : ''}
-                    ${objText ? `<p style="font-size:var(--text-xs); color:var(--text-muted); line-height:1.6; margin:0;"><strong>Career Objective:</strong> ${esc(objText)}</p>` : ''}
+                    ${sumText ? `
+                        <div style="background:var(--surface); padding:12px 14px; border-radius:8px; border-left:3px solid var(--accent-indigo); margin-bottom:8px;">
+                            <div style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-bottom:4px;">Professional Summary</div>
+                            <p style="font-size:var(--text-xs); color:var(--text-main); line-height:1.6; margin:0;">${esc(sumText)}</p>
+                        </div>
+                    ` : ''}
+                    ${objText ? `
+                        <div style="background:var(--surface); padding:10px 14px; border-radius:8px; border:1px solid var(--surface-border);">
+                            <div style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-bottom:2px;">Career Objective</div>
+                            <p style="font-size:var(--text-xs); color:var(--text-muted); line-height:1.5; margin:0;">${esc(objText)}</p>
+                        </div>
+                    ` : ''}
                 </div>`;
             }
 
-            // 4. Categorized Skills
+            // Card 3: Categorized Skills Matrix
             let hasSkills = false;
             let skillsHtml = '';
             if (typeof skills === 'object' && !Array.isArray(skills)) {
@@ -1368,8 +1472,8 @@
                         hasSkills = true;
                         const catLabel = catKey.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
                         skillsHtml += `
-                        <div style="margin-bottom:10px;">
-                            <div style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:4px;">${esc(catLabel)}</div>
+                        <div style="margin-bottom:12px;">
+                            <div style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">${esc(catLabel)}</div>
                             <div class="skill-tag-list">
                                 ${list.map(s => `<span class="skill-chip">${esc(s)}</span>`).join('')}
                             </div>
@@ -1389,13 +1493,48 @@
                 html += `
                 <div class="visual-card">
                     <div class="visual-card-header">
-                        <span class="visual-card-title">⚡ Skills & Technologies</span>
+                        <span class="visual-card-title">⚡ Skills & Competency Matrix</span>
                     </div>
                     ${skillsHtml}
                 </div>`;
             }
 
-            // 5. Work Experience
+            // Card 4: Languages & Additional Information
+            const langList = cand.languages || [];
+            if (langList.length > 0 || Object.keys(addInfo).length > 0) {
+                html += `
+                <div class="visual-card">
+                    <div class="visual-card-header">
+                        <span class="visual-card-title">🌐 Languages & Details</span>
+                    </div>
+                    ${langList.length > 0 ? `
+                        <div style="margin-bottom:12px;">
+                            <div style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-bottom:6px;">Languages</div>
+                            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                                ${langList.map(l => {
+                                    const lName = typeof l === 'object' ? (l.language || '') : String(l);
+                                    const lProf = typeof l === 'object' && l.proficiency ? ` · ${l.proficiency}` : '';
+                                    return `<span class="skill-chip" style="background:var(--surface);">${esc(lName + lProf)}</span>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${Object.keys(addInfo).length > 0 ? `
+                        <div class="visual-grid">
+                            ${addInfo.availability ? `<div class="visual-item"><div class="visual-item-label">Availability</div><div class="visual-item-value">${esc(addInfo.availability)}</div></div>` : ''}
+                            ${addInfo.work_authorization ? `<div class="visual-item"><div class="visual-item-label">Authorization</div><div class="visual-item-value">${esc(addInfo.work_authorization)}</div></div>` : ''}
+                            ${addInfo.notice_period ? `<div class="visual-item"><div class="visual-item-label">Notice Period</div><div class="visual-item-value">${esc(addInfo.notice_period)}</div></div>` : ''}
+                        </div>
+                    ` : ''}
+                </div>`;
+            }
+
+            html += `</div>`; // Close Left Column
+
+            // ── RIGHT COLUMN ──────────────────────────────────────────────────────
+            html += `<div class="visual-column">`;
+
+            // Card 5: Work Experience Timeline
             const expList = cand.work_experience || cand.experience || [];
             if (Array.isArray(expList) && expList.length > 0) {
                 html += `
@@ -1409,13 +1548,22 @@
                             const comp = exp.company_name || exp.company || 'Company';
                             const dates = (exp.start_date || exp.end_date) ? `${exp.start_date || ''} – ${exp.end_date || (exp.is_current ? 'Present' : '')}` : (exp.duration || '');
                             const techs = Array.isArray(exp.technologies) ? exp.technologies : [];
+                            const respList = Array.isArray(exp.responsibilities) ? exp.responsibilities : [];
                             return `
                             <div class="timeline-item">
-                                <div class="timeline-title">${esc(title)} ${exp.is_current ? '<span class="file-type-badge" style="font-size:10px; padding:2px 6px;">Current</span>' : ''}</div>
+                                <div class="timeline-title">
+                                    <span>${esc(title)}</span>
+                                    ${exp.is_current ? '<span class="file-type-badge" style="font-size:10px; padding:2px 8px; background:#10b981; color:#fff;">Current</span>' : ''}
+                                </div>
                                 <div class="timeline-sub">${esc(comp)} ${dates ? '· ' + esc(dates) : ''} ${exp.location ? '· ' + esc(exp.location) : ''}</div>
-                                <div class="timeline-desc">${esc(exp.description || '')}</div>
+                                ${exp.description ? `<div class="timeline-desc">${esc(exp.description)}</div>` : ''}
+                                ${respList.length > 0 ? `
+                                    <ul style="margin:6px 0 0 16px; padding:0; font-size:var(--text-xs); color:var(--text-main); line-height:1.5;">
+                                        ${respList.map(r => `<li>${esc(r)}</li>`).join('')}
+                                    </ul>
+                                ` : ''}
                                 ${techs.length > 0 ? `
-                                    <div style="margin-top:6px; display:flex; gap:4px; flex-wrap:wrap;">
+                                    <div style="margin-top:8px; display:flex; gap:4px; flex-wrap:wrap;">
                                         ${techs.map(t => `<span class="skill-chip" style="font-size:10px; padding:2px 6px;">${esc(t)}</span>`).join('')}
                                     </div>
                                 ` : ''}
@@ -1425,7 +1573,7 @@
                 </div>`;
             }
 
-            // 6. Education
+            // Card 6: Education
             const eduList = cand.education || [];
             if (Array.isArray(eduList) && eduList.length > 0) {
                 html += `
@@ -1448,7 +1596,7 @@
                 </div>`;
             }
 
-            // 7. Projects
+            // Card 7: Key Projects
             const projList = cand.projects || [];
             if (Array.isArray(projList) && projList.length > 0) {
                 html += `
@@ -1456,16 +1604,19 @@
                     <div class="visual-card-header">
                         <span class="visual-card-title">🚀 Key Projects (${projList.length})</span>
                     </div>
-                    <div class="visual-grid">
+                    <div style="display:flex; flex-direction:column; gap:10px;">
                         ${projList.map(p => `
-                            <div class="visual-item">
-                                <div class="visual-item-label">${esc(p.project_name || p.name || 'Project')} ${p.role ? '· ' + esc(p.role) : ''}</div>
-                                <div class="visual-item-value" style="font-weight:normal; margin-bottom:6px;">${esc(p.description || '')}</div>
+                            <div class="visual-item" style="padding:12px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                                    <strong style="color:var(--text-main); font-size:var(--text-xs);">${esc(p.project_name || p.name || 'Project')}</strong>
+                                    ${p.role ? `<span style="font-size:11px; color:var(--text-muted);">${esc(p.role)}</span>` : ''}
+                                </div>
+                                <div style="font-size:var(--text-xs); color:var(--text-muted); margin-bottom:6px; line-height:1.4;">${esc(p.description || '')}</div>
                                 ${Array.isArray(p.technologies) && p.technologies.length > 0 ? `
                                     <div style="font-size:11px; color:var(--accent-indigo); font-weight:700;">Tech: ${esc(p.technologies.join(', '))}</div>
                                 ` : ''}
                                 ${p.project_url || p.github_url ? `
-                                    <a href="${esc(p.project_url || p.github_url)}" target="_blank" rel="noopener" style="display:inline-block; font-size:11px; color:var(--accent-indigo); margin-top:4px;">🔗 View Project</a>
+                                    <a href="${esc(p.project_url || p.github_url)}" target="_blank" rel="noopener" style="display:inline-block; font-size:11px; color:var(--accent-indigo); margin-top:4px; text-decoration:none; font-weight:600;">🔗 View Project</a>
                                 ` : ''}
                             </div>
                         `).join('')}
@@ -1473,7 +1624,7 @@
                 </div>`;
             }
 
-            // 8. Certifications & Awards
+            // Card 8: Certifications & Honors
             const certList = cand.certifications || [];
             const awardList = cand.awards || cand.achievements || [];
             if (certList.length > 0 || awardList.length > 0) {
@@ -1491,13 +1642,16 @@
                         `).join('')}
                         ${awardList.map(a => `
                             <div class="visual-item">
-                                <div class="visual-item-label">Award / Achievement</div>
+                                <div class="visual-item-label">Honor / Award</div>
                                 <div class="visual-item-value">${esc(typeof a === 'object' ? (a.title || a.name || '') : a)} ${typeof a === 'object' && a.organization ? '· ' + esc(a.organization) : ''}</div>
                             </div>
                         `).join('')}
                     </div>
                 </div>`;
             }
+
+            html += `</div>`; // Close Right Column
+            html += `</div>`; // Close Dashboard Grid
 
             visualTreeContainer.innerHTML = html;
         }
