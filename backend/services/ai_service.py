@@ -513,83 +513,225 @@ class AIService:
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# Dynamic High-Fidelity Extraction Prompt
+# Dynamic High-Fidelity Extraction Prompt (4-Tier Production Schema)
 # ────────────────────────────────────────────────────────────────────────────
 def _get_extraction_prompt(mode: str = "auto") -> str:
-    return """You are a world-class Multimodal Document & Resume Intelligence AI.
-Analyze ALL visual, structural, and textual information from this document with 100% accuracy.
+    return """You are an elite Multimodal Document Intelligence & ATS Resume AI.
+Analyze the provided document with 100% precision and extract every detail into the comprehensive 4-tier structured JSON schema below.
 
-CRITICAL INSTRUCTIONS:
-1. Return ONLY valid, well-formed JSON. No markdown codeblock wrapper, no preamble, no trailing commentary.
-2. Extract ALL details: contact info, full work experience, bullet points, education, technical and soft skills, projects, certifications, languages, awards, and any other sections.
-3. If a section is tabular or multi-column, preserve the exact column relationships.
-4. If a field is not present, use null or an empty array/string. Do NOT invent or hallucinate data.
+CRITICAL EXTRACTION RULES:
+1. Return ONLY pure, valid JSON. No markdown code blocks, no preamble, no trailing text.
+2. Separate pure factual data (candidate) from AI evaluation (analysis) and document metadata (document).
+3. If a field or section is not present in the document, use null or empty array [] / empty string "". Never fabricate or hallucinate details.
+4. If work experience or projects contain bullet points, extract them into both 'description' (combined text) and 'responsibilities' / 'achievements' (array of strings).
+5. Categorize skills into technical, soft, programming languages, frameworks, databases, tools, cloud/devops.
+6. Calculate accurate analysis scores (0-100) for ats_score, overall_quality_score, and completeness_score based on standard resume best practices.
 
-You MUST follow this exact JSON schema:
+REQUIRED JSON SCHEMA:
 {
-  "raw_text": "Full extracted plain text of the entire document verbatim...",
-  "structured_data": {
-    "name": "Full Name / Candidate Name",
-    "title": "Professional Title / Headline / Target Role",
-    "email": "email@example.com",
-    "phone": "+1 234 567 8900",
-    "address": "City, State / Country",
-    "website": "https://personalwebsite.com",
-    "linkedin": "https://linkedin.com/in/username",
-    "github": "https://github.com/username",
-    "portfolio": "https://...",
-    "summary": "Professional background summary or executive overview",
-    "skills": "Skill 1, Skill 2, Skill 3, Python, JavaScript, Leadership",
-    "languages": ["English (Native)", "Spanish (Fluent)"],
-    "experience": [
+  "document": {
+    "type": "resume",
+    "language": "en",
+    "source": {
+      "filename": "",
+      "mime_type": "",
+      "page_count": 1
+    }
+  },
+
+  "candidate": {
+    "personal_information": {
+      "full_name": "",
+      "job_title": "",
+      "email": "",
+      "phone": "",
+      "location": {
+        "city": "",
+        "state": "",
+        "country": "",
+        "postal_code": ""
+      },
+      "website": "",
+      "linkedin": "",
+      "github": "",
+      "portfolio": "",
+      "other_links": []
+    },
+
+    "professional_summary": "",
+    "career_objective": "",
+
+    "work_experience": [
       {
-        "title": "Job Title / Role",
-        "company": "Company Name / Organization",
-        "duration": "Jan 2021 – Present",
-        "location": "City, Country or Remote",
-        "description": "• Built scalable microservices\n• Managed a team of 5 engineers"
+        "job_title": "",
+        "company_name": "",
+        "employment_type": "",
+        "location": "",
+        "start_date": "",
+        "end_date": "",
+        "is_current": false,
+        "description": "",
+        "responsibilities": [],
+        "achievements": [],
+        "technologies": []
       }
     ],
+
     "education": [
       {
-        "degree": "B.S. in Computer Science",
-        "university": "University Name",
-        "year": "2017 – 2021",
-        "gpa": "3.8/4.0",
-        "honors": "Magna Cum Laude"
+        "degree": "",
+        "field_of_study": "",
+        "institution": "",
+        "location": "",
+        "start_date": "",
+        "end_date": "",
+        "is_current": false,
+        "grade": "",
+        "gpa": "",
+        "percentage": "",
+        "description": []
       }
     ],
-    "certifications": ["AWS Solutions Architect", "PMP"],
+
+    "skills": {
+      "technical_skills": [],
+      "soft_skills": [],
+      "programming_languages": [],
+      "frameworks_and_libraries": [],
+      "databases": [],
+      "tools_and_technologies": [],
+      "cloud_and_devops": [],
+      "other_skills": []
+    },
+
     "projects": [
       {
-        "name": "Project Name",
-        "description": "Comprehensive project overview and achievements",
-        "tech_stack": "React, Node.js, PostgreSQL",
-        "link": "https://github.com/..."
+        "project_name": "",
+        "description": "",
+        "role": "",
+        "start_date": "",
+        "end_date": "",
+        "project_url": "",
+        "github_url": "",
+        "technologies": [],
+        "responsibilities": [],
+        "achievements": []
       }
     ],
-    "achievements": [
-      "Won 1st place in 2023 National Hackathon",
-      "Published research paper on AI Optimization"
-    ],
-    "publications": [],
-    "volunteer": [],
-    "custom_sections": [
+
+    "certifications": [
       {
-        "heading": "Section Heading",
-        "content": "Full section content or key details"
+        "name": "",
+        "issuing_organization": "",
+        "issue_date": "",
+        "expiration_date": "",
+        "credential_id": "",
+        "credential_url": ""
       }
-    ]
+    ],
+
+    "achievements": [
+      {
+        "title": "",
+        "description": "",
+        "date": "",
+        "organization": ""
+      }
+    ],
+
+    "awards": [
+      {
+        "name": "",
+        "issuer": "",
+        "date": "",
+        "description": ""
+      }
+    ],
+
+    "languages": [
+      {
+        "language": "",
+        "proficiency": ""
+      }
+    ],
+
+    "publications": [
+      {
+        "title": "",
+        "publisher": "",
+        "publication_date": "",
+        "url": "",
+        "description": ""
+      }
+    ],
+
+    "volunteer_experience": [
+      {
+        "role": "",
+        "organization": "",
+        "location": "",
+        "start_date": "",
+        "end_date": "",
+        "description": []
+      }
+    ],
+
+    "internships": [
+      {
+        "job_title": "",
+        "company_name": "",
+        "location": "",
+        "start_date": "",
+        "end_date": "",
+        "description": "",
+        "responsibilities": [],
+        "technologies": []
+      }
+    ],
+
+    "interests": [],
+
+    "references": [
+      {
+        "name": "",
+        "job_title": "",
+        "company": "",
+        "email": "",
+        "phone": "",
+        "relationship": ""
+      }
+    ],
+
+    "additional_information": {
+      "availability": "",
+      "work_authorization": "",
+      "visa_status": "",
+      "willing_to_relocate": false,
+      "driving_license": "",
+      "notice_period": ""
+    }
   },
-  "metadata": {
-    "document_type": "Resume",
-    "language": "en",
-    "confidence_score": 0.98,
-    "total_sections_detected": 6
+
+  "analysis": {
+    "overall_quality_score": 88,
+    "ats_score": 85,
+    "completeness_score": 90,
+    "skills_detected": [],
+    "missing_sections": [],
+    "missing_information": [],
+    "potential_errors": [],
+    "recommendations": []
+  },
+
+  "extraction": {
+    "confidence": 0.98,
+    "field_confidence": {},
+    "uncertain_fields": [],
+    "source_references": []
   }
 }
 
-Return ONLY the raw JSON object now."""
+Return ONLY this JSON structure now."""
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -598,41 +740,40 @@ Return ONLY the raw JSON object now."""
 def _optimize_image_bytes(file_bytes: bytes, filename: str) -> tuple[bytes, str]:
     """
     Auto-orient EXIF, resize massive images to max 2048px (ideal for high-accuracy OCR),
-    and output optimized PNG or JPEG bytes.
+    and convert to optimized JPEG or PNG.
     """
     try:
         img = Image.open(io.BytesIO(file_bytes))
-        # Auto-rotate according to EXIF tags (e.g. mobile photos)
         img = ImageOps.exif_transpose(img)
 
-        # Scale down if larger than 2048 on longest edge
+        # Cap max dimension to 2048px while preserving aspect ratio
         max_dim = 2048
         w, h = img.size
-        if w > max_dim or h > max_dim:
-            scale = max_dim / max(w, h)
+        if max(w, h) > max_dim:
+            scale = max_dim / float(max(w, h))
             new_size = (int(w * scale), int(h * scale))
             img = img.resize(new_size, Image.Resampling.LANCZOS)
 
-        # Determine output format
-        ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else "jpg"
-        if ext in ("png", "webp", "gif"):
-            out_buf = io.BytesIO()
-            img.save(out_buf, format="PNG", optimize=True)
-            return out_buf.getvalue(), "image/png"
-        else:
+        out_io = io.BytesIO()
+        ext = filename.split(".")[-1].lower() if filename else "png"
+        if ext in ("jpg", "jpeg"):
             if img.mode in ("RGBA", "P"):
                 img = img.convert("RGB")
-            out_buf = io.BytesIO()
-            img.save(out_buf, format="JPEG", quality=90, optimize=True)
-            return out_buf.getvalue(), "image/jpeg"
+            img.save(out_io, format="JPEG", quality=90, optimize=True)
+            return out_io.getvalue(), "image/jpeg"
+        else:
+            if img.mode not in ("RGB", "RGBA"):
+                img = img.convert("RGBA")
+            img.save(out_io, format="PNG", optimize=True)
+            return out_io.getvalue(), "image/png"
     except Exception as e:
-        logger.warning(f"Image optimization skipped: {e}")
+        logger.warning(f"Pillow image optimization skipped ({e}), using raw bytes.")
         mime = "image/jpeg" if "jpg" in filename or "jpeg" in filename else "image/png"
         return file_bytes, mime
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# JSON Parser & Schema Normalizer
+# JSON Parser & 4-Tier Schema Normalizer
 # ────────────────────────────────────────────────────────────────────────────
 def _safe_parse_json(text: str, fallback=None):
     """Robust JSON parser that cleans markdown fences and recovers JSON objects."""
@@ -663,91 +804,408 @@ def _safe_parse_json(text: str, fallback=None):
     return fallback
 
 
-_REQUIRED_RESUME_KEYS = {
-    "name": "", "title": "", "email": "", "phone": "", "address": "",
-    "website": "", "linkedin": "", "github": "", "portfolio": "",
-    "summary": "", "skills": "",
-    "languages": [], "experience": [], "education": [],
-    "certifications": [], "projects": [], "achievements": [],
-    "publications": [], "volunteer": [], "custom_sections": [],
-}
-
-
 def _parse_and_validate_resume_json(raw: str, raw_fallback: str = "") -> dict:
-    """Validate and normalize parsed JSON to match standard WISAXIS schema."""
+    """
+    Validate, unwrap, and normalize extracted JSON into the 4-Tier Production Schema:
+    - document: file & language metadata
+    - candidate: complete personal info, experience, education, skills, projects, etc.
+    - analysis: ats_score, quality_score, recommendations, missing sections
+    - extraction: confidence and field metrics
+    - structured_data: backward-compatible flat object
+    - raw_text: verbatim text
+    """
     parsed = _safe_parse_json(raw, {})
     if not isinstance(parsed, dict):
         parsed = {}
 
-    # Extract structured_data or treat the whole parsed dict as structured_data
-    if "structured_data" in parsed and isinstance(parsed["structured_data"], dict):
-        raw_sd = parsed["structured_data"]
+    # Unwrap root wrappers if present (e.g. { "resume": { ... } })
+    if "resume" in parsed and isinstance(parsed["resume"], dict):
+        unwrapped = parsed["resume"]
     else:
-        raw_sd = {k: v for k, v in parsed.items() if k not in ("raw_text", "metadata")}
+        unwrapped = parsed
 
-    result_structured = {**_REQUIRED_RESUME_KEYS, **raw_sd}
+    # ── 1. Document Metadata ──────────────────────────────────────────────────
+    raw_doc = unwrapped.get("document", {}) if isinstance(unwrapped.get("document"), dict) else {}
+    doc = {
+        "type": str(raw_doc.get("type") or "resume"),
+        "language": str(raw_doc.get("language") or "en"),
+        "source": {
+            "filename": str(raw_doc.get("source", {}).get("filename") if isinstance(raw_doc.get("source"), dict) else ""),
+            "mime_type": str(raw_doc.get("source", {}).get("mime_type") if isinstance(raw_doc.get("source"), dict) else ""),
+            "page_count": int(raw_doc.get("source", {}).get("page_count") if isinstance(raw_doc.get("source"), dict) and str(raw_doc.get("source", {}).get("page_count", "")).isdigit() else 1)
+        }
+    }
 
-    # Normalize array fields
-    for arr_key in ("languages", "experience", "education", "certifications",
-                    "projects", "achievements", "publications", "volunteer", "custom_sections"):
-        val = result_structured.get(arr_key)
-        if not isinstance(val, list):
-            result_structured[arr_key] = [val] if val else []
+    # ── 2. Candidate Section ──────────────────────────────────────────────────
+    # Could be inside unwrapped['candidate'] or top-level
+    raw_cand = unwrapped.get("candidate", {}) if isinstance(unwrapped.get("candidate"), dict) else unwrapped
+    if "structured_data" in unwrapped and isinstance(unwrapped["structured_data"], dict):
+        raw_sd = unwrapped["structured_data"]
+    else:
+        raw_sd = raw_cand
 
-    # Normalize string fields
-    for str_key in ("name", "title", "email", "phone", "address",
-                    "website", "linkedin", "github", "portfolio", "summary", "skills"):
-        val = result_structured.get(str_key)
-        if isinstance(val, list):
-            result_structured[str_key] = ", ".join(str(x) for x in val if x)
-        elif val is None:
-            result_structured[str_key] = ""
-        else:
-            result_structured[str_key] = str(val)
+    # Personal Information & Contact
+    raw_pi = raw_cand.get("personal_information", {}) if isinstance(raw_cand.get("personal_information"), dict) else raw_sd.get("personal_info", {})
+    if not isinstance(raw_pi, dict):
+        raw_pi = {}
 
-    # Normalize experience items
+    raw_loc = raw_pi.get("location", {}) if isinstance(raw_pi.get("location"), dict) else {}
+    address_fallback = str(raw_pi.get("address") or raw_sd.get("address") or "")
+
+    personal_info = {
+        "full_name": str(raw_pi.get("full_name") or raw_pi.get("name") or raw_sd.get("name") or ""),
+        "job_title": str(raw_pi.get("job_title") or raw_pi.get("title") or raw_sd.get("title") or ""),
+        "email": str(raw_pi.get("email") or raw_sd.get("email") or ""),
+        "phone": str(raw_pi.get("phone") or raw_sd.get("phone") or ""),
+        "location": {
+            "city": str(raw_loc.get("city") or (address_fallback.split(",")[0].strip() if address_fallback else "")),
+            "state": str(raw_loc.get("state") or ""),
+            "country": str(raw_loc.get("country") or (address_fallback.split(",")[-1].strip() if "," in address_fallback else "")),
+            "postal_code": str(raw_loc.get("postal_code") or "")
+        },
+        "website": str(raw_pi.get("website") or raw_sd.get("website") or ""),
+        "linkedin": str(raw_pi.get("linkedin") or raw_sd.get("linkedin") or ""),
+        "github": str(raw_pi.get("github") or raw_sd.get("github") or ""),
+        "portfolio": str(raw_pi.get("portfolio") or raw_sd.get("portfolio") or ""),
+        "other_links": raw_pi.get("other_links") if isinstance(raw_pi.get("other_links"), list) else []
+    }
+
+    # Summary & Objective
+    summary = str(raw_cand.get("professional_summary") or raw_cand.get("summary") or raw_sd.get("summary") or "")
+    objective = str(raw_cand.get("career_objective") or raw_sd.get("career_objective") or "")
+
+    # Work Experience
+    raw_exp = raw_cand.get("work_experience") or raw_cand.get("experience") or raw_sd.get("experience") or []
+    if not isinstance(raw_exp, list):
+        raw_exp = [raw_exp] if raw_exp else []
+
     norm_exp = []
-    for item in result_structured["experience"]:
+    for item in raw_exp:
         if isinstance(item, dict):
+            dur = str(item.get("duration") or "")
+            if not dur and (item.get("start_date") or item.get("end_date")):
+                dur = f"{item.get('start_date', '')} – {item.get('end_date', 'Present')}".strip(" –")
+
+            desc = str(item.get("description") or "")
+            resp_list = item.get("responsibilities") if isinstance(item.get("responsibilities"), list) else []
+            if not desc and resp_list:
+                desc = "\n".join(f"• {r}" for r in resp_list)
+
             norm_exp.append({
-                "title": str(item.get("title") or item.get("job_title") or ""),
-                "company": str(item.get("company") or item.get("organization") or ""),
-                "duration": str(item.get("duration") or item.get("dates") or item.get("year") or ""),
+                "job_title": str(item.get("job_title") or item.get("title") or ""),
+                "company_name": str(item.get("company_name") or item.get("company") or item.get("organization") or ""),
+                "employment_type": str(item.get("employment_type") or ""),
                 "location": str(item.get("location") or ""),
-                "description": str(item.get("description") or item.get("responsibilities") or item.get("details") or ""),
+                "start_date": str(item.get("start_date") or (dur.split("–")[0].strip() if "–" in dur else "")),
+                "end_date": str(item.get("end_date") or (dur.split("–")[1].strip() if "–" in dur else "")),
+                "is_current": bool(item.get("is_current") or "present" in dur.lower() or "current" in dur.lower()),
+                "description": desc,
+                "responsibilities": resp_list,
+                "achievements": item.get("achievements") if isinstance(item.get("achievements"), list) else [],
+                "technologies": item.get("technologies") if isinstance(item.get("technologies"), list) else []
             })
         elif isinstance(item, str):
-            norm_exp.append({"title": item, "company": "", "duration": "", "description": ""})
-    result_structured["experience"] = norm_exp
+            norm_exp.append({
+                "job_title": item, "company_name": "", "employment_type": "", "location": "",
+                "start_date": "", "end_date": "", "is_current": False, "description": "",
+                "responsibilities": [], "achievements": [], "technologies": []
+            })
 
-    # Normalize education items
+    # Education
+    raw_edu = raw_cand.get("education") or raw_sd.get("education") or []
+    if not isinstance(raw_edu, list):
+        raw_edu = [raw_edu] if raw_edu else []
+
     norm_edu = []
-    for item in result_structured["education"]:
+    for item in raw_edu:
         if isinstance(item, dict):
+            yr = str(item.get("year") or item.get("duration") or item.get("graduation_year") or "")
             norm_edu.append({
                 "degree": str(item.get("degree") or item.get("qualification") or ""),
-                "university": str(item.get("university") or item.get("institution") or item.get("school") or ""),
-                "year": str(item.get("year") or item.get("duration") or item.get("graduation_year") or ""),
+                "field_of_study": str(item.get("field_of_study") or item.get("major") or ""),
+                "institution": str(item.get("institution") or item.get("university") or item.get("school") or ""),
+                "location": str(item.get("location") or ""),
+                "start_date": str(item.get("start_date") or (yr.split("–")[0].strip() if "–" in yr else "")),
+                "end_date": str(item.get("end_date") or (yr.split("–")[1].strip() if "–" in yr else yr)),
+                "is_current": bool(item.get("is_current", False)),
+                "grade": str(item.get("grade") or item.get("honors") or ""),
                 "gpa": str(item.get("gpa") or ""),
-                "honors": str(item.get("honors") or ""),
+                "percentage": str(item.get("percentage") or ""),
+                "description": item.get("description") if isinstance(item.get("description"), list) else []
             })
         elif isinstance(item, str):
-            norm_edu.append({"degree": item, "university": "", "year": ""})
-    result_structured["education"] = norm_edu
+            norm_edu.append({
+                "degree": item, "field_of_study": "", "institution": "", "location": "",
+                "start_date": "", "end_date": "", "is_current": False, "grade": "",
+                "gpa": "", "percentage": "", "description": []
+            })
 
-    # Metadata & raw_text
-    metadata = parsed.get("metadata", {})
-    if not isinstance(metadata, dict):
-        metadata = {}
-    metadata.setdefault("document_type", "Document")
-    metadata.setdefault("confidence_score", 0.95)
+    # Skills categorization
+    raw_skills = raw_cand.get("skills") or raw_sd.get("skills") or {}
+    if isinstance(raw_skills, dict):
+        skills_obj = {
+            "technical_skills": raw_skills.get("technical_skills") if isinstance(raw_skills.get("technical_skills"), list) else [],
+            "soft_skills": raw_skills.get("soft_skills") if isinstance(raw_skills.get("soft_skills"), list) else [],
+            "programming_languages": raw_skills.get("programming_languages") if isinstance(raw_skills.get("programming_languages"), list) else [],
+            "frameworks_and_libraries": raw_skills.get("frameworks_and_libraries") if isinstance(raw_skills.get("frameworks_and_libraries"), list) else [],
+            "databases": raw_skills.get("databases") if isinstance(raw_skills.get("databases"), list) else [],
+            "tools_and_technologies": raw_skills.get("tools_and_technologies") if isinstance(raw_skills.get("tools_and_technologies"), list) else [],
+            "cloud_and_devops": raw_skills.get("cloud_and_devops") if isinstance(raw_skills.get("cloud_and_devops"), list) else [],
+            "other_skills": raw_skills.get("other_skills") if isinstance(raw_skills.get("other_skills"), list) else []
+        }
+    elif isinstance(raw_skills, list):
+        skills_obj = {
+            "technical_skills": [str(s) for s in raw_skills],
+            "soft_skills": [],
+            "programming_languages": [],
+            "frameworks_and_libraries": [],
+            "databases": [],
+            "tools_and_technologies": [],
+            "cloud_and_devops": [],
+            "other_skills": []
+        }
+    elif isinstance(raw_skills, str):
+        parsed_s = [s.strip() for s in raw_skills.split(",") if s.strip()]
+        skills_obj = {
+            "technical_skills": parsed_s,
+            "soft_skills": [],
+            "programming_languages": [],
+            "frameworks_and_libraries": [],
+            "databases": [],
+            "tools_and_technologies": [],
+            "cloud_and_devops": [],
+            "other_skills": []
+        }
+    else:
+        skills_obj = {
+            "technical_skills": [], "soft_skills": [], "programming_languages": [],
+            "frameworks_and_libraries": [], "databases": [], "tools_and_technologies": [],
+            "cloud_and_devops": [], "other_skills": []
+        }
+
+    # Projects
+    raw_proj = raw_cand.get("projects") or raw_sd.get("projects") or []
+    norm_proj = []
+    if isinstance(raw_proj, list):
+        for p in raw_proj:
+            if isinstance(p, dict):
+                norm_proj.append({
+                    "project_name": str(p.get("project_name") or p.get("name") or p.get("title") or ""),
+                    "description": str(p.get("description") or ""),
+                    "role": str(p.get("role") or ""),
+                    "start_date": str(p.get("start_date") or ""),
+                    "end_date": str(p.get("end_date") or ""),
+                    "project_url": str(p.get("project_url") or p.get("link") or p.get("url") or ""),
+                    "github_url": str(p.get("github_url") or ""),
+                    "technologies": p.get("technologies") if isinstance(p.get("technologies"), list) else ([t.strip() for t in str(p.get("tech_stack", "")).split(",") if t.strip()] if p.get("tech_stack") else []),
+                    "responsibilities": p.get("responsibilities") if isinstance(p.get("responsibilities"), list) else [],
+                    "achievements": p.get("achievements") if isinstance(p.get("achievements"), list) else []
+                })
+
+    # Certifications
+    raw_certs = raw_cand.get("certifications") or raw_sd.get("certifications") or []
+    norm_certs = []
+    if isinstance(raw_certs, list):
+        for c in raw_certs:
+            if isinstance(c, dict):
+                norm_certs.append({
+                    "name": str(c.get("name") or c.get("title") or ""),
+                    "issuing_organization": str(c.get("issuing_organization") or c.get("issuer") or c.get("organization") or ""),
+                    "issue_date": str(c.get("issue_date") or c.get("date") or c.get("year") or ""),
+                    "expiration_date": str(c.get("expiration_date") or ""),
+                    "credential_id": str(c.get("credential_id") or ""),
+                    "credential_url": str(c.get("credential_url") or "")
+                })
+            elif isinstance(c, str):
+                norm_certs.append({
+                    "name": c, "issuing_organization": "", "issue_date": "",
+                    "expiration_date": "", "credential_id": "", "credential_url": ""
+                })
+
+    # Achievements & Awards
+    raw_ach = raw_cand.get("achievements") or raw_sd.get("achievements") or []
+    norm_ach = []
+    if isinstance(raw_ach, list):
+        for a in raw_ach:
+            if isinstance(a, dict):
+                norm_ach.append({
+                    "title": str(a.get("title") or ""),
+                    "description": str(a.get("description") or ""),
+                    "date": str(a.get("date") or ""),
+                    "organization": str(a.get("organization") or "")
+                })
+            elif isinstance(a, str):
+                norm_ach.append({"title": a, "description": "", "date": "", "organization": ""})
+
+    raw_awards = raw_cand.get("awards") or raw_sd.get("awards") or []
+    norm_awards = []
+    if isinstance(raw_awards, list):
+        for aw in raw_awards:
+            if isinstance(aw, dict):
+                norm_awards.append({
+                    "name": str(aw.get("name") or aw.get("title") or ""),
+                    "issuer": str(aw.get("issuer") or aw.get("organization") or ""),
+                    "date": str(aw.get("date") or ""),
+                    "description": str(aw.get("description") or "")
+                })
+            elif isinstance(aw, str):
+                norm_awards.append({"name": aw, "issuer": "", "date": "", "description": ""})
+
+    # Languages
+    raw_langs = raw_cand.get("languages") or raw_sd.get("languages") or []
+    norm_langs = []
+    if isinstance(raw_langs, list):
+        for l in raw_langs:
+            if isinstance(l, dict):
+                norm_langs.append({
+                    "language": str(l.get("language") or l.get("name") or ""),
+                    "proficiency": str(l.get("proficiency") or l.get("level") or "")
+                })
+            elif isinstance(l, str):
+                parts = l.split("(")
+                lang_name = parts[0].strip()
+                prof = parts[1].replace(")", "").strip() if len(parts) > 1 else ""
+                norm_langs.append({"language": lang_name, "proficiency": prof})
+
+    # Additional & Optional Sections
+    pubs = raw_cand.get("publications") if isinstance(raw_cand.get("publications"), list) else []
+    vol = raw_cand.get("volunteer_experience") or raw_cand.get("volunteer") or []
+    if not isinstance(vol, list): vol = []
+    intern = raw_cand.get("internships") if isinstance(raw_cand.get("internships"), list) else []
+    interests = raw_cand.get("interests") if isinstance(raw_cand.get("interests"), list) else []
+    refs = raw_cand.get("references") if isinstance(raw_cand.get("references"), list) else []
+    add_info = raw_cand.get("additional_information", {}) if isinstance(raw_cand.get("additional_information"), dict) else {}
+
+    candidate = {
+        "personal_information": personal_info,
+        "professional_summary": summary,
+        "career_objective": objective,
+        "work_experience": norm_exp,
+        "education": norm_edu,
+        "skills": skills_obj,
+        "projects": norm_proj,
+        "certifications": norm_certs,
+        "achievements": norm_ach,
+        "awards": norm_awards,
+        "languages": norm_langs,
+        "publications": pubs,
+        "volunteer_experience": vol,
+        "internships": intern,
+        "interests": interests,
+        "references": refs,
+        "additional_information": add_info
+    }
+
+    # ── 3. AI Analysis & Scoring ──────────────────────────────────────────────
+    raw_analysis = unwrapped.get("analysis", {}) if isinstance(unwrapped.get("analysis"), dict) else {}
+
+    # Calculate intelligent default scores if not provided by model
+    completeness = 40
+    if personal_info["full_name"]: completeness += 10
+    if personal_info["email"] and personal_info["phone"]: completeness += 10
+    if summary: completeness += 10
+    if norm_exp: completeness += 15
+    if norm_edu: completeness += 10
+    if any(skills_obj.values()): completeness += 5
+    completeness = min(100, completeness)
+
+    ats_score = int(raw_analysis.get("ats_score") or (completeness - 5))
+    quality_score = int(raw_analysis.get("overall_quality_score") or completeness)
+
+    all_detected_skills = []
+    for k, v in skills_obj.items():
+        if isinstance(v, list):
+            all_detected_skills.extend(v)
+
+    analysis = {
+        "overall_quality_score": quality_score,
+        "ats_score": ats_score,
+        "completeness_score": int(raw_analysis.get("completeness_score") or completeness),
+        "skills_detected": raw_analysis.get("skills_detected") or list(dict.fromkeys(all_detected_skills)),
+        "missing_sections": raw_analysis.get("missing_sections") if isinstance(raw_analysis.get("missing_sections"), list) else [],
+        "missing_information": raw_analysis.get("missing_information") if isinstance(raw_analysis.get("missing_information"), list) else [],
+        "potential_errors": raw_analysis.get("potential_errors") if isinstance(raw_analysis.get("potential_errors"), list) else [],
+        "recommendations": raw_analysis.get("recommendations") if isinstance(raw_analysis.get("recommendations"), list) else [
+            "Quantify your work experience achievements with measurable metrics (%, $, numbers).",
+            "Tailor skill keywords specifically to match target job descriptions."
+        ]
+    }
+
+    # ── 4. Extraction Metrics ────────────────────────────────────────────────
+    raw_ext = unwrapped.get("extraction", {}) if isinstance(unwrapped.get("extraction"), dict) else {}
+    extraction = {
+        "confidence": float(raw_ext.get("confidence") or 0.98),
+        "field_confidence": raw_ext.get("field_confidence") if isinstance(raw_ext.get("field_confidence"), dict) else {
+            "personal_information": 1.0,
+            "work_experience": 0.98 if norm_exp else 0.5,
+            "education": 0.99 if norm_edu else 0.5,
+            "skills": 0.95 if any(skills_obj.values()) else 0.5
+        },
+        "uncertain_fields": raw_ext.get("uncertain_fields") if isinstance(raw_ext.get("uncertain_fields"), list) else [],
+        "source_references": raw_ext.get("source_references") if isinstance(raw_ext.get("source_references"), list) else []
+    }
 
     raw_text = parsed.get("raw_text") or raw_fallback or ""
 
+    # ── Backward-compatible structured_data alias ────────────────────────────
+    all_skills_flat = []
+    for s_list in skills_obj.values():
+        if isinstance(s_list, list):
+            all_skills_flat.extend(s_list)
+
+    structured_data_compat = {
+        "name": personal_info["full_name"],
+        "title": personal_info["job_title"],
+        "email": personal_info["email"],
+        "phone": personal_info["phone"],
+        "address": f"{personal_info['location']['city']}, {personal_info['location']['country']}".strip(", "),
+        "website": personal_info["website"],
+        "linkedin": personal_info["linkedin"],
+        "github": personal_info["github"],
+        "portfolio": personal_info["portfolio"],
+        "summary": summary,
+        "skills": ", ".join(dict.fromkeys(all_skills_flat)),
+        "languages": [f"{l['language']} ({l['proficiency']})".replace(" ()", "") for l in norm_langs],
+        "experience": [
+            {
+                "title": e["job_title"],
+                "company": e["company_name"],
+                "duration": f"{e['start_date']} – {e['end_date']}".strip(" –"),
+                "location": e["location"],
+                "description": e["description"]
+            }
+            for e in norm_exp
+        ],
+        "education": [
+            {
+                "degree": f"{ed['degree']} {ed['field_of_study']}".strip(),
+                "university": ed["institution"],
+                "year": f"{ed['start_date']} – {ed['end_date']}".strip(" –"),
+                "gpa": ed["gpa"]
+            }
+            for ed in norm_edu
+        ],
+        "certifications": [c["name"] for c in norm_certs],
+        "projects": [
+            {
+                "name": p["project_name"],
+                "description": p["description"],
+                "tech_stack": ", ".join(p["technologies"]),
+                "link": p["project_url"] or p["github_url"]
+            }
+            for p in norm_proj
+        ],
+        "achievements": [a["title"] for a in norm_ach],
+        "custom_sections": []
+    }
+
     return {
-        "raw_text": str(raw_text),
-        "structured_data": result_structured,
-        "metadata": metadata
+        "document": doc,
+        "candidate": candidate,
+        "analysis": analysis,
+        "extraction": extraction,
+        "structured_data": structured_data_compat,
+        "raw_text": str(raw_text)
     }
 
 

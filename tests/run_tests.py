@@ -416,44 +416,75 @@ class JSONExtractorTestCase(unittest.TestCase):
     def test_resume_json_normalization(self):
         from backend.services.ai_service import _parse_and_validate_resume_json
         raw = '''{
-            "structured_data": {
-                "name": "Jane Doe",
-                "title": "Cloud Architect",
-                "email": "jane@example.com",
-                "phone": "+1-555-0199",
-                "skills": ["AWS", "Python", "Kubernetes"],
-                "experience": [
+            "document": {
+                "type": "resume",
+                "language": "en",
+                "source": { "filename": "jane_doe.pdf", "mime_type": "application/pdf", "page_count": 1 }
+            },
+            "candidate": {
+                "personal_information": {
+                    "full_name": "Jane Doe",
+                    "job_title": "Cloud Architect",
+                    "email": "jane@example.com",
+                    "phone": "+1-555-0199",
+                    "location": { "city": "San Francisco", "state": "CA", "country": "USA", "postal_code": "94105" }
+                },
+                "professional_summary": "Expert Cloud Architect with 8+ years experience.",
+                "skills": {
+                    "technical_skills": ["AWS", "Kubernetes", "Terraform"],
+                    "programming_languages": ["Python", "Go", "SQL"]
+                },
+                "work_experience": [
                     {
-                        "title": "Principal Architect",
-                        "company": "Cloud Co",
-                        "duration": "2021-Present",
-                        "description": "Architected multi-cloud infrastructure"
+                        "job_title": "Principal Architect",
+                        "company_name": "Cloud Co",
+                        "start_date": "2021",
+                        "end_date": "Present",
+                        "is_current": true,
+                        "description": "Architected multi-cloud infrastructure",
+                        "responsibilities": ["Led infrastructure team"]
                     }
                 ],
                 "education": [
                     {
-                        "degree": "M.S. Software Engineering",
-                        "university": "Tech University",
-                        "year": "2019"
+                        "degree": "M.S.",
+                        "field_of_study": "Software Engineering",
+                        "institution": "Tech University",
+                        "start_date": "2017",
+                        "end_date": "2019"
                     }
                 ]
             },
-            "metadata": {
-                "document_type": "Resume",
-                "confidence_score": 0.99
+            "analysis": {
+                "ats_score": 94,
+                "overall_quality_score": 92,
+                "completeness_score": 95,
+                "recommendations": ["Add more metrics"]
+            },
+            "extraction": {
+                "confidence": 0.99
             }
         }'''
         res = _parse_and_validate_resume_json(raw)
+        
+        # Verify 4-tier production keys
+        self.assertIn("document", res)
+        self.assertIn("candidate", res)
+        self.assertIn("analysis", res)
+        self.assertIn("extraction", res)
         self.assertIn("structured_data", res)
-        sd = res["structured_data"]
-        self.assertEqual(sd["name"], "Jane Doe")
-        self.assertEqual(sd["title"], "Cloud Architect")
-        self.assertEqual(sd["email"], "jane@example.com")
-        self.assertIn("AWS", sd["skills"])
-        self.assertEqual(len(sd["experience"]), 1)
-        self.assertEqual(sd["experience"][0]["title"], "Principal Architect")
-        self.assertEqual(len(sd["education"]), 1)
-        self.assertEqual(res["metadata"]["document_type"], "Resume")
+
+        cand = res["candidate"]
+        pi = cand["personal_information"]
+        self.assertEqual(pi["full_name"], "Jane Doe")
+        self.assertEqual(pi["job_title"], "Cloud Architect")
+        self.assertEqual(pi["email"], "jane@example.com")
+        self.assertEqual(pi["location"]["city"], "San Francisco")
+        self.assertIn("AWS", cand["skills"]["technical_skills"])
+        self.assertEqual(len(cand["work_experience"]), 1)
+        self.assertEqual(cand["work_experience"][0]["job_title"], "Principal Architect")
+        self.assertEqual(len(cand["education"]), 1)
+        self.assertEqual(res["analysis"]["ats_score"], 94)
 
     def test_extract_endpoint_unauthorized(self):
         # Attempt without auth token -> 401

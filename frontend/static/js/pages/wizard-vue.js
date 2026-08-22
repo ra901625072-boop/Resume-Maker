@@ -195,27 +195,37 @@ createApp({
                 event.target.value = '';
             }
         },
-        // ── Schema-agnostic data normalizer ────────────────────────────────────
-        // Accepts three formats and maps them to the wizard's flat formData:
-        //   1. Legacy flat JSON  { name, title, email, ... }
-        //   2. Optimized nested  { personal_info: {…}, professional_summary, … }
+        // ── Flexible Data Normalizer ──────────────────────────────────────────
+        // Accepts:
+        //   1. 4-Tier Schema     { candidate: { personal_information, work_experience, skills, ... } }
+        //   2. AI Extract output { structured_data: { name, title, … } }
         //   3. AI Analyzer       { candidate: { contact:{…} }, structured_data:{…}, … }
-        //   4. AI Extract output { structured_data: { name, title, … } }
+        //   4. Legacy flat JSON  { name, title, email, ... }
         populateData(data) {
             if (!data || typeof data !== 'object') return;
 
-            // ── Step 1: Unwrap AI extraction envelope if present ───────────────
-            // Format: { raw_text, structured_data: {…}, metadata: {…} }
-            if (data.structured_data && typeof data.structured_data === 'object') {
-                data = { ...data.structured_data, template: data.template || data.selected_template || '' };
-            }
+            // ── Step 1: Handle Candidate from 4-Tier Schema ───────────────────
+            const cand = data.candidate || (data.resume && data.resume.candidate) || null;
+            const sd = data.structured_data || null;
 
-            // ── Step 2: Normalize to a flat intermediate object ───────────────
             const norm = {};
 
             // --- Personal Info ---
-            // Optimized: { personal_info: { full_name, job_title, email, phone, address } }
-            if (data.personal_info && typeof data.personal_info === 'object') {
+            if (cand && cand.personal_information && typeof cand.personal_information === 'object') {
+                const pi = cand.personal_information;
+                norm.name    = pi.full_name || pi.name || '';
+                norm.title   = pi.job_title || pi.title || '';
+                norm.email   = pi.email || '';
+                norm.phone   = pi.phone || '';
+                if (pi.location && typeof pi.location === 'object') {
+                    const loc = [pi.location.city, pi.location.state, pi.location.country].filter(Boolean).join(', ');
+                    norm.address = loc || pi.address || '';
+                } else {
+                    norm.address = pi.address || '';
+                }
+                norm.photo   = pi.photo_url || pi.photo || '';
+                norm.summary = cand.professional_summary || cand.career_objective || cand.summary || '';
+            } else if (data.personal_info && typeof data.personal_info === 'object') {
                 const pi = data.personal_info;
                 norm.name    = pi.full_name    || pi.name    || '';
                 norm.title   = pi.job_title    || pi.title   || '';
@@ -223,65 +233,63 @@ createApp({
                 norm.phone   = pi.phone        || '';
                 norm.address = pi.address      || '';
                 norm.photo   = pi.photo_url    || pi.photo   || '';
-            }
-            // AI Analyzer: { candidate: { name, role, contact: { email, phone, address } } }
-            else if (data.candidate && typeof data.candidate === 'object') {
-                const c = data.candidate;
-                norm.name    = c.name  || c.full_name || '';
-                norm.title   = c.role  || c.job_title || c.title || '';
-                const contact = c.contact || {};
-                norm.email   = contact.email   || data.email   || '';
-                norm.phone   = contact.phone   || data.phone   || '';
-                norm.address = contact.address || data.address || '';
-            }
-            // Legacy flat: { name, title, email, phone, address }
-            else {
+                norm.summary = data.professional_summary || data.summary || '';
+            } else if (sd && typeof sd === 'object') {
+                norm.name    = sd.name || sd.full_name || '';
+                norm.title   = sd.title || sd.job_title || '';
+                norm.email   = sd.email || '';
+                norm.phone   = sd.phone || '';
+                norm.address = sd.address || '';
+                norm.photo   = sd.photo || sd.photo_url || '';
+                norm.summary = sd.professional_summary || sd.summary || '';
+            } else {
                 norm.name    = data.name    || data.full_name    || '';
                 norm.title   = data.title   || data.job_title    || '';
                 norm.email   = data.email   || '';
                 norm.phone   = data.phone   || '';
                 norm.address = data.address || '';
                 norm.photo   = data.photo   || data.photo_url   || '';
+                norm.summary = data.professional_summary || data.summary || '';
             }
-
-            // --- Professional Summary ---
-            norm.summary = data.professional_summary || data.summary || '';
 
             // --- Skills ---
-            // Could be a comma-string "Python, Flask" or an array ["Python","Flask"]
-            const rawSkills = data.skills || [];
-            if (Array.isArray(rawSkills)) {
+            const rawSkills = (cand && cand.skills) || (sd && sd.skills) || data.skills || [];
+            if (rawSkills && typeof rawSkills === 'object' && !Array.isArray(rawSkills)) {
+                const allS = [];
+                Object.values(rawSkills).forEach(val => {
+                    if (Array.isArray(val)) allS.push(...val);
+                    else if (typeof val === 'string' && val.trim()) allS.push(val);
+                });
+                norm.skills = [...new Set(allS)].join(', ');
+            } else if (Array.isArray(rawSkills)) {
                 norm.skills = rawSkills.join(', ');
             } else {
-                norm.skills = String(rawSkills);
+                norm.skills = String(rawSkills || '');
             }
 
-            // --- Template ---
+            // --- Template & Resume ID ---
             norm.template = data.selected_template || data.template || '';
-
-            // --- Resume ID (edit mode) ---
             norm.id = data.id || data.resume_id || '';
 
-            // ── Step 3: Populate formData ─────────────────────────────────────
-            if (norm.id)      this.formData.resume_id = norm.id;
-            if (norm.template) this.formData.template = norm.template;
-            if (norm.name)    this.formData.name    = norm.name;
-            if (norm.title)   this.formData.title   = norm.title;
-            if (norm.email)   this.formData.email   = norm.email;
-            if (norm.phone)   this.formData.phone   = norm.phone;
-            if (norm.address) this.formData.address = norm.address;
-            if (norm.summary) this.formData.summary = norm.summary;
-            if (norm.skills)  this.formData.skills  = norm.skills;
+            // ── Step 2: Populate Basic Fields ─────────────────────────────────
+            if (norm.id)       this.formData.resume_id = norm.id;
+            if (norm.template) this.formData.template  = norm.template;
+            if (norm.name)     this.formData.name      = norm.name;
+            if (norm.title)    this.formData.title     = norm.title;
+            if (norm.email)    this.formData.email     = norm.email;
+            if (norm.phone)    this.formData.phone     = norm.phone;
+            if (norm.address)  this.formData.address   = norm.address;
+            if (norm.summary)  this.formData.summary   = norm.summary;
+            if (norm.skills)   this.formData.skills    = norm.skills;
 
             // ── Languages ─────────────────────────────────────────────────────
-            // Supported: ["English (Native)"] | [{ value: "…" }] | [{ language, level }]
-            const rawLangs = data.languages || [];
+            const rawLangs = (cand && cand.languages) || (sd && sd.languages) || data.languages || [];
             if (Array.isArray(rawLangs) && rawLangs.length > 0) {
                 this.formData.languages = rawLangs.map(l => {
-                    if (typeof l === 'string')       return { value: l };
-                    if (l.value)                     return { value: l.value };
+                    if (typeof l === 'string') return { value: l };
+                    if (l.value) return { value: l.value };
                     if (l.language) {
-                        const lvl = l.level ? ` (${l.level})` : '';
+                        const lvl = l.proficiency || l.level ? ` (${l.proficiency || l.level})` : '';
                         return { value: l.language + lvl };
                     }
                     return { value: String(l) };
@@ -289,39 +297,42 @@ createApp({
             }
 
             // ── Experience ────────────────────────────────────────────────────
-            // Supported: { title|job_title, company|company_name, duration, description|start_date+end_date }
-            const rawExp = data.experience || [];
+            const rawExp = (cand && (cand.work_experience || cand.experience)) || (sd && sd.experience) || data.experience || data.work_experience || [];
             if (Array.isArray(rawExp) && rawExp.length > 0) {
                 this.formData.experience = rawExp.map(e => {
                     const dur = e.duration ||
-                        ((e.start_date || '') + (e.end_date ? ' – ' + e.end_date : ''));
-                    const desc = Array.isArray(e.description)
-                        ? e.description.join('\n')
-                        : (e.description || '');
+                        [e.start_date, e.end_date || (e.is_current ? 'Present' : '')].filter(Boolean).join(' – ');
+                    let desc = e.description || '';
+                    if (!desc && Array.isArray(e.responsibilities) && e.responsibilities.length > 0) {
+                        desc = e.responsibilities.map(r => `• ${r}`).join('\n');
+                    }
                     return {
                         id:           e.id || '',
-                        title:        e.title       || e.job_title    || '',
-                        company:      e.company     || e.company_name || '',
+                        title:        e.title || e.job_title || '',
+                        company:      e.company || e.company_name || '',
                         duration:     dur.trim(),
                         description:  desc,
                         isGenerating: false
                     };
-                }).filter(e => e.title.trim() !== '');
+                }).filter(e => e.title.trim() !== '' || e.company.trim() !== '');
                 if (this.formData.experience.length === 0) {
                     this.formData.experience = [{ id: '', title: '', company: '', duration: '', description: '', isGenerating: false }];
                 }
             }
 
             // ── Education ─────────────────────────────────────────────────────
-            // Supported: { degree, university|institution, year }
-            const rawEdu = data.education || [];
+            const rawEdu = (cand && cand.education) || (sd && sd.education) || data.education || [];
             if (Array.isArray(rawEdu) && rawEdu.length > 0) {
-                this.formData.education = rawEdu.map(e => ({
-                    id:         e.id         || '',
-                    degree:     e.degree     || '',
-                    university: e.university || e.institution || '',
-                    year:       e.year       || ''
-                })).filter(e => e.degree.trim() !== '');
+                this.formData.education = rawEdu.map(e => {
+                    const deg = e.degree ? (e.field_of_study ? `${e.degree} in ${e.field_of_study}` : e.degree) : (e.field_of_study || '');
+                    const yr = e.year || [e.start_date, e.end_date].filter(Boolean).join(' – ');
+                    return {
+                        id:         e.id || '',
+                        degree:     deg,
+                        university: e.university || e.institution || e.school || '',
+                        year:       yr
+                    };
+                }).filter(e => e.degree.trim() !== '' || e.university.trim() !== '');
                 if (this.formData.education.length === 0) {
                     this.formData.education = [{ id: '', degree: '', university: '', year: '' }];
                 }

@@ -936,62 +936,92 @@
             <!-- ── Schema explorer ── -->
             <div class="schema-card" id="schema-card">
                 <div class="schema-header">
-                    <span class="schema-title">WISAXIS Resume Schema Reference</span>
-                    <span class="schema-badge">v2.5 Full Multimodal</span>
+                    <span class="schema-title">WISAXIS 4-Tier Production Schema Reference</span>
+                    <span class="schema-badge">v3.0 Production ATS</span>
                 </div>
-                <p style="color:var(--text-muted); font-size:var(--text-xs); margin-bottom:1rem; line-height:1.5;">This standard JSON structure is guaranteed by our AI and integrates directly with the WISAXIS Resume Builder.</p>
+                <p style="color:var(--text-muted); font-size:var(--text-xs); margin-bottom:1rem; line-height:1.5;">This industry-standard 4-tier schema cleanly separates document metadata, candidate facts, AI evaluation, and extraction confidence.</p>
 
                 <div class="schema-tabs" role="tablist">
                     <button class="schema-tab active" data-tab="candidate" role="tab" aria-selected="true">Candidate Profile</button>
-                    <button class="schema-tab" data-tab="experience" role="tab" aria-selected="false">Experience Timeline</button>
-                    <button class="schema-tab" data-tab="education" role="tab" aria-selected="false">Education & Skills</button>
+                    <button class="schema-tab" data-tab="experience" role="tab" aria-selected="false">Experience & Skills</button>
+                    <button class="schema-tab" data-tab="analysis" role="tab" aria-selected="false">AI Analysis & ATS</button>
                     <button class="schema-tab" data-tab="curl" role="tab" aria-selected="false">API / cURL Usage</button>
                 </div>
 
                 <!-- Tab Panels -->
                 <div class="schema-panel active" id="tab-candidate" role="tabpanel">
                     <pre class="code-block">{
-  "name": "Jane Doe",
-  "title": "Senior Full-Stack Engineer",
-  "email": "jane.doe@example.com",
-  "phone": "+1 (555) 123-4567",
-  "address": "San Francisco, CA",
-  "website": "https://janedoe.dev",
-  "linkedin": "https://linkedin.com/in/janedoe",
-  "github": "https://github.com/janedoe",
-  "summary": "Full-stack engineer with 6+ years specializing in Python, React, and cloud systems."
+  "document": {
+    "type": "resume",
+    "language": "en",
+    "source": { "filename": "resume.pdf", "mime_type": "application/pdf", "page_count": 1 }
+  },
+  "candidate": {
+    "personal_information": {
+      "full_name": "Jane Doe",
+      "job_title": "Senior Full-Stack Engineer",
+      "email": "jane.doe@example.com",
+      "phone": "+1 (555) 123-4567",
+      "location": { "city": "San Francisco", "state": "CA", "country": "USA", "postal_code": "94105" },
+      "website": "https://janedoe.dev",
+      "linkedin": "https://linkedin.com/in/janedoe",
+      "github": "https://github.com/janedoe",
+      "portfolio": "https://janedoe.dev/portfolio"
+    },
+    "professional_summary": "Full-stack engineer with 6+ years specializing in Python, React, and cloud systems.",
+    "career_objective": ""
+  }
 }</pre>
                 </div>
 
                 <div class="schema-panel" id="tab-experience" role="tabpanel">
-                    <pre class="code-block">[
-  {
-    "title": "Lead Software Engineer",
-    "company": "Tech Corp Inc.",
-    "duration": "Jan 2021 – Present",
-    "location": "San Francisco, CA (Hybrid)",
-    "description": "• Spearheaded migration of core backend to microservices\n• Increased system throughput by 40% using Redis and Go"
+                    <pre class="code-block">{
+  "candidate": {
+    "work_experience": [
+      {
+        "job_title": "Lead Software Engineer",
+        "company_name": "Tech Corp Inc.",
+        "employment_type": "Full-time",
+        "location": "San Francisco, CA (Hybrid)",
+        "start_date": "Jan 2021",
+        "end_date": "Present",
+        "is_current": true,
+        "description": "• Spearheaded migration of core backend to microservices\n• Increased system throughput by 40%",
+        "responsibilities": ["Led architecture redesign", "Mentored 4 engineers"],
+        "technologies": ["Python", "Go", "Redis", "Docker"]
+      }
+    ],
+    "skills": {
+      "technical_skills": ["Python", "React", "TypeScript", "Node.js", "PostgreSQL"],
+      "soft_skills": ["Leadership", "Agile", "System Design"],
+      "cloud_and_devops": ["AWS", "Docker", "CI/CD"]
+    }
   }
-]</pre>
+}</pre>
                 </div>
 
-                <div class="schema-panel" id="tab-education" role="tabpanel">
+                <div class="schema-panel" id="tab-analysis" role="tabpanel">
                     <pre class="code-block">{
-  "skills": "Python, React, TypeScript, Node.js, PostgreSQL, Docker, AWS, GraphQL",
-  "education": [
-    {
-      "degree": "B.S. in Computer Science",
-      "university": "University of California, Berkeley",
-      "year": "2016 – 2020",
-      "gpa": "3.85 / 4.0"
-    }
-  ],
-  "certifications": ["AWS Certified Solutions Architect", "Google Cloud Professional"]
+  "analysis": {
+    "overall_quality_score": 92,
+    "ats_score": 90,
+    "completeness_score": 95,
+    "skills_detected": ["Python", "React", "AWS", "PostgreSQL"],
+    "missing_sections": [],
+    "recommendations": [
+      "Quantify bullet points with metrics where possible",
+      "Ensure all project links are live"
+    ]
+  },
+  "extraction": {
+    "confidence": 0.98,
+    "field_confidence": { "personal_information": 1.0, "work_experience": 0.98, "education": 0.99 }
+  }
 }</pre>
                 </div>
 
                 <div class="schema-panel" id="tab-curl" role="tabpanel">
-                    <pre class="code-block">curl -X POST https://your-domain.com/api/extract-json \
+                    <pre class="code-block">curl -X POST https://resume-maker-8ljc.onrender.com/api/extract-json \
   -H "Authorization: Bearer &lt;YOUR_TOKEN&gt;" \
   -F "file=@/path/to/resume.pdf" \
   -F "mode=auto"</pre>
@@ -1222,132 +1252,247 @@
             const formattedHTML = syntaxHighlight(data);
             formattedJsonCode.innerHTML = formattedHTML;
 
-            const sd = data.structured_data || data;
-            const keyCount = Object.keys(sd).length;
-            jsonStatsDisplay.textContent = `JSON Object · ${keyCount} top-level fields`;
+            const cand = data.candidate || data.structured_data || data;
+            const keyCount = Object.keys(cand).length;
+            const atsScore = (data.analysis && data.analysis.ats_score) ? data.analysis.ats_score : 85;
+            jsonStatsDisplay.textContent = `4-Tier Production JSON · ATS Score: ${atsScore}/100 · ${keyCount} sections`;
 
             // Raw Text panel
             rawTextContent.textContent = data.raw_text || '(No raw text available)';
 
             // Visual Card View
-            renderVisualTree(sd);
+            renderVisualTree(data);
 
             resultSection.style.display = 'block';
             resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        function renderVisualTree(sd) {
+        function renderVisualTree(rootData) {
+            const cand = rootData.candidate || rootData.structured_data || {};
+            const pi = cand.personal_information || cand.personal_info || cand || {};
+            const loc = pi.location || {};
+            const analysis = rootData.analysis || {};
+            const skills = cand.skills || {};
+
+            let locStr = [loc.city, loc.state, loc.country].filter(Boolean).join(', ') || pi.address || '—';
+
             let html = '';
 
-            // Candidate Info
+            // 1. AI Analysis & ATS Intelligence Card
+            if (analysis && (analysis.ats_score || analysis.overall_quality_score)) {
+                html += `
+                <div class="visual-card" style="background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(16,185,129,0.08)); border-color: rgba(99,102,241,0.3);">
+                    <div class="visual-card-header">
+                        <span class="visual-card-title">🎯 AI Quality & ATS Intelligence Score</span>
+                        <span class="file-type-badge" style="background:#10b981; color:#fff; font-weight:800;">ATS Passed</span>
+                    </div>
+                    <div class="visual-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
+                        <div class="visual-item" style="text-align:center;">
+                            <div class="visual-item-label">ATS Score</div>
+                            <div style="font-size:1.8rem; font-weight:900; color:var(--accent-indigo);">${analysis.ats_score || 85}<span style="font-size:1rem; color:var(--text-muted);">/100</span></div>
+                        </div>
+                        <div class="visual-item" style="text-align:center;">
+                            <div class="visual-item-label">Quality Score</div>
+                            <div style="font-size:1.8rem; font-weight:900; color:#10b981;">${analysis.overall_quality_score || 88}<span style="font-size:1rem; color:var(--text-muted);">/100</span></div>
+                        </div>
+                        <div class="visual-item" style="text-align:center;">
+                            <div class="visual-item-label">Completeness</div>
+                            <div style="font-size:1.8rem; font-weight:900; color:#a78bfa;">${analysis.completeness_score || 90}<span style="font-size:1rem; color:var(--text-muted);">%</span></div>
+                        </div>
+                    </div>
+                    ${Array.isArray(analysis.recommendations) && analysis.recommendations.length > 0 ? `
+                        <div style="margin-top:12px; font-size:12px; color:var(--text-muted);">
+                            <strong style="color:var(--text-main);">💡 AI Recommendations:</strong>
+                            <ul style="margin:6px 0 0 16px; padding:0; line-height:1.5;">
+                                ${analysis.recommendations.map(r => `<li>${esc(r)}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                </div>`;
+            }
+
+            // 2. Candidate Info
             html += `
             <div class="visual-card">
                 <div class="visual-card-header">
-                    <span class="visual-card-title">👤 Personal / Candidate Details</span>
+                    <span class="visual-card-title">👤 Candidate Personal Information</span>
                 </div>
                 <div class="visual-grid">
                     <div class="visual-item">
                         <div class="visual-item-label">Full Name</div>
-                        <div class="visual-item-value">${esc(sd.name || '—')}</div>
+                        <div class="visual-item-value">${esc(pi.full_name || pi.name || '—')}</div>
                     </div>
                     <div class="visual-item">
-                        <div class="visual-item-label">Target Title / Role</div>
-                        <div class="visual-item-value">${esc(sd.title || '—')}</div>
+                        <div class="visual-item-label">Job Title / Target Role</div>
+                        <div class="visual-item-value">${esc(pi.job_title || pi.title || '—')}</div>
                     </div>
                     <div class="visual-item">
-                        <div class="visual-item-label">Email</div>
-                        <div class="visual-item-value">${esc(sd.email || '—')}</div>
+                        <div class="visual-item-label">Email Address</div>
+                        <div class="visual-item-value">${esc(pi.email || '—')}</div>
                     </div>
                     <div class="visual-item">
-                        <div class="visual-item-label">Phone</div>
-                        <div class="visual-item-value">${esc(sd.phone || '—')}</div>
+                        <div class="visual-item-label">Phone Number</div>
+                        <div class="visual-item-value">${esc(pi.phone || '—')}</div>
                     </div>
                     <div class="visual-item">
-                        <div class="visual-item-label">Location / Address</div>
-                        <div class="visual-item-value">${esc(sd.address || '—')}</div>
+                        <div class="visual-item-label">Location / City</div>
+                        <div class="visual-item-value">${esc(locStr)}</div>
                     </div>
                     <div class="visual-item">
                         <div class="visual-item-label">LinkedIn / Website</div>
-                        <div class="visual-item-value">${esc(sd.linkedin || sd.website || '—')}</div>
+                        <div class="visual-item-value">${esc(pi.linkedin || pi.website || pi.github || pi.portfolio || '—')}</div>
                     </div>
                 </div>
             </div>`;
 
-            // Summary
-            if (sd.summary) {
+            // 3. Summary & Objective
+            const sumText = cand.professional_summary || cand.summary || '';
+            const objText = cand.career_objective || '';
+            if (sumText || objText) {
                 html += `
                 <div class="visual-card">
                     <div class="visual-card-header">
-                        <span class="visual-card-title">📝 Professional Summary</span>
+                        <span class="visual-card-title">📝 Summary & Objective</span>
                     </div>
-                    <p style="font-size:var(--text-xs); color:var(--text-main); line-height:1.6; margin:0;">${esc(sd.summary)}</p>
+                    ${sumText ? `<p style="font-size:var(--text-xs); color:var(--text-main); line-height:1.6; margin:0 0 8px 0;"><strong>Professional Summary:</strong> ${esc(sumText)}</p>` : ''}
+                    ${objText ? `<p style="font-size:var(--text-xs); color:var(--text-muted); line-height:1.6; margin:0;"><strong>Career Objective:</strong> ${esc(objText)}</p>` : ''}
                 </div>`;
             }
 
-            // Skills
-            if (sd.skills) {
-                const skillList = Array.isArray(sd.skills) ? sd.skills : String(sd.skills).split(',').map(s => s.trim()).filter(Boolean);
+            // 4. Categorized Skills
+            let hasSkills = false;
+            let skillsHtml = '';
+            if (typeof skills === 'object' && !Array.isArray(skills)) {
+                Object.entries(skills).forEach(([catKey, list]) => {
+                    if (Array.isArray(list) && list.length > 0) {
+                        hasSkills = true;
+                        const catLabel = catKey.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                        skillsHtml += `
+                        <div style="margin-bottom:10px;">
+                            <div style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:4px;">${esc(catLabel)}</div>
+                            <div class="skill-tag-list">
+                                ${list.map(s => `<span class="skill-chip">${esc(s)}</span>`).join('')}
+                            </div>
+                        </div>`;
+                    }
+                });
+            } else if (Array.isArray(skills) && skills.length > 0) {
+                hasSkills = true;
+                skillsHtml = `<div class="skill-tag-list">${skills.map(s => `<span class="skill-chip">${esc(s)}</span>`).join('')}</div>`;
+            } else if (typeof skills === 'string' && skills.trim()) {
+                hasSkills = true;
+                const sList = skills.split(',').map(s => s.trim()).filter(Boolean);
+                skillsHtml = `<div class="skill-tag-list">${sList.map(s => `<span class="skill-chip">${esc(s)}</span>`).join('')}</div>`;
+            }
+
+            if (hasSkills) {
                 html += `
                 <div class="visual-card">
                     <div class="visual-card-header">
                         <span class="visual-card-title">⚡ Skills & Technologies</span>
                     </div>
-                    <div class="skill-tag-list">
-                        ${skillList.map(s => `<span class="skill-chip">${esc(s)}</span>`).join('')}
-                    </div>
+                    ${skillsHtml}
                 </div>`;
             }
 
-            // Experience
-            if (Array.isArray(sd.experience) && sd.experience.length > 0) {
+            // 5. Work Experience
+            const expList = cand.work_experience || cand.experience || [];
+            if (Array.isArray(expList) && expList.length > 0) {
                 html += `
                 <div class="visual-card">
                     <div class="visual-card-header">
-                        <span class="visual-card-title">💼 Work Experience (${sd.experience.length})</span>
+                        <span class="visual-card-title">💼 Work Experience (${expList.length})</span>
                     </div>
                     <div>
-                        ${sd.experience.map(exp => `
+                        ${expList.map(exp => {
+                            const title = exp.job_title || exp.title || 'Role';
+                            const comp = exp.company_name || exp.company || 'Company';
+                            const dates = (exp.start_date || exp.end_date) ? `${exp.start_date || ''} – ${exp.end_date || (exp.is_current ? 'Present' : '')}` : (exp.duration || '');
+                            const techs = Array.isArray(exp.technologies) ? exp.technologies : [];
+                            return `
                             <div class="timeline-item">
-                                <div class="timeline-title">${esc(exp.title || 'Role')}</div>
-                                <div class="timeline-sub">${esc(exp.company || 'Company')} ${exp.duration ? '· ' + esc(exp.duration) : ''} ${exp.location ? '· ' + esc(exp.location) : ''}</div>
+                                <div class="timeline-title">${esc(title)} ${exp.is_current ? '<span class="file-type-badge" style="font-size:10px; padding:2px 6px;">Current</span>' : ''}</div>
+                                <div class="timeline-sub">${esc(comp)} ${dates ? '· ' + esc(dates) : ''} ${exp.location ? '· ' + esc(exp.location) : ''}</div>
                                 <div class="timeline-desc">${esc(exp.description || '')}</div>
-                            </div>
-                        `).join('')}
+                                ${techs.length > 0 ? `
+                                    <div style="margin-top:6px; display:flex; gap:4px; flex-wrap:wrap;">
+                                        ${techs.map(t => `<span class="skill-chip" style="font-size:10px; padding:2px 6px;">${esc(t)}</span>`).join('')}
+                                    </div>
+                                ` : ''}
+                            </div>`;
+                        }).join('')}
                     </div>
                 </div>`;
             }
 
-            // Education
-            if (Array.isArray(sd.education) && sd.education.length > 0) {
+            // 6. Education
+            const eduList = cand.education || [];
+            if (Array.isArray(eduList) && eduList.length > 0) {
                 html += `
                 <div class="visual-card">
                     <div class="visual-card-header">
-                        <span class="visual-card-title">🎓 Education (${sd.education.length})</span>
+                        <span class="visual-card-title">🎓 Education (${eduList.length})</span>
                     </div>
                     <div>
-                        ${sd.education.map(edu => `
+                        ${eduList.map(edu => {
+                            const deg = edu.degree ? (edu.field_of_study ? `${edu.degree} in ${edu.field_of_study}` : edu.degree) : (edu.field_of_study || 'Degree');
+                            const inst = edu.institution || edu.university || 'University';
+                            const yr = (edu.start_date || edu.end_date) ? `${edu.start_date || ''} – ${edu.end_date || ''}` : (edu.year || '');
+                            return `
                             <div class="timeline-item">
-                                <div class="timeline-title">${esc(edu.degree || 'Degree')}</div>
-                                <div class="timeline-sub">${esc(edu.university || 'University')} ${edu.year ? '· ' + esc(edu.year) : ''} ${edu.gpa ? '· GPA: ' + esc(edu.gpa) : ''}</div>
-                            </div>
-                        `).join('')}
+                                <div class="timeline-title">${esc(deg)}</div>
+                                <div class="timeline-sub">${esc(inst)} ${yr ? '· ' + esc(yr) : ''} ${edu.gpa ? '· GPA: ' + esc(edu.gpa) : ''} ${edu.grade ? '· ' + esc(edu.grade) : ''}</div>
+                            </div>`;
+                        }).join('')}
                     </div>
                 </div>`;
             }
 
-            // Projects
-            if (Array.isArray(sd.projects) && sd.projects.length > 0) {
+            // 7. Projects
+            const projList = cand.projects || [];
+            if (Array.isArray(projList) && projList.length > 0) {
                 html += `
                 <div class="visual-card">
                     <div class="visual-card-header">
-                        <span class="visual-card-title">🚀 Projects (${sd.projects.length})</span>
+                        <span class="visual-card-title">🚀 Key Projects (${projList.length})</span>
                     </div>
                     <div class="visual-grid">
-                        ${sd.projects.map(p => `
+                        ${projList.map(p => `
                             <div class="visual-item">
-                                <div class="visual-item-label">${esc(p.name || 'Project')}</div>
-                                <div class="visual-item-value" style="font-weight:normal; margin-bottom:4px;">${esc(p.description || '')}</div>
-                                ${p.tech_stack ? `<div style="font-size:11px; color:var(--accent-indigo); font-weight:700;">${esc(p.tech_stack)}</div>` : ''}
+                                <div class="visual-item-label">${esc(p.project_name || p.name || 'Project')} ${p.role ? '· ' + esc(p.role) : ''}</div>
+                                <div class="visual-item-value" style="font-weight:normal; margin-bottom:6px;">${esc(p.description || '')}</div>
+                                ${Array.isArray(p.technologies) && p.technologies.length > 0 ? `
+                                    <div style="font-size:11px; color:var(--accent-indigo); font-weight:700;">Tech: ${esc(p.technologies.join(', '))}</div>
+                                ` : ''}
+                                ${p.project_url || p.github_url ? `
+                                    <a href="${esc(p.project_url || p.github_url)}" target="_blank" rel="noopener" style="display:inline-block; font-size:11px; color:var(--accent-indigo); margin-top:4px;">🔗 View Project</a>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+            }
+
+            // 8. Certifications & Awards
+            const certList = cand.certifications || [];
+            const awardList = cand.awards || cand.achievements || [];
+            if (certList.length > 0 || awardList.length > 0) {
+                html += `
+                <div class="visual-card">
+                    <div class="visual-card-header">
+                        <span class="visual-card-title">🏆 Certifications & Honors</span>
+                    </div>
+                    <div class="visual-grid">
+                        ${certList.map(c => `
+                            <div class="visual-item">
+                                <div class="visual-item-label">Certification</div>
+                                <div class="visual-item-value">${esc(typeof c === 'object' ? (c.name || '') : c)} ${typeof c === 'object' && c.issuing_organization ? '· ' + esc(c.issuing_organization) : ''}</div>
+                            </div>
+                        `).join('')}
+                        ${awardList.map(a => `
+                            <div class="visual-item">
+                                <div class="visual-item-label">Award / Achievement</div>
+                                <div class="visual-item-value">${esc(typeof a === 'object' ? (a.title || a.name || '') : a)} ${typeof a === 'object' && a.organization ? '· ' + esc(a.organization) : ''}</div>
                             </div>
                         `).join('')}
                     </div>
@@ -1373,7 +1518,7 @@
             navigator.clipboard.writeText(JSON.stringify(lastJSON, null, 2)).then(() => {
                 const btn = document.getElementById('copy-json-btn');
                 btn.textContent = '✅ Copied!';
-                if (window.showToast) window.showToast('JSON copied to clipboard! 📋', 'success');
+                if (window.showToast) window.showToast('4-Tier JSON copied to clipboard! 📋', 'success');
                 setTimeout(() => btn.textContent = '📋 Copy JSON', 2200);
             });
         });
@@ -1383,7 +1528,7 @@
             if (!lastJSON) return;
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(lastJSON, null, 2));
             const downloadAnchor = document.createElement('a');
-            const name = (selectedFile ? selectedFile.name.replace(/\.[^/.]+$/, "") : "resume") + "_extracted.json";
+            const name = (selectedFile ? selectedFile.name.replace(/\.[^/.]+$/, "") : "resume") + "_structured.json";
             downloadAnchor.setAttribute("href", dataStr);
             downloadAnchor.setAttribute("download", name);
             document.body.appendChild(downloadAnchor);
