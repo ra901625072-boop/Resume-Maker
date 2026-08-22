@@ -1,93 +1,139 @@
 /* ==========================================================
-   WISAXIS RESUME MAKER — CSS DESIGN TOKENS
-   Single source of truth for all variables.
+   WISAXIS RESUME MAKER — CSS DESIGN SYSTEM & DESIGN TOKENS
+   Single source of truth for all design tokens (2026 SaaS Standard).
    Load this FIRST before any other stylesheet.
    ========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
 
 :root {
 
   /* ===== TYPOGRAPHY ===== */
-  --font-heading: 'Outfit', sans-serif;
-  --font-body: 'Outfit', 'Inter', sans-serif;
+  --font-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Font Size Scale */
-  --text-xs: 0.75rem;
-  /* 12px */
-  --text-sm: 0.875rem;
-  /* 14px */
-  --text-md: 1rem;
-  /* 16px */
-  --text-lg: 1.125rem;
-  /* 18px */
-  --text-xl: 1.25rem;
-  /* 20px */
-  --text-2xl: 1.5rem;
-  /* 24px */
-  --text-3xl: 1.875rem;
-  /* 30px */
-  --text-4xl: 2.25rem;
-  /* 36px */
+  /* Symmetrical Fluid Type Scale */
+  --text-2xs: 0.6875rem; /* 11px */
+  --text-xs:  0.75rem;   /* 12px */
+  --text-sm:  0.875rem;  /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-md:   1rem;     /* 16px */
+  --text-lg:   1.125rem; /* 18px */
+  --text-xl:   1.25rem;  /* 20px */
+  --text-2xl:  1.5rem;   /* 24px */
+  --text-3xl:  1.875rem; /* 30px */
+  --text-4xl:  2.25rem;  /* 36px */
+  --text-5xl:  3rem;     /* 48px */
+  --text-6xl:  3.75rem;  /* 60px */
 
-  /* ===== COLORS — Dark Mode (Default) ===== */
+  /* Line Heights */
+  --leading-none: 1;
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.75;
 
-  /* Backgrounds & Surfaces */
-  --bg-primary: radial-gradient(circle at 0% 0%, #1e1b4b 0%, #0f172a 100%);
-  --bg-overlay: rgba(15, 23, 42, 0.85);
-  --surface: rgba(20, 24, 34, 0.62);
-  --surface-paper: rgba(15, 23, 42, 0.60);
-  --surface-card: rgba(255, 255, 255, 0.03);
+  /* ===== COLORS — Dark Mode (Default / 2026 Calm SaaS) ===== */
+  --bg-base: #07090e;
+  --bg-primary: radial-gradient(circle at 50% 0%, #111628 0%, #07090e 100%);
+  --bg-overlay: rgba(7, 9, 14, 0.78);
+  
+  /* Elevation Surfaces */
+  --surface-0: #07090e;
+  --surface-1: rgba(15, 20, 32, 0.72);
+  --surface-2: rgba(22, 30, 48, 0.68);
+  --surface-3: rgba(30, 41, 66, 0.75);
+  --surface-paper: rgba(13, 17, 28, 0.85);
+  --surface-card: rgba(255, 255, 255, 0.035);
+  --surface-card-hover: rgba(255, 255, 255, 0.06);
   --surface-border: rgba(255, 255, 255, 0.08);
+  --surface-border-hover: rgba(99, 102, 241, 0.35);
 
-  /* Text */
+  /* Legacy surface aliases */
+  --surface: var(--surface-1);
+  --glass-bg: var(--surface-card);
+
+  /* Borders & Dividers */
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --border-focus: rgba(99, 102, 241, 0.7);
+
+  /* Text & Content */
   --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --text-inverse: #0f172a;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-dim: #475569;
+  --text-inverse: #07090e;
 
-  /* Brand Colors */
+  /* Brand Palette (Electric Indigo & Violet) */
   --primary: #6366f1;
   --primary-hover: #4f46e5;
+  --primary-active: #4338ca;
+  --primary-light: rgba(99, 102, 241, 0.12);
+  --primary-glow: rgba(99, 102, 241, 0.38);
+
+  --accent: #8b5cf6;
+  --accent-hover: #7c3aed;
+  --accent-light: rgba(139, 92, 246, 0.12);
+  --accent-glow: rgba(139, 92, 246, 0.35);
+  --accent-indigo: #6366f1;
+
+  /* Semantic Feedback */
+  --success: #10b981;
+  --success-hover: #059669;
+  --success-light: rgba(16, 185, 129, 0.12);
   --secondary: #10b981;
-  --accent: #f59e0b;
-  --danger: #ef4444;
 
-  /* Glass / Backdrop */
+  --warning: #f59e0b;
+  --warning-hover: #d97706;
+  --warning-light: rgba(245, 158, 11, 0.12);
+
+  --danger: #f43f5e;
+  --danger-hover: #e11d48;
+  --danger-light: rgba(244, 63, 94, 0.12);
+
+  --info: #0ea5e9;
+  --info-light: rgba(14, 165, 233, 0.12);
+
+  /* Glassmorphism & Shadows */
   --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-blur: blur(20px);
-  --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.40);
+  --glass-blur: blur(16px);
+  --glass-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.55);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 40px -8px rgba(0, 0, 0, 0.45);
+  --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.32);
+  --shadow-hover: 0 20px 48px -6px rgba(0, 0, 0, 0.52);
 
-  /* Shadows */
-  --shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.24);
-  --shadow-hover: 0 20px 42px rgba(0, 0, 0, 0.34);
-
-  /* ===== GLOBAL BACKGROUND SYSTEM (Replaces legacy template shell) ===== */
-  --global-bg-overlay: rgba(8, 11, 18, 0.52);
-  --global-bg-overlay-mobile: rgba(8, 11, 18, 0.34);
-  --global-bg-blur: 14px;
+  /* ===== GLOBAL BACKGROUND SYSTEM ===== */
+  --global-bg-overlay: rgba(7, 9, 14, 0.68);
+  --global-bg-overlay-mobile: rgba(7, 9, 14, 0.5);
+  --global-bg-blur: 16px;
   --global-bg-blur-mobile: 18px;
-  --global-bg-gradient-1: rgba(99, 102, 241, 0.22);
-  --global-bg-gradient-2: rgba(56, 189, 248, 0.16);
-  --global-bg-gradient-3: rgba(82, 239, 26, 0.08);
+  --global-bg-gradient-1: rgba(99, 102, 241, 0.18);
+  --global-bg-gradient-2: rgba(139, 92, 246, 0.14);
+  --global-bg-gradient-3: rgba(16, 185, 129, 0.07);
 
-  /* ===== SHELL VARIABLES (Legacy support) ===== */
+  /* ===== SHELL VARIABLES ===== */
   --shell-overlay: var(--global-bg-overlay);
   --shell-overlay-mobile: var(--global-bg-overlay-mobile);
   --shell-blur: var(--global-bg-blur);
   --shell-blur-mobile: var(--global-bg-blur-mobile);
-  --shell-surface: rgba(15, 23, 42, 0.74);
+  --shell-surface: rgba(13, 17, 28, 0.82);
   --shell-surface-border: rgba(255, 255, 255, 0.08);
-  --shell-shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
-  --shell-radius: 22px;
-  --shell-transition: 0.28s ease;
-  --shell-green: #52ef1a;
-  --shell-green-dark: #17c964;
-  --shell-purple: #7c5cff;
-  --shell-purple-dark: #5b4bff;
+  --shell-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+  --shell-radius: 20px;
+  --shell-transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --shell-green: #10b981;
+  --shell-green-dark: #059669;
+  --shell-purple: #8b5cf6;
+  --shell-purple-dark: #6366f1;
   --shell-text: #ffffff;
-  --shell-muted: rgba(255, 255, 255, 0.64);
+  --shell-muted: rgba(255, 255, 255, 0.65);
 
-  /* ===== SPACING — 8pt Grid ===== */
+  /* ===== SPACING — 8pt Grid System ===== */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -96,8 +142,10 @@
   --space-6: 32px;
   --space-7: 48px;
   --space-8: 64px;
+  --space-9: 80px;
+  --space-10: 100px;
 
-  /* Legacy spacing aliases (template background) */
+  /* Legacy spacing aliases */
   --spacing-xs: 8px;
   --spacing-sm: 12px;
   --spacing-md: 16px;
@@ -106,14 +154,17 @@
   --spacing-2xl: 40px;
 
   /* ===== BORDER RADIUS ===== */
+  --radius-xs: 6px;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
 
-  /* Legacy aliases */
-  --card-radius: 24px;
-  --input-radius: 14px;
+  /* Legacy radius aliases */
+  --card-radius: 20px;
+  --input-radius: 12px;
   --btn-radius: 12px;
 
   /* ===== Z-INDEX SCALE ===== */
@@ -125,57 +176,56 @@
   --z-actions: 1100;
   --z-header: 1200;
   --z-header-dropdown: 1300;
+  --z-modal: 9000;
+  --z-toast: 10000;
 
-  /* ===== TRANSITIONS ===== */
-  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* ===== TRANSITIONS & EASING ===== */
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-out-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.15s ease;
+  --transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-theme:
-    background 0.5s ease-in-out,
-    background-color 0.5s ease-in-out,
-    color 0.3s ease-in-out,
-    box-shadow 0.4s ease,
-    border-color 0.4s ease,
-    backdrop-filter 0.5s ease;
+    background-color 0.35s ease,
+    background 0.35s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.3s ease;
 
   /* ===== INPUTS ===== */
-  --input-bg: rgba(255, 255, 255, 0.02);
-  --input-border: rgba(255, 255, 255, 0.08);
-  --input-focus-bg: rgba(255, 255, 255, 0.04);
+  --input-bg: rgba(255, 255, 255, 0.03);
+  --input-border: rgba(255, 255, 255, 0.09);
+  --input-focus-bg: rgba(255, 255, 255, 0.05);
   --input-focus-border: #6366f1;
 
   /* ===== LAYOUT ===== */
   --section-padding: 4rem;
-  --container-max-width: 1200px;
+  --container-max-width: 1240px;
 
   /* ===== TEMPLATE LAYOUT DIMENSIONS ===== */
-  /* Uniform gap token — same whitespace between every mobile element */
   --g: 16px;
-
-  --mobile-navbar-height: 76px;
-  --mobile-template-height: 130px;
-  /* scroll strip height */
-  --mobile-download-height: 56px;
-  /* download button height */
-  --mobile-bottom-space: 104px;
-  /* legacy: safe-area + gap + download + gap */
-  --mobile-header-gap: 16px;
-  /* alias → use --g */
-  --mobile-radius: 22px;
-  --mobile-bg: #09090f;
-  --mobile-glass: linear-gradient(180deg, rgba(9, 12, 22, 0.94), rgba(10, 14, 24, 0.88));
-  --mobile-border: 1px solid rgba(255, 255, 255, 0.06);
-  --mobile-shadow: 0 12px 34px rgba(0, 0, 0, 0.38);
-  --mobile-purple: #7c5cff;
-  --mobile-purple-2: #5b4bff;
-  --mobile-muted: rgba(255, 255, 255, 0.62);
+  --mobile-navbar-height: 72px;
+  --mobile-template-height: 128px;
+  --mobile-download-height: 54px;
+  --mobile-bottom-space: 96px;
+  --mobile-header-gap: 14px;
+  --mobile-radius: 20px;
+  --mobile-bg: #07090e;
+  --mobile-glass: linear-gradient(180deg, rgba(13, 17, 28, 0.96), rgba(7, 9, 14, 0.92));
+  --mobile-border: 1px solid rgba(255, 255, 255, 0.08);
+  --mobile-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
+  --mobile-purple: #8b5cf6;
+  --mobile-purple-2: #6366f1;
+  --mobile-muted: rgba(255, 255, 255, 0.65);
   --mobile-download-bg: transparent;
 
-  --desktop-navbar-height: 84px;
+  --desktop-navbar-height: 76px;
   --desktop-sidebar-width: 148px;
   --desktop-gap: 24px;
-  --desktop-page-top: 118px;
+  --desktop-page-top: 106px;
 }
 
-/* ===== MOBILE DEFAULTS ===== */
+/* ===== MOBILE OVERRIDES ===== */
 @media (max-width: 768px) {
   :root {
     --card-radius: 16px;
@@ -184,43 +234,88 @@
   }
 }
 
-/* ===== LIGHT MODE ===== */
+/* ===== LIGHT MODE (Crisp Porcelain & Slate 2026 Standard) ===== */
 html[data-theme="light"] {
-  --font-heading: 'Outfit', sans-serif;
-  --font-body: 'Outfit', 'Inter', sans-serif;
+  --bg-base: #f8fafc;
+  --bg-primary: radial-gradient(circle at 50% 0%, #ffffff 0%, #f1f5f9 100%);
+  --bg-overlay: rgba(255, 255, 255, 0.82);
 
-  --bg-primary: radial-gradient(circle at 0% 0%, #f1f5f9 0%, #e2e8f0 100%);
-  --bg-overlay: rgba(255, 255, 255, 0.85);
-  --surface: rgba(255, 255, 255, 0.65);
-  --surface-paper: rgba(255, 255, 255, 0.90);
-  --surface-card: rgba(255, 255, 255, 0.80);
+  /* Elevation Surfaces */
+  --surface-0: #f8fafc;
+  --surface-1: rgba(255, 255, 255, 0.85);
+  --surface-2: rgba(248, 250, 252, 0.9);
+  --surface-3: #ffffff;
+  --surface-paper: rgba(255, 255, 255, 0.94);
+  --surface-card: #ffffff;
+  --surface-card-hover: #f8fafc;
   --surface-border: rgba(15, 23, 42, 0.08);
+  --surface-border-hover: rgba(79, 70, 229, 0.35);
 
-  /* Global Background Overrides */
-  --global-bg-overlay: rgba(255, 255, 255, 0.5);
-  --global-bg-overlay-mobile: rgba(255, 255, 255, 0.85);
+  --surface: var(--surface-1);
+  --glass-bg: #ffffff;
 
+  /* Borders */
+  --border-subtle: rgba(15, 23, 42, 0.05);
+  --border-default: rgba(15, 23, 42, 0.09);
+  --border-strong: rgba(15, 23, 42, 0.16);
+  --border-focus: rgba(79, 70, 229, 0.8);
+
+  /* Typography */
   --text-main: #0f172a;
-  --text-muted: #475569;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
   --text-inverse: #ffffff;
 
+  /* Brand Palette (Deep rich indigo for light contrast) */
   --primary: #4f46e5;
   --primary-hover: #4338ca;
+  --primary-active: #3730a3;
+  --primary-light: rgba(79, 70, 229, 0.08);
+  --primary-glow: rgba(79, 70, 229, 0.25);
+
+  --accent: #7c3aed;
+  --accent-hover: #6d28d9;
+  --accent-light: rgba(124, 58, 237, 0.08);
+  --accent-glow: rgba(124, 58, 237, 0.22);
+  --accent-indigo: #4f46e5;
+
+  /* Semantic Feedback */
+  --success: #059669;
+  --success-hover: #047857;
+  --success-light: rgba(5, 150, 105, 0.08);
   --secondary: #059669;
-  --accent: #f59e0b;
-  --danger: #b91c1c;
 
-  --glass-border: rgba(255, 255, 255, 0.6);
-  --glass-blur: blur(20px);
-  --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  --warning: #d97706;
+  --warning-hover: #b45309;
+  --warning-light: rgba(217, 119, 6, 0.08);
 
-  --shadow-soft: 0 12px 30px rgba(79, 70, 229, 0.08);
-  --shadow-hover: 0 20px 42px rgba(79, 70, 229, 0.12);
+  --danger: #e11d48;
+  --danger-hover: #be123c;
+  --danger-light: rgba(225, 29, 72, 0.08);
 
-  --card-radius: 24px;
-  --input-radius: 14px;
+  --info: #0284c7;
+  --info-light: rgba(2, 132, 199, 0.08);
 
-  --input-bg: #f1f5f9;
+  /* Glass / Shadows */
+  --glass-border: rgba(15, 23, 42, 0.08);
+  --glass-blur: blur(16px);
+  --glass-shadow: 0 12px 36px -4px rgba(15, 23, 42, 0.08);
+  --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 6px 18px -2px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 16px 36px -4px rgba(15, 23, 42, 0.08);
+  --shadow-soft: 0 10px 28px rgba(15, 23, 42, 0.06);
+  --shadow-hover: 0 18px 40px -4px rgba(79, 70, 229, 0.12);
+
+  /* Background Overrides */
+  --global-bg-overlay: rgba(255, 255, 255, 0.7);
+  --global-bg-overlay-mobile: rgba(255, 255, 255, 0.9);
+  --global-bg-gradient-1: rgba(79, 70, 229, 0.08);
+  --global-bg-gradient-2: rgba(124, 58, 237, 0.06);
+  --global-bg-gradient-3: rgba(5, 150, 105, 0.04);
+
+  /* Inputs */
+  --input-bg: #f8fafc;
   --input-border: #cbd5e1;
   --input-focus-bg: #ffffff;
   --input-focus-border: #4f46e5;

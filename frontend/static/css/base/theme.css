@@ -1,38 +1,71 @@
 /* ==========================================================
    WISAXIS RESUME MAKER — GLOBAL BODY & THEME
-   Sets base body appearance, transitions, and dark/light
-   theme application using variables from 00-variables.css.
+   Sets base body appearance, typography smoothing, transitions,
+   scrollbars, text selection, and dark/light theme switching.
    ========================================================== */
 
-/* ===== BODY BASE ===== */
+/* ===== DOCUMENT & BODY BASE ===== */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   font-family: var(--font-body);
   color: var(--text-main);
-  line-height: 1.6;
+  line-height: var(--leading-normal);
   background: var(--bg-primary);
+  background-color: var(--bg-base);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   transition: var(--transition-theme);
 }
 
-/* Radial highlight over background */
-
-
-/* Remove legacy glow effects */
-body::after,
-.auth-glow,
-.mouse-light {
-  display: none !important;
+/* Text Selection Color */
+::selection {
+  background: rgba(99, 102, 241, 0.35);
+  color: var(--text-main);
 }
 
-/* Per-component transitions are defined within each component.
-   A universal * transition was removed to avoid overrides and reduce paint overhead. */
+html[data-theme="light"] ::selection {
+  background: rgba(79, 70, 229, 0.25);
+  color: #0f172a;
+}
 
+/* ===== GLOBAL SCROLLBARS ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
 
 /* ===== THEME TOGGLE BUTTON ===== */
-#theme-toggle {
+#theme-toggle,
+.theme-toggle {
   background: var(--surface-card);
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--border-default);
   color: var(--text-main);
-  padding: 0.5rem;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -40,29 +73,52 @@ body::after,
   justify-content: center;
   width: 40px;
   height: 40px;
+  flex-shrink: 0;
+  padding: 0;
   transition: var(--transition);
+  position: relative;
 }
 
-#theme-toggle:hover {
+#theme-toggle:hover,
+.theme-toggle:hover {
   background: var(--primary);
   border-color: var(--primary);
   color: #fff;
-  transform: rotate(15deg) scale(1.05);
-  box-shadow: 0 0 18px rgba(99, 102, 241, 0.45);
+  transform: rotate(18deg) scale(1.06);
+  box-shadow: 0 0 20px var(--primary-glow);
 }
 
-/* Theme icon switching */
+html[data-theme="light"] #theme-toggle,
+html[data-theme="light"] .theme-toggle {
+  background: var(--surface-3);
+  border-color: var(--border-default);
+  color: var(--text-main);
+}
+
+html[data-theme="light"] #theme-toggle:hover,
+html[data-theme="light"] .theme-toggle:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+/* Theme Icon Visibility Switch */
 .theme-icon-sun  { display: none; }
 .theme-icon-moon { display: block; }
 
 html[data-theme="light"] .theme-icon-sun  { display: block; }
 html[data-theme="light"] .theme-icon-moon { display: none; }
 
-/* ===== TEMPLATE SHELL BODY ===== */
+/* ===== TEMPLATE SHELL BODY (Resume Viewer) ===== */
 body.template-shell {
   min-height: 100vh;
   position: relative;
-  background: #09090f;
+  background: var(--bg-base);
   color: var(--shell-text);
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--font-body);
+}
+
+html[data-theme="light"] body.template-shell {
+  background: #eef2f8;
+  color: var(--text-main);
 }

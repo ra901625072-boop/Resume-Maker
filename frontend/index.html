@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Maker | Professional AI Resume Builder</title>
+    <title>Wisaxis Resume Maker | Professional AI Resume Builder</title>
     <meta name="description"
         content="Professional AI-driven resume builder. Create, customize, and download premium resumes in minutes.">
 
@@ -38,7 +38,7 @@
 
 <body>
 
-    <!-- Global Background (inlined partial) -->
+    <!-- Global Background System -->
     <div class="global-bg" aria-hidden="true">
         <div class="bg-layer-base"></div>
         <div class="bg-layer-overlay"></div>
@@ -47,37 +47,35 @@
         <div class="bg-layer-particles"></div>
     </div>
 
+    <!-- Sticky Navigation Header -->
     <header class="app-header" role="banner">
         <div class="header-inner">
             <a href="/" class="brand" aria-label="Wisaxis Resume Maker Home">
-                <img src="/static/images/brand/logo.png" alt="" class="brand-logo" width="32" height="32">
-                <span class="brand-text">WISAXIS <span>Resume Maker</span></span>
+                <img src="/static/images/brand/logo.png" alt="" class="brand-logo" width="34" height="34">
+                <span class="brand-text">WISAXIS<span>Resume Maker</span></span>
             </a>
 
             <div class="header-actions-wrap">
-                <!-- Desktop nav (shown ≥501px) -->
+                <!-- Desktop nav (shown ≥820px) -->
                 <nav class="desktop-nav" aria-label="Main Navigation">
-                    <a href="#templates">Templates</a>
-                    <a href="/chat">AI Assistant</a>
-                    <a href="/json">JSON Extractor</a>
-                    <a href="/profile" data-show-auth>My Resumes</a>
                     <a href="/login.html" data-show-guest>Log In</a>
-                    <a href="/signup.html" data-show-guest class="btn-primary">Sign Up</a>
+                    <a href="/signup.html" data-show-guest class="btn-primary">Get Started</a>
                     <a href="/dashboard" data-show-auth class="btn-primary">Create Resume</a>
                     <a href="#" data-show-auth class="btn-logout" data-action="logout" style="color: var(--text-muted); font-size: var(--text-sm); margin-left: 6px;">Log Out</a>
                 </nav>
 
-                <!-- Mobile nav (shown ≤500px via CSS) -->
+                <!-- Mobile nav pills (shown <820px) -->
                 <nav class="mobile-nav-pills" aria-label="Mobile Navigation">
                     <a href="/login.html" data-show-guest class="mobile-nav-login">Log In</a>
                     <a href="/signup.html" data-show-guest class="mobile-nav-signup">Sign Up</a>
-                    <a href="/profile" data-show-auth class="mobile-nav-login">My Resumes</a>
+                    <a href="/profile" data-show-auth class="mobile-nav-login">Resumes</a>
                     <a href="/dashboard" data-show-auth class="mobile-nav-signup">Create</a>
                 </nav>
 
+                <!-- Theme Toggle Button -->
                 <button class="nav-icon-btn" id="theme-toggle" aria-label="Toggle dark mode" type="button">
-                    <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                    <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg class="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 </button>
             </div>
         </div>
@@ -85,107 +83,110 @@
 
     <main id="main-content" role="main">
 
+        <!-- Hero Section -->
         <section class="hero" aria-labelledby="hero-title">
             <div class="hero-inner fade-up">
                 <div class="badge-wrapper">
-                    <span class="hero-badge">Next-Generation Builder</span>
+                    <span class="hero-badge">AI-Powered SaaS Standard</span>
                 </div>
                 <h1 id="hero-title" class="hero-title">
-                    Build a resume that gets you <span>hired.</span>
+                    Build a resume that gets you <span>hired fast.</span>
                 </h1>
                 <p class="hero-lead">
-                    Create a beautiful, recruiter-approved resume in less than 5 minutes with our guided, intelligent wizard. Perfect for professional growth.
+                    Create a modern, ATS-proof resume in less than 5 minutes with our intelligent guided wizard, instant PDF downloads, and AI content assistant.
                 </p>
                 <div class="hero-actions">
-                    <a href="/dashboard" class="cta-primary btn-adaptive">
-                        <span>Build My Resume</span>
+                    <a href="/dashboard" class="cta-primary">
+                        <span>Start Building Free</span>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                     </a>
-                    <a href="#templates" class="cta-secondary">View Templates</a>
+                    <a href="#templates" class="cta-secondary">Browse 8+ Templates</a>
                 </div>
                 <div class="hero-trust">
                     <div class="trust-badges">
-                        <span class="trust-badge">8+ Templates</span>
-                        <span class="trust-badge">100% Free</span>
-                        <span class="trust-badge">No Credit Card</span>
+                        <span class="trust-badge">⚡ 8 High-Impact Templates</span>
+                        <span class="trust-badge">🎯 ATS Optimized</span>
+                        <span class="trust-badge">🔒 Private & Secure</span>
+                        <span class="trust-badge">📄 Instant PDF / Print</span>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Template Showcase Carousel -->
         <section id="templates" class="template-section fade-up" aria-labelledby="templates-heading">
             <div class="section-header">
                 <span class="section-eyebrow">Curated Designs</span>
                 <h2 id="templates-heading" class="section-title">Modern templates for every industry</h2>
-                <p class="section-desc">Hover to pause · Click any template to start</p>
+                <p class="section-desc">Hover to pause · Click any template to customize immediately</p>
             </div>
 
             <div class="template-scroll-wrapper" role="region" aria-label="Resume templates" tabindex="0">
                 <div class="template-scroll-track" id="templateTrack">
                     <!-- Set 1 -->
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateA.webp')" aria-label="View Executive template — Professional style">
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateA.webp')" aria-label="View Executive template">
                         <span class="template-name">Executive</span>
                         <span class="template-tag">Professional</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateB.webp')" aria-label="View Modern template — Trendy style">
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateB.webp')" aria-label="View Modern template">
                         <span class="template-name">Modern</span>
                         <span class="template-tag">Trendy</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateC.webp')" aria-label="View Creative template — Expressive style">
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateC.webp')" aria-label="View Creative template">
                         <span class="template-name">Creative</span>
                         <span class="template-tag">Expressive</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateD.webp')" aria-label="View Minimalist template — Clean style">
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateD.webp')" aria-label="View Minimalist template">
                         <span class="template-name">Minimalist</span>
                         <span class="template-tag">Clean</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateE.webp')" aria-label="View Academic template — Scholarly style">
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateE.webp')" aria-label="View Academic template">
                         <span class="template-name">Academic</span>
                         <span class="template-tag">Scholarly</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateF.webp')" aria-label="View Professional template — Robust style">
-                        <span class="template-name">Professional</span>
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateF.webp')" aria-label="View Corporate template">
+                        <span class="template-name">Corporate</span>
                         <span class="template-tag">Robust</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateG.webp')" aria-label="View Classic template — Elegant style">
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateG.webp')" aria-label="View Classic template">
                         <span class="template-name">Classic</span>
                         <span class="template-tag">Elegant</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateH.webp')" aria-label="View Compact template — Sleek style">
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateH.webp')" aria-label="View Compact template">
                         <span class="template-name">Compact</span>
                         <span class="template-tag">Sleek</span>
                     </a>
 
-                    <!-- Set 2 (Duplicated for Seamless Loop) -->
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateA.webp')" aria-hidden="true" tabindex="-1">
+                    <!-- Set 2 (Duplicated for Continuous Infinite Scroll) -->
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateA.webp')" aria-hidden="true" tabindex="-1">
                         <span class="template-name">Executive</span>
                         <span class="template-tag">Professional</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateB.webp')" aria-hidden="true" tabindex="-1">
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateB.webp')" aria-hidden="true" tabindex="-1">
                         <span class="template-name">Modern</span>
                         <span class="template-tag">Trendy</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateC.webp')" aria-hidden="true" tabindex="-1">
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateC.webp')" aria-hidden="true" tabindex="-1">
                         <span class="template-name">Creative</span>
                         <span class="template-tag">Expressive</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateD.webp')" aria-hidden="true" tabindex="-1">
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateD.webp')" aria-hidden="true" tabindex="-1">
                         <span class="template-name">Minimalist</span>
                         <span class="template-tag">Clean</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateE.webp')" aria-hidden="true" tabindex="-1">
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateE.webp')" aria-hidden="true" tabindex="-1">
                         <span class="template-name">Academic</span>
                         <span class="template-tag">Scholarly</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateF.webp')" aria-hidden="true" tabindex="-1">
-                        <span class="template-name">Professional</span>
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateF.webp')" aria-hidden="true" tabindex="-1">
+                        <span class="template-name">Corporate</span>
                         <span class="template-tag">Robust</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateG.webp')" aria-hidden="true" tabindex="-1">
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateG.webp')" aria-hidden="true" tabindex="-1">
                         <span class="template-name">Classic</span>
                         <span class="template-tag">Elegant</span>
                     </a>
-                    <a href="/dashboard" class="template-card resume-template resume-template-float" style="--template-img: url('/static/images/templates/templateH.webp')" aria-hidden="true" tabindex="-1">
+                    <a href="/dashboard" class="template-card" style="--template-img: url('/static/images/templates/templateH.webp')" aria-hidden="true" tabindex="-1">
                         <span class="template-name">Compact</span>
                         <span class="template-tag">Sleek</span>
                     </a>
@@ -193,47 +194,110 @@
             </div>
         </section>
 
-        <section class="info-section fade-up" aria-labelledby="info-heading">
-            <div class="info-inner">
-                <h2 id="info-heading">Create ATS-Friendly Resumes Effortlessly</h2>
-                <p>Our templates are designed in partnership with recruiters to bypass automated screening filters while presenting your skills with cinematic visual clarity. Free downloads forever.</p>
-                <div class="tech-stack">
-                    <span class="tech-pill">Free Forever</span>
-                    <span class="tech-pill">ATS Optimized</span>
-                    <span class="tech-pill">No Design Skills Needed</span>
-                    <span class="tech-pill">Instant PDF Download</span>
+        <!-- 2026 Bento Grid Features Section -->
+        <section class="features-section fade-up" aria-labelledby="features-heading">
+            <div class="section-header">
+                <span class="section-eyebrow">Supercharged Experience</span>
+                <h2 id="features-heading" class="section-title">Engineered for your career success</h2>
+                <p class="section-desc">Everything you need to craft an outstanding application.</p>
+            </div>
+
+            <div class="bento-grid">
+                <!-- Bento Card 1 (Span 8) -->
+                <div class="bento-card bento-col-8">
+                    <div>
+                        <div class="bento-icon">✨</div>
+                        <h3 class="bento-title">AI Assistant & Action Bullet Enhancer</h3>
+                        <p class="bento-desc">
+                            Transform basic bullet points into high-impact, metric-driven achievements using our integrated generative AI assistant with industry-specific action verbs.
+                        </p>
+                    </div>
+                    <div class="bento-pill-list">
+                        <span class="bento-pill">Action Verbs</span>
+                        <span class="bento-pill">Quantifiable Metrics</span>
+                        <span class="bento-pill">Grammar & Tone Polish</span>
+                    </div>
+                </div>
+
+                <!-- Bento Card 2 (Span 4) -->
+                <div class="bento-card bento-col-4">
+                    <div>
+                        <div class="bento-icon">⚡</div>
+                        <h3 class="bento-title">JSON Extractor</h3>
+                        <p class="bento-desc">
+                            Import existing resumes, raw text, or LinkedIn data directly. Our parser structures your entire history into clean JSON instantly.
+                        </p>
+                    </div>
+                    <div class="bento-pill-list">
+                        <span class="bento-pill">1-Click Import</span>
+                        <span class="bento-pill">Schema Standard</span>
+                    </div>
+                </div>
+
+                <!-- Bento Card 3 (Span 6) -->
+                <div class="bento-card bento-col-6">
+                    <div>
+                        <div class="bento-icon">🎯</div>
+                        <h3 class="bento-title">Recruiter-Approved ATS Formats</h3>
+                        <p class="bento-desc">
+                            Every template follows strict parsing hierarchies to ensure applicant tracking systems index your skills, titles, and dates without scoring penalties.
+                        </p>
+                    </div>
+                    <div class="bento-pill-list">
+                        <span class="bento-pill">100% Parseable</span>
+                        <span class="bento-pill">Clean Typographic Grid</span>
+                    </div>
+                </div>
+
+                <!-- Bento Card 4 (Span 6) -->
+                <div class="bento-card bento-col-6">
+                    <div>
+                        <div class="bento-icon">📱</div>
+                        <h3 class="bento-title">Symmetrical Multi-Device Sync</h3>
+                        <p class="bento-desc">
+                            Edit seamlessly on your desktop or phone. Preview templates live in A4 dimensions and generate pixel-perfect PDFs with print optimization.
+                        </p>
+                    </div>
+                    <div class="bento-pill-list">
+                        <span class="bento-pill">A4 Print Ready</span>
+                        <span class="bento-pill">Dark & Light Mode</span>
+                        <span class="bento-pill">Live Switcher</span>
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
+    <!-- Global Footer -->
     <footer class="app-footer" role="contentinfo">
         <div class="footer-top">
             <div class="footer-brand">
                 <h4>WISAXIS <span>Resume Maker</span></h4>
-                <p>Empowering professionals globally.</p>
+                <p>Empowering ambitious professionals to land dream careers worldwide.</p>
             </div>
             <div class="footer-cols">
                 <div class="footer-col">
-                    <h5>Tools</h5>
-                    <a href="#templates">Explore Templates</a>
-                    <a href="/dashboard">Resume Builder</a>
+                    <h5>Product</h5>
+                    <a href="#templates">Templates</a>
+                    <a href="/dashboard">Resume Wizard</a>
                     <a href="/chat">AI Assistant</a>
+                    <a href="/json">JSON Parser</a>
                 </div>
                 <div class="footer-col">
-                    <h5>Quick Links</h5>
+                    <h5>Account</h5>
                     <a href="/profile">My Resumes</a>
-                    <a href="/json">JSON Extractor</a>
-                    <a href="/dashboard">Create New</a>
+                    <a href="/login.html">Sign In</a>
+                    <a href="/signup.html">Register</a>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2026 WISAXIS. All rights reserved.</p>
             <div class="footer-bottom-links">
-                <a href="/privacy">Privacy</a>
-                <a href="/terms">Terms</a>
+                <a href="#templates">Templates</a>
+                <a href="/dashboard">Builder</a>
+                <a href="/chat">AI Chat</a>
             </div>
         </div>
     </footer>

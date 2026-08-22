@@ -1,16 +1,152 @@
 /* ==========================================================
-   WISAXIS — TEMPLATE CARD COMPONENTS
-   Template preview cards for home page carousel.
-   Source: desktop/home.css (.template-card, .template-thumb)
+   WISAXIS — CARD & BENTO COMPONENTS (2026 SaaS Standard)
    ========================================================== */
+
+/* ===== ADAPTIVE GLASS CARD ===== */
+.adaptive-card,
+.glass-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.adaptive-card:hover,
+.glass-card:hover {
+  border-color: var(--surface-border-hover);
+  box-shadow: var(--shadow-md);
+}
+
+html[data-theme="light"] .adaptive-card,
+html[data-theme="light"] .glass-card {
+  background: #ffffff;
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-sm);
+}
+
+html[data-theme="light"] .adaptive-card:hover,
+html[data-theme="light"] .glass-card:hover {
+  border-color: var(--surface-border-hover);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+/* ===== 2026 BENTO GRID SYSTEM ===== */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.bento-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.bento-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--surface-border-hover);
+  box-shadow: var(--shadow-hover);
+}
+
+.bento-card:hover::before {
+  opacity: 1;
+}
+
+html[data-theme="light"] .bento-card {
+  background: #ffffff;
+  border-color: var(--border-default);
+}
+
+.bento-col-8 {
+  grid-column: span 8;
+}
+
+.bento-col-4 {
+  grid-column: span 4;
+}
+
+.bento-col-6 {
+  grid-column: span 6;
+}
+
+.bento-col-12 {
+  grid-column: span 12;
+}
+
+.bento-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-lg);
+  background: var(--primary-light);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+.bento-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  margin: 0 0 0.75rem;
+}
+
+.bento-desc {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .bento-col-8,
+  .bento-col-4,
+  .bento-col-6 {
+    grid-column: span 12;
+  }
+}
 
 /* ===== HOME PAGE CAROUSEL CARD ===== */
 .template-card {
-  width: 240px;
-  height: 320px;
+  width: 250px;
+  height: 340px;
   flex-shrink: 0;
-  border-radius: var(--card-radius, 24px);
-  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-default);
   overflow: hidden;
   position: relative;
   text-decoration: none;
@@ -18,41 +154,41 @@
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-start;
-  padding: 20px;
+  padding: 22px;
 
-  /* Template image via inline CSS custom property */
+  /* Template preview image */
   background-image: var(--template-img);
   background-size: cover;
   background-position: top center;
-  background-color: #1e293b; /* fallback */
+  background-color: var(--surface-2);
   cursor: pointer;
 
   transition:
-    transform   0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow  0.35s ease,
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.35s ease,
     border-color 0.35s ease;
 }
 
-/* Dark scrim overlay */
+/* Dark gradient scrim overlay */
 .template-card::before {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(10, 14, 26, 0.90) 0%,
-    rgba(10, 14, 26, 0.30) 50%,
-    transparent 100%
+    rgba(7, 9, 14, 0.94) 0%,
+    rgba(7, 9, 14, 0.4) 50%,
+    rgba(7, 9, 14, 0.05) 100%
   );
   z-index: 1;
   transition: opacity 0.3s ease;
 }
 
 .template-card:hover::before {
-  opacity: 0.75;
+  opacity: 0.85;
 }
 
-/* Shine sweep on hover */
+/* Top shine sweep */
 .template-card::after {
   content: '';
   position: absolute;
@@ -80,8 +216,8 @@
 }
 
 .template-card:hover {
-  transform: translateY(-10px) scale(1.03);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.50);
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.65), 0 0 20px var(--primary-glow);
   border-color: var(--primary);
 }
 
@@ -89,60 +225,62 @@
 .template-name {
   position: relative;
   z-index: 2;
+  font-family: var(--font-heading);
   font-weight: 800;
-  font-size: 1rem;
-  color: #fff;
+  font-size: 1.1rem;
+  color: #ffffff;
   display: block;
-  margin-bottom: 4px;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  margin-bottom: 6px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
 }
 
 .template-tag {
   position: relative;
   z-index: 2;
-  display: inline-block;
-  font-size: 0.7rem;
-  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-2xs);
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.60);
-  background: rgba(99, 102, 241, 0.40);
-  padding: 2px 8px;
-  border-radius: 20px;
+  color: #c7d2fe;
+  background: rgba(99, 102, 241, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(8px);
 }
 
-/* ===== TEMPLATE SIDEBAR THUMBNAIL (template editor) ===== */
+/* ===== TEMPLATE SIDEBAR THUMBNAIL (Template Editor) ===== */
 .template-thumb {
   width: 100%;
-  border-radius: 18px;
+  border-radius: var(--radius-lg);
   background-size: cover;
   background-position: center;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
-  transition: transform var(--shell-transition, 0.28s ease),
-              box-shadow var(--shell-transition, 0.28s ease);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--shell-transition),
+              box-shadow var(--shell-transition),
+              border-color var(--shell-transition);
 }
 
 .template-thumb:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(82, 239, 26, 0.18);
+  transform: translateY(-3px) scale(1.02);
+  border-color: var(--primary);
+  box-shadow: 0 12px 28px var(--primary-glow);
 }
 
-/* Desktop sidebar thumb height */
 @media (min-width: 501px) {
   .template-thumb {
-    height: 198px;
+    height: 190px;
   }
 }
 
-/* Mobile thumb size */
 @media screen and (max-width: 500px) {
   .template-thumb {
-    width: 68px;
-    height: 98px;
-    border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
+    width: 72px;
+    height: 102px;
+    border-radius: var(--radius-md);
     flex-shrink: 0;
   }
 
@@ -155,7 +293,6 @@
   }
 }
 
-/* ===== TEMPLATE LINK WRAPPER ===== */
 .template-link {
   text-decoration: none;
   flex: none;
@@ -163,42 +300,23 @@
   width: 100%;
 }
 
-/* ===== CAROUSEL DOT NAVIGATION ===== */
-.carousel-dots {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 24px;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--glass-border);
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: background 0.3s ease, transform 0.3s ease, width 0.3s ease;
-}
-
-.dot.active {
-  background: var(--primary);
-  width: 24px;
-  border-radius: 4px;
-}
-
-/* ===== MOBILE CARD SIZES ===== */
+/* ===== MOBILE SIZES ===== */
 @media (max-width: 768px) {
   .template-card {
-    width: 200px;
-    height: 270px;
+    width: 210px;
+    height: 290px;
+    padding: 16px;
   }
 }
 
 @media (max-width: 480px) {
   .template-card {
-    width: 170px;
-    height: 240px;
+    width: 180px;
+    height: 250px;
+    padding: 14px;
+  }
+
+  .template-name {
+    font-size: 0.95rem;
   }
 }
