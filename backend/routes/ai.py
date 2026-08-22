@@ -165,47 +165,53 @@ def cover_letter():
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# AI File Extraction
+# AI File Extraction & Universal JSON Extractor
 # POST /api/extract-json
-# Accepts: multipart/form-data  file=<binary>
-# Returns: { success, data: { name, title, email, ... } }
+# Accepts: multipart/form-data  file=<binary>, mode=<string: auto|resume|universal>
+# Returns: { success, data: { raw_text, structured_data: {...}, metadata: {...} }, model, tokens }
 # ────────────────────────────────────────────────────────────────────────────
 @ai_bp.route("/extract-json", methods=["POST"])
 @token_required
-@limiter.limit("10 per hour")
+@limiter.limit("20 per hour")
 def extract_json():
     """
-    Upload an image, PDF, or DOCX and extract full structured resume data.
-    The AI uses multimodal vision for images/scanned PDFs and text extraction
-    for digital PDFs and DOCX files, then returns a validated JSON schema.
+    Upload an image (JPG, PNG, WebP, BMP, TIFF), PDF (digital or scanned),
+    Word document (DOCX/DOC/RTF/ODT), or plain text (TXT/MD/CSV/JSON) and extract
+    full structured data in clean JSON format.
     """
     uploaded = request.files.get("file")
     if not uploaded or not uploaded.filename:
-        return jsonify({"success": False, "error": "No file received."}), 400
+        return jsonify({"success": False, "error": "No file received. Please select a file to upload."}), 400
 
     filename = secure_filename(uploaded.filename)
     if "." not in filename:
-        return jsonify({"success": False, "error": "File has no extension."}), 400
+        return jsonify({"success": False, "error": "Uploaded file has no extension."}), 400
 
     ext     = filename.rsplit(".", 1)[-1].lower()
     allowed = current_app.config.get(
-        "ALLOWED_ANALYZE_EXTENSIONS", {"jpg", "jpeg", "png", "webp", "pdf", "docx", "doc"}
+        "ALLOWED_ANALYZE_EXTENSIONS",
+        {"jpg", "jpeg", "png", "webp", "bmp", "tiff", "tif", "pdf", "docx", "doc", "txt", "rtf", "odt", "md", "csv", "json"}
     )
     if ext not in allowed:
         return jsonify({
             "success": False,
-            "error":   f"Unsupported file type .{ext}. Allowed: {', '.join(sorted(allowed))}"
+            "error":   f"Unsupported file type .{ext}. Allowed formats: {', '.join(sorted(allowed))}"
         }), 415
 
-    # Validate size
+    # Extraction mode ('auto', 'resume', 'universal')
+    mode = request.form.get("mode", "auto").strip().lower()
+    if mode not in ("auto", "resume", "universal"):
+        mode = "auto"
+
+    # Validate file size
     uploaded.seek(0, 2)
     size = uploaded.tell()
     uploaded.seek(0)
-    max_size = current_app.config.get("MAX_CONTENT_LENGTH", 10 * 1024 * 1024)
+    max_size = current_app.config.get("MAX_CONTENT_LENGTH", 15 * 1024 * 1024)
     if size > max_size:
         return jsonify({
             "success": False,
-            "error":   f"File too large. Maximum is {max_size // (1024*1024)} MB."
+            "error":   f"File too large ({size / (1024*1024):.1f} MB). Maximum size is {max_size // (1024*1024)} MB."
         }), 413
 
     # Save temporarily
@@ -216,7 +222,14 @@ def extract_json():
 
     try:
         uploaded.save(tmp_path)
-        result = AIService.analyze_file(file_path=tmp_path, ext=ext)
+        result = AIService.analyze_file(file_path=tmp_path, ext=ext, mode=mode)
+        if result.get("success") and isinstance(result.get("data"), dict):
+            # Attach original filename and size to metadata
+            if "metadata" not in result["data"]:
+                result["data"]["metadata"] = {}
+            result["data"]["metadata"]["original_filename"] = uploaded.filename
+            result["data"]["metadata"]["file_size_bytes"] = size
+            result["data"]["metadata"]["file_type"] = ext.upper()
     except Exception as e:
         current_app.logger.exception("extract-json endpoint error")
         result = {"success": False, "error": f"File processing error: {str(e)}"}
@@ -229,3 +242,4 @@ def extract_json():
             pass
 
     return jsonify(result), (200 if result["success"] else 502)
+

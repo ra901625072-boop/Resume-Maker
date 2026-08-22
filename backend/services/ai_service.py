@@ -1,50 +1,58 @@
 """
-services/ai_service.py — OpenRouter AI Brain (v2)
-===================================================
+services/ai_service.py — OpenRouter AI Brain (v3 - Optimized Multimodal & Universal Extractor)
+===========================================================================================
 Architecture:
-  • 3-tier model fallback chain (primary → fast → emergency-free)
-  • Per-action smart model selection based on task complexity
-  • Retry logic with exponential back-off per tier
+  • Multi-tier model fallback chain with top multimodal & reasoning models
+  • Vision & Document intelligence: Google Gemini 2.0 Flash / Qwen 2.5 VL 72B / Llama 3.2 Vision
+  • Universal Ingestion: Digital PDFs, Scanned PDFs, DOCX, DOC, RTF, ODT, TXT, MD, CSV, Images (JPG, PNG, WebP, BMP, TIFF)
+  • Image Optimizer: EXIF orientation correction, DPI scaling, and high-fidelity base64 encoding
   • In-process LRU response cache (TTL-based)
-  • Multimodal file analysis (image / PDF / DOCX)
-  • Structured JSON extraction with schema validation
+  • Robust JSON repair & schema validation
   • All public methods return:
-      { "success": True,  "data": <str|dict>, "tokens": int, "model": str }
+      { "success": True,  "data": <str|dict>, "tokens": int, "model": str, ... }
       { "success": False, "error": str }
 """
 
 import base64
 import hashlib
+import io
 import json
 import logging
+import os
 import re
 import time
 from functools import lru_cache
-from typing import Optional
+from typing import Optional, Union
 
 import requests
+from PIL import Image, ImageOps
 
 logger = logging.getLogger(__name__)
 
 # ── Model tiers ──────────────────────────────────────────────────────────────
-# Each tier is tried in order; if one fails the next is attempted.
-# Override any of these in .env via OPENROUTER_MODEL_PRIMARY etc.
+# Default text-centric reasoning models (tried in order)
 _MODELS = [
-    "google/gemini-2.0-flash-exp:free",           # Often 404s now, but good if it exists
-    "nvidia/llama-3.1-nemotron-nano-8b-v1:free",  # Very reliable
-    "meta-llama/llama-3.3-8b-instruct:free",      # Lightweight + stable
-    "mistralai/mistral-7b-instruct:free",         # Fast agent tasks
-    "openrouter/free"                             # Auto-routes to any working free model
+    "google/gemini-2.0-flash-001",
+    "google/gemini-2.0-flash:free",
+    "meta-llama/llama-3.3-70b-instruct:free",
+    "qwen/qwen-2.5-72b-instruct:free",
+    "nvidia/llama-3.1-nemotron-nano-8b-v1:free",
+    "mistralai/mistral-7b-instruct:free",
+    "openrouter/free",
 ]
 
-# Vision-capable models for image/multimodal requests (tried in order)
+# Multimodal & Vision models for image/scanned document analysis (tried in order)
 _VISION_MODELS = [
-    "nvidia/nemotron-nano-12b-v2-vl:free",
+    "google/gemini-2.0-flash-001",
+    "google/gemini-2.0-flash:free",
+    "qwen/qwen-2.5-vl-72b-instruct:free",
+    "meta-llama/llama-3.2-11b-vision-instruct:free",
+    "mistralai/pixtral-12b:free",
     "openrouter/free",
 ]
 
 # Actions that need multimodal or heavy reasoning → always use primary
-_HEAVY_ACTIONS = {"extract_resume", "ats_score", "extract_from_file", "analyze_file"}
+_HEAVY_ACTIONS = {"extract_resume", "ats_score", "extract_from_file", "analyze_file", "extract_json"}
 # Actions that are lightweight → can start at secondary for speed
 _LIGHT_ACTIONS = {"suggest_skills", "improve_grammar", "chat"}
 
@@ -76,7 +84,7 @@ def _cache_set(key: str, value: dict):
 # ────────────────────────────────────────────────────────────────────────────
 class AIService:
     """
-    Central AI brain.  All AI features route through this class.
+    Central AI brain. All AI features route through this class.
     """
 
     # ── Public generation methods ─────────────────────────────────────────────
@@ -99,7 +107,7 @@ class AIService:
             "- Human-sounding, not generic — avoid clichés like 'results-driven'\n"
             "- Output only the paragraph text, no heading or label"
         )
-        return cls._call(prompt, action="generate_summary", max_tokens=400)
+        return cls._call(prompt, action="generate_summary", max_tokens=600)
 
     @classmethod
     def generate_experience(cls, title: str, company: str = "",
@@ -121,7 +129,7 @@ class AIService:
             "- Output only the bullet points, no headings\n"
             "- Format each bullet on its own line starting with •"
         )
-        return cls._call(prompt, action="generate_experience", max_tokens=512)
+        return cls._call(prompt, action="generate_experience", max_tokens=700)
 
     @classmethod
     def chat(cls, message: str, history: list = None) -> dict:
@@ -156,7 +164,7 @@ class AIService:
             '  "improvements": array of 3-5 specific actionable improvements\n'
             "Return ONLY the JSON, no extra text."
         )
-        result = cls._call(prompt, action="ats_score", max_tokens=600)
+        result = cls._call(prompt, action="ats_score", max_tokens=800)
         if result["success"]:
             result["data"] = _safe_parse_json(result["data"], result["data"])
         return result
@@ -178,7 +186,7 @@ class AIService:
             "- 300-400 words total\n"
             "- Do not use placeholders like [Your Name]"
         )
-        return cls._call(prompt, action="cover_letter", max_tokens=1024)
+        return cls._call(prompt, action="cover_letter", max_tokens=1200)
 
     @classmethod
     def improve_grammar(cls, text: str) -> dict:
@@ -188,7 +196,7 @@ class AIService:
             f"resume text. Preserve the original meaning. Return only the improved text.\n\n"
             f"Original text:\n{text}"
         )
-        return cls._call(prompt, action="improve_grammar", max_tokens=800)
+        return cls._call(prompt, action="improve_grammar", max_tokens=1000)
 
     @classmethod
     def suggest_skills(cls, job_title: str, existing_skills: str = "") -> dict:
@@ -202,55 +210,63 @@ class AIService:
             "- ATS-optimised keywords\n"
             "- Return as a comma-separated list only, no explanation"
         )
-        return cls._call(prompt, action="suggest_skills", max_tokens=256)
+        return cls._call(prompt, action="suggest_skills", max_tokens=300)
 
-    # ── File Analysis (NEW) ───────────────────────────────────────────────────
+    # ── Universal File Analysis & JSON Extractor ──────────────────────────────
 
     @classmethod
-    def analyze_file(cls, file_path: str, ext: str, file_bytes: bytes = None) -> dict:
+    def analyze_file(cls, file_path: str, ext: str, file_bytes: bytes = None, mode: str = "auto") -> dict:
         """
-        Analyse an uploaded file (image / PDF / DOCX) and extract structured
-        resume data.  Returns a validated JSON dict matching the WISAXIS schema.
-
-        Strategy:
-          • Images  → multimodal vision model (base64 inline)
-          • PDF     → pdfplumber text extraction → text prompt
-          • DOCX    → python-docx text extraction → text prompt
-          • Scanned PDF (no text) → base64 image fallback via vision
+        Universal document & image analyzer:
+        Accepts: PDF, Word (DOCX/DOC), Rich Text (RTF/ODT), Text (TXT/MD/CSV/JSON),
+                 and Images (JPG, PNG, WebP, BMP, TIFF, SVG).
+        Returns a complete, validated structured JSON dictionary.
         """
         ext = ext.lower().strip(".")
 
-        if ext in ("jpg", "jpeg", "png", "webp", "gif"):
-            return cls._analyze_image(file_path, file_bytes)
-        elif ext == "pdf":
-            return cls._analyze_pdf(file_path, file_bytes)
-        elif ext in ("doc", "docx"):
-            return cls._analyze_docx(file_path)
-        else:
-            return {"success": False, "error": f"Unsupported file type: .{ext}"}
+        image_extensions = {"jpg", "jpeg", "png", "webp", "bmp", "tiff", "tif", "svg"}
+        text_extensions = {"txt", "md", "markdown", "csv", "tsv", "json", "html", "htm"}
+        doc_extensions = {"doc", "docx", "rtf", "odt"}
+
+        try:
+            if ext in image_extensions:
+                return cls._analyze_image(file_path, file_bytes, mode=mode)
+            elif ext == "pdf":
+                return cls._analyze_pdf(file_path, file_bytes, mode=mode)
+            elif ext in ("docx", "doc"):
+                return cls._analyze_docx(file_path, mode=mode)
+            elif ext in ("rtf", "odt"):
+                return cls._analyze_rich_text(file_path, mode=mode)
+            elif ext in text_extensions:
+                return cls._analyze_text_file(file_path, mode=mode)
+            else:
+                return {"success": False, "error": f"Unsupported file extension: .{ext}"}
+        except Exception as e:
+            logger.exception(f"File analysis failed for {file_path} (.{ext})")
+            return {"success": False, "error": f"File analysis error: {str(e)}"}
 
     @classmethod
-    def _analyze_image(cls, file_path: str, file_bytes: bytes = None) -> dict:
-        """Send image as base64 to a vision-capable model."""
+    def _analyze_image(cls, file_path: str, file_bytes: bytes = None, mode: str = "auto") -> dict:
+        """Send image with auto-orientation and DPI scaling to a vision AI model."""
         try:
             if file_bytes is None:
                 with open(file_path, "rb") as f:
                     file_bytes = f.read()
 
-            ext = file_path.rsplit(".", 1)[-1].lower()
-            mime_map = {"jpg": "image/jpeg", "jpeg": "image/jpeg",
-                        "png": "image/png", "webp": "image/webp", "gif": "image/gif"}
-            mime = mime_map.get(ext, "image/jpeg")
-            b64 = base64.b64encode(file_bytes).decode("utf-8")
+            optimized_bytes, mime = _optimize_image_bytes(file_bytes, file_path)
+            b64 = base64.b64encode(optimized_bytes).decode("utf-8")
 
             messages = [
-                {"role": "user", "content": [
-                    {"type": "text",       "text": _RESUME_EXTRACTION_PROMPT},
-                    {"type": "image_url",  "image_url": {"url": f"data:{mime};base64,{b64}"}},
-                ]}
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": _get_extraction_prompt(mode)},
+                        {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{b64}"}},
+                    ],
+                }
             ]
             result = cls._call_with_messages(
-                messages, action="analyze_file", max_tokens=2048,
+                messages, action="analyze_file", max_tokens=4096,
                 force_primary=True, vision=True
             )
             if result["success"]:
@@ -261,46 +277,65 @@ class AIService:
             return {"success": False, "error": f"Image analysis error: {str(e)}"}
 
     @classmethod
-    def _analyze_pdf(cls, file_path: str, file_bytes: bytes = None) -> dict:
-        """Extract text from PDF, fall back to vision if text is empty (scanned PDF)."""
+    def _analyze_pdf(cls, file_path: str, file_bytes: bytes = None, mode: str = "auto") -> dict:
+        """
+        Extract text from PDF using pdfplumber.
+        If the PDF is a scanned image (or has <50 chars), render page 1 to an image and run vision OCR.
+        """
         text = _extract_pdf_text(file_path)
 
-        if text and len(text.strip()) > 100:
-            # PDF has real text — use text prompt
-            return cls._extract_from_text(text, "pdf")
+        if text and len(text.strip()) >= 50:
+            # Digital text PDF
+            return cls._extract_from_text(text, source="pdf", mode=mode)
         else:
-            # Scanned PDF — convert first page to image and use vision
-            logger.info("PDF appears scanned. Attempting vision fallback.")
-            try:
-                img_bytes = _pdf_page_to_image(file_path)
-                if img_bytes:
-                    # Write tmp file path for mime detection
-                    tmp_path = file_path.replace(".pdf", "_page1.png")
-                    return cls._analyze_image(tmp_path + ".png", img_bytes)
-                else:
-                    return {"success": False,
-                            "error": "PDF appears to be a scanned image but image conversion failed. "
-                                     "Please upload a text-based PDF or a direct image file."}
-            except Exception as e:
-                logger.exception("Scanned PDF fallback failed")
-                return {"success": False, "error": f"Could not process scanned PDF: {str(e)}"}
+            # Scanned / Image-only PDF fallback to Vision
+            logger.info("PDF appears scanned or empty. Attempting multimodal vision fallback.")
+            img_bytes = _pdf_page_to_image(file_path)
+            if img_bytes:
+                return cls._analyze_image(file_path + ".png", img_bytes, mode=mode)
+            else:
+                return {
+                    "success": False,
+                    "error": "The uploaded PDF appears to be an empty or scanned document, and page rendering failed. Please upload a clear text PDF or an image (JPG/PNG)."
+                }
 
     @classmethod
-    def _analyze_docx(cls, file_path: str) -> dict:
-        """Extract text from DOCX and analyse."""
+    def _analyze_docx(cls, file_path: str, mode: str = "auto") -> dict:
+        """Extract paragraphs, headings, and table cells from DOCX/DOC."""
         text = _extract_docx_text(file_path)
-        if not text or len(text.strip()) < 50:
-            return {"success": False, "error": "Could not extract text from this document."}
-        return cls._extract_from_text(text, "docx")
+        if not text or len(text.strip()) < 20:
+            # Try plain binary text reader for legacy doc
+            text = _extract_fallback_text(file_path)
+
+        if not text or len(text.strip()) < 10:
+            return {"success": False, "error": "Could not extract readable text from this Word document."}
+
+        return cls._extract_from_text(text, source="docx", mode=mode)
 
     @classmethod
-    def _extract_from_text(cls, text: str, source: str) -> dict:
-        """Run the structured extraction prompt over plain text."""
-        truncated = text[:5000]  # Stay within context limits
-        prompt = f"{_RESUME_EXTRACTION_PROMPT}\n\nDocument text:\n{truncated}"
-        result = cls._call(prompt, action="extract_from_file", max_tokens=2048)
+    def _analyze_rich_text(cls, file_path: str, mode: str = "auto") -> dict:
+        """Extract text from RTF/ODT files."""
+        text = _extract_fallback_text(file_path)
+        if not text or len(text.strip()) < 10:
+            return {"success": False, "error": "Could not extract readable text from this document."}
+        return cls._extract_from_text(text, source="document", mode=mode)
+
+    @classmethod
+    def _analyze_text_file(cls, file_path: str, mode: str = "auto") -> dict:
+        """Extract text from TXT, MD, CSV, or JSON."""
+        text = _extract_plain_text(file_path)
+        if not text or len(text.strip()) < 5:
+            return {"success": False, "error": "File is empty or contains no readable text."}
+        return cls._extract_from_text(text, source="text", mode=mode)
+
+    @classmethod
+    def _extract_from_text(cls, text: str, source: str, mode: str = "auto") -> dict:
+        """Run the structured extraction prompt over plain extracted text."""
+        truncated = text[:25000]  # Support large text within safe token window
+        prompt = f"{_get_extraction_prompt(mode)}\n\n--- DOCUMENT CONTENT ---\n{truncated}"
+        result = cls._call(prompt, action="extract_from_file", max_tokens=4096)
         if result["success"]:
-            result["data"] = _parse_and_validate_resume_json(result["data"])
+            result["data"] = _parse_and_validate_resume_json(result["data"], raw_fallback=text)
         return result
 
     # Legacy compat
@@ -315,16 +350,28 @@ class AIService:
         """Pull config from Flask app context."""
         from flask import current_app
         cfg = current_app.config
-        # We can still read an override for the primary model if desired
+
+        # Text models
         models = list(_MODELS)
         primary_override = cfg.get("AI_MODEL_PRIMARY")
-        if primary_override and primary_override != models[0]:
+        if primary_override and primary_override not in models:
             models.insert(0, primary_override)
+
+        # Vision models
+        vision_models = list(_VISION_MODELS)
+        vision_env = cfg.get("AI_MODEL_VISION", "")
+        if vision_env:
+            custom_vision = [m.strip() for m in vision_env.split(",") if m.strip()]
+            for cv in reversed(custom_vision):
+                if cv not in vision_models:
+                    vision_models.insert(0, cv)
+
         return {
-            "api_key":  cfg.get("OPENROUTER_API_KEY", ""),
-            "base_url": cfg.get("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
-            "timeout":  int(cfg.get("AI_REQUEST_TIMEOUT", 30)),
-            "models":   models,
+            "api_key":       cfg.get("OPENROUTER_API_KEY", ""),
+            "base_url":      cfg.get("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+            "timeout":       int(cfg.get("AI_REQUEST_TIMEOUT", 45)),
+            "models":        models,
+            "vision_models": vision_models,
         }
 
     @classmethod
@@ -339,10 +386,9 @@ class AIService:
                              max_tokens: int = None, force_primary: bool = False,
                              vision: bool = False) -> dict:
         """
-        Execute the API call with the fallback chain.
-        - vision=True uses _VISION_MODELS list (models that support image input).
-        - Heavy/multimodal actions always start at primary tier.
-        - Each tier gets 1 retry before cascading to the next.
+        Execute the API call with the resilient fallback chain.
+        - vision=True uses vision_models list (Gemini 2.0 Flash / Qwen 2.5 VL / Llama 3.2 Vision / Pixtral).
+        - Each model gets 1 retry before cascading to the next.
         """
         try:
             cfg = cls._get_config()
@@ -352,19 +398,11 @@ class AIService:
         api_key = cfg["api_key"]
         if not api_key:
             return {"success": False,
-                    "error": "AI service is not configured. Add OPENROUTER_API_KEY to .env"}
+                    "error": "AI service is not configured. Please set OPENROUTER_API_KEY in your environment (.env)."}
 
-        # Use vision model list for image requests, text model list otherwise
-        if vision:
-            models_to_try = list(_VISION_MODELS)
-            # Also prepend the configured primary if it's not already in the vision list
-            primary_override = cfg.get("models", [None])[0] if cfg.get("models") else None
-            if primary_override and primary_override not in models_to_try:
-                models_to_try.insert(0, primary_override)
-        else:
-            models_to_try = cfg["models"]
-
-        tokens = max_tokens or 1024
+        # Select model list based on vision requirement
+        models_to_try = cfg["vision_models"] if vision else cfg["models"]
+        tokens = max_tokens or 2048
         last_error = "Unknown error"
 
         for idx, model in enumerate(models_to_try):
@@ -383,10 +421,9 @@ class AIService:
                         result["tier"] = f"model_{idx}"
                         return result
                     last_error = result.get("error", "Unknown error")
-                    # Don't retry on auth errors — they won't fix themselves
+                    # Don't retry on auth errors
                     if "401" in last_error or "API key" in last_error:
                         return result
-                    # Exponential wait before retry
                     if attempt == 0:
                         time.sleep(1.0)
 
@@ -396,7 +433,7 @@ class AIService:
                     if attempt == 0:
                         time.sleep(1.0)
 
-            logger.warning(f"[AI] Model {model} exhausted, cascading. Last error: {last_error}")
+            logger.warning(f"[AI] Model {model} exhausted, cascading to next model. Last error: {last_error}")
 
         return {"success": False,
                 "error": f"All AI models unavailable. Last error: {last_error}"}
@@ -415,7 +452,7 @@ class AIService:
             "model":       model,
             "messages":    messages,
             "max_tokens":  max_tokens,
-            "temperature": 0.65,
+            "temperature": 0.2,  # Lower temperature for accurate structured extraction
         }
 
         resp = requests.post(
@@ -437,14 +474,11 @@ class AIService:
         resp.raise_for_status()
         data = resp.json()
 
-        # Guard against None content — some models return null for unsupported inputs
         raw_content = data.get("choices", [{}])[0].get("message", {}).get("content")
         if raw_content is None:
-            # Treat as a model failure so the fallback chain continues
             finish_reason = data.get("choices", [{}])[0].get("finish_reason", "unknown")
             return {"success": False,
-                    "error": f"Model {model} returned empty content (finish_reason={finish_reason}). "
-                             "Model may not support this input type."}
+                    "error": f"Model {model} returned empty content (finish_reason={finish_reason})."}
 
         content     = raw_content.strip()
         tokens_used = data.get("usage", {}).get("total_tokens", 0)
@@ -456,187 +490,366 @@ class AIService:
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# Extraction prompt (shared by text and image routes)
+# Dynamic High-Fidelity Extraction Prompt
 # ────────────────────────────────────────────────────────────────────────────
-_RESUME_EXTRACTION_PROMPT = """Extract ALL text and structured information from this document.
+def _get_extraction_prompt(mode: str = "auto") -> str:
+    return """You are a world-class Multimodal Document & Resume Intelligence AI.
+Analyze ALL visual, structural, and textual information from this document with 100% accuracy.
 
-Requirements:
-Return ONLY valid JSON.
-No markdown.
-No explanation.
-Preserve exact text.
-Detect tables, forms, resume sections, invoices, and layouts.
-Extract all emails, phones, dates, links, skills, education, experience, and metadata.
+CRITICAL INSTRUCTIONS:
+1. Return ONLY valid, well-formed JSON. No markdown codeblock wrapper, no preamble, no trailing commentary.
+2. Extract ALL details: contact info, full work experience, bullet points, education, technical and soft skills, projects, certifications, languages, awards, and any other sections.
+3. If a section is tabular or multi-column, preserve the exact column relationships.
+4. If a field is not present, use null or an empty array/string. Do NOT invent or hallucinate data.
 
-Use EXACTLY this schema (if a field is missing, return null or empty array/string):
+You MUST follow this exact JSON schema:
 {
-  "raw_text": "Full extracted text here",
+  "raw_text": "Full extracted plain text of the entire document verbatim...",
   "structured_data": {
-    "name": "Full Name",
-    "title": "Job Title / Professional Headline",
+    "name": "Full Name / Candidate Name",
+    "title": "Professional Title / Headline / Target Role",
     "email": "email@example.com",
-    "phone": "+1 555 000 0000",
-    "address": "City, Country",
-    "website": "https://...",
-    "linkedin": "https://linkedin.com/in/...",
-    "github": "https://github.com/...",
-    "summary": "Professional summary paragraph",
-    "skills": "skill1, skill2, skill3",
-    "languages": ["English (Native)", "French (B2)"],
+    "phone": "+1 234 567 8900",
+    "address": "City, State / Country",
+    "website": "https://personalwebsite.com",
+    "linkedin": "https://linkedin.com/in/username",
+    "github": "https://github.com/username",
+    "portfolio": "https://...",
+    "summary": "Professional background summary or executive overview",
+    "skills": "Skill 1, Skill 2, Skill 3, Python, JavaScript, Leadership",
+    "languages": ["English (Native)", "Spanish (Fluent)"],
     "experience": [
       {
-        "title": "Job Title",
-        "company": "Company Name",
-        "duration": "Jan 2020 – Present",
-        "description": "• Bullet point 1\n• Bullet point 2"
+        "title": "Job Title / Role",
+        "company": "Company Name / Organization",
+        "duration": "Jan 2021 – Present",
+        "location": "City, Country or Remote",
+        "description": "• Built scalable microservices\n• Managed a team of 5 engineers"
       }
     ],
     "education": [
       {
-        "degree": "B.Sc Computer Science",
+        "degree": "B.S. in Computer Science",
         "university": "University Name",
-        "year": "2018 – 2022"
+        "year": "2017 – 2021",
+        "gpa": "3.8/4.0",
+        "honors": "Magna Cum Laude"
       }
     ],
-    "certifications": ["AWS Certified Developer", "Google Cloud Professional"],
+    "certifications": ["AWS Solutions Architect", "PMP"],
     "projects": [
       {
         "name": "Project Name",
-        "description": "Brief description",
-        "tech_stack": "Python, React, AWS"
+        "description": "Comprehensive project overview and achievements",
+        "tech_stack": "React, Node.js, PostgreSQL",
+        "link": "https://github.com/..."
       }
     ],
-    "achievements": ["Achievement 1", "Achievement 2"]
+    "achievements": [
+      "Won 1st place in 2023 National Hackathon",
+      "Published research paper on AI Optimization"
+    ],
+    "publications": [],
+    "volunteer": [],
+    "custom_sections": [
+      {
+        "heading": "Section Heading",
+        "content": "Full section content or key details"
+      }
+    ]
   },
   "metadata": {
-    "pages": 1,
-    "language": "en"
+    "document_type": "Resume",
+    "language": "en",
+    "confidence_score": 0.98,
+    "total_sections_detected": 6
   }
 }
 
-Return ONLY the JSON object, no markdown fences, no explanation."""
+Return ONLY the raw JSON object now."""
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# JSON helpers
+# Image Pre-processor & Optimizer
+# ────────────────────────────────────────────────────────────────────────────
+def _optimize_image_bytes(file_bytes: bytes, filename: str) -> tuple[bytes, str]:
+    """
+    Auto-orient EXIF, resize massive images to max 2048px (ideal for high-accuracy OCR),
+    and output optimized PNG or JPEG bytes.
+    """
+    try:
+        img = Image.open(io.BytesIO(file_bytes))
+        # Auto-rotate according to EXIF tags (e.g. mobile photos)
+        img = ImageOps.exif_transpose(img)
+
+        # Scale down if larger than 2048 on longest edge
+        max_dim = 2048
+        w, h = img.size
+        if w > max_dim or h > max_dim:
+            scale = max_dim / max(w, h)
+            new_size = (int(w * scale), int(h * scale))
+            img = img.resize(new_size, Image.Resampling.LANCZOS)
+
+        # Determine output format
+        ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else "jpg"
+        if ext in ("png", "webp", "gif"):
+            out_buf = io.BytesIO()
+            img.save(out_buf, format="PNG", optimize=True)
+            return out_buf.getvalue(), "image/png"
+        else:
+            if img.mode in ("RGBA", "P"):
+                img = img.convert("RGB")
+            out_buf = io.BytesIO()
+            img.save(out_buf, format="JPEG", quality=90, optimize=True)
+            return out_buf.getvalue(), "image/jpeg"
+    except Exception as e:
+        logger.warning(f"Image optimization skipped: {e}")
+        mime = "image/jpeg" if "jpg" in filename or "jpeg" in filename else "image/png"
+        return file_bytes, mime
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# JSON Parser & Schema Normalizer
 # ────────────────────────────────────────────────────────────────────────────
 def _safe_parse_json(text: str, fallback=None):
-    """Try to parse JSON from text, stripping markdown fences if present."""
-    # Strip ```json ... ``` or ``` ... ```
+    """Robust JSON parser that cleans markdown fences and recovers JSON objects."""
+    if not text:
+        return fallback
+
+    # Strip markdown ```json ... ``` or ``` ... ```
     cleaned = re.sub(r"^```(?:json)?\s*", "", text.strip(), flags=re.IGNORECASE)
     cleaned = re.sub(r"\s*```$", "", cleaned.strip())
+
     try:
         return json.loads(cleaned)
     except json.JSONDecodeError:
-        # Try to find JSON object inside the text
-        match = re.search(r"\{.*\}", cleaned, re.DOTALL)
-        if match:
+        # Regex search for the outermost {...} block
+        start = cleaned.find("{")
+        end = cleaned.rfind("}")
+        if start != -1 and end != -1 and end > start:
+            candidate = cleaned[start:end+1]
             try:
-                return json.loads(match.group())
+                return json.loads(candidate)
             except json.JSONDecodeError:
-                pass
+                # Basic cleanup of trailing commas before closing braces/brackets
+                candidate_fixed = re.sub(r",\s*([\]}])", r"\1", candidate)
+                try:
+                    return json.loads(candidate_fixed)
+                except json.JSONDecodeError:
+                    pass
     return fallback
 
 
 _REQUIRED_RESUME_KEYS = {
     "name": "", "title": "", "email": "", "phone": "", "address": "",
-    "website": "", "linkedin": "", "github": "", "summary": "", "skills": "",
+    "website": "", "linkedin": "", "github": "", "portfolio": "",
+    "summary": "", "skills": "",
     "languages": [], "experience": [], "education": [],
     "certifications": [], "projects": [], "achievements": [],
+    "publications": [], "volunteer": [], "custom_sections": [],
 }
 
 
-def _parse_and_validate_resume_json(raw: str) -> dict:
-    """Parse AI output and ensure all schema keys exist with correct types."""
+def _parse_and_validate_resume_json(raw: str, raw_fallback: str = "") -> dict:
+    """Validate and normalize parsed JSON to match standard WISAXIS schema."""
     parsed = _safe_parse_json(raw, {})
     if not isinstance(parsed, dict):
         parsed = {}
 
-    structured_data = parsed.get("structured_data", {})
-    if not isinstance(structured_data, dict):
-        structured_data = {}
+    # Extract structured_data or treat the whole parsed dict as structured_data
+    if "structured_data" in parsed and isinstance(parsed["structured_data"], dict):
+        raw_sd = parsed["structured_data"]
+    else:
+        raw_sd = {k: v for k, v in parsed.items() if k not in ("raw_text", "metadata")}
 
-    # Fill missing keys with defaults
-    result_structured = {**_REQUIRED_RESUME_KEYS, **structured_data}
+    result_structured = {**_REQUIRED_RESUME_KEYS, **raw_sd}
 
-    # Coerce array fields
+    # Normalize array fields
     for arr_key in ("languages", "experience", "education", "certifications",
-                    "projects", "achievements"):
-        if not isinstance(result_structured[arr_key], list):
-            result_structured[arr_key] = []
+                    "projects", "achievements", "publications", "volunteer", "custom_sections"):
+        val = result_structured.get(arr_key)
+        if not isinstance(val, list):
+            result_structured[arr_key] = [val] if val else []
 
-    # Coerce string fields
+    # Normalize string fields
     for str_key in ("name", "title", "email", "phone", "address",
-                    "website", "linkedin", "github", "summary", "skills"):
-        if not isinstance(result_structured[str_key], str):
-            result_structured[str_key] = str(result_structured[str_key]) if result_structured[str_key] else ""
+                    "website", "linkedin", "github", "portfolio", "summary", "skills"):
+        val = result_structured.get(str_key)
+        if isinstance(val, list):
+            result_structured[str_key] = ", ".join(str(x) for x in val if x)
+        elif val is None:
+            result_structured[str_key] = ""
+        else:
+            result_structured[str_key] = str(val)
 
+    # Normalize experience items
+    norm_exp = []
+    for item in result_structured["experience"]:
+        if isinstance(item, dict):
+            norm_exp.append({
+                "title": str(item.get("title") or item.get("job_title") or ""),
+                "company": str(item.get("company") or item.get("organization") or ""),
+                "duration": str(item.get("duration") or item.get("dates") or item.get("year") or ""),
+                "location": str(item.get("location") or ""),
+                "description": str(item.get("description") or item.get("responsibilities") or item.get("details") or ""),
+            })
+        elif isinstance(item, str):
+            norm_exp.append({"title": item, "company": "", "duration": "", "description": ""})
+    result_structured["experience"] = norm_exp
+
+    # Normalize education items
+    norm_edu = []
+    for item in result_structured["education"]:
+        if isinstance(item, dict):
+            norm_edu.append({
+                "degree": str(item.get("degree") or item.get("qualification") or ""),
+                "university": str(item.get("university") or item.get("institution") or item.get("school") or ""),
+                "year": str(item.get("year") or item.get("duration") or item.get("graduation_year") or ""),
+                "gpa": str(item.get("gpa") or ""),
+                "honors": str(item.get("honors") or ""),
+            })
+        elif isinstance(item, str):
+            norm_edu.append({"degree": item, "university": "", "year": ""})
+    result_structured["education"] = norm_edu
+
+    # Metadata & raw_text
     metadata = parsed.get("metadata", {})
     if not isinstance(metadata, dict):
         metadata = {}
+    metadata.setdefault("document_type", "Document")
+    metadata.setdefault("confidence_score", 0.95)
 
-    raw_text = parsed.get("raw_text", "")
+    raw_text = parsed.get("raw_text") or raw_fallback or ""
 
     return {
-        "raw_text": str(raw_text) if raw_text else "",
+        "raw_text": str(raw_text),
         "structured_data": result_structured,
         "metadata": metadata
     }
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# File extraction helpers
+# Universal File Extraction Parsers
 # ────────────────────────────────────────────────────────────────────────────
 def _extract_pdf_text(file_path: str) -> str:
-    """Extract text from a PDF using pdfplumber (returns empty string on failure)."""
+    """Extract text from a digital PDF using pdfplumber."""
+    try:
+        import pdfplumber
+        text_parts = []
+        with pdfplumber.open(file_path) as pdf:
+            for page in pdf.pages:
+                pt = page.extract_text(layout=True) or page.extract_text() or ""
+                if pt.strip():
+                    text_parts.append(pt.strip())
+                # Also extract table text
+                tables = page.extract_tables()
+                for table in tables:
+                    for row in table:
+                        row_cells = [str(c).strip() for c in row if c and str(c).strip()]
+                        if row_cells:
+                            text_parts.append(" | ".join(row_cells))
+        return "\n\n".join(text_parts)
+    except Exception as e:
+        logger.error(f"PDF extraction with pdfplumber failed: {e}")
+        return ""
+
+
+def _pdf_page_to_image(file_path: str) -> Optional[bytes]:
+    """Convert page 1 of a PDF to high-resolution PNG bytes for vision analysis."""
     try:
         import pdfplumber
         with pdfplumber.open(file_path) as pdf:
-            pages = [page.extract_text() or "" for page in pdf.pages]
-        return "\n".join(pages)
-    except ImportError:
-        logger.warning("pdfplumber not installed. Run: pip install pdfplumber")
-        return ""
+            if pdf.pages:
+                # Render first page at 150 DPI
+                page_img = pdf.pages[0].to_image(resolution=150).original
+                buf = io.BytesIO()
+                page_img.save(buf, format="PNG")
+                return buf.getvalue()
     except Exception as e:
-        logger.error(f"PDF extraction failed: {e}")
-        return ""
+        logger.warning(f"pdfplumber page rendering failed: {e}")
+
+    try:
+        import fitz  # PyMuPDF fallback if available
+        doc = fitz.open(file_path)
+        if len(doc) > 0:
+            page = doc.load_page(0)
+            pix = page.get_pixmap(dpi=150)
+            return pix.tobytes("png")
+    except Exception:
+        pass
+
+    return None
 
 
 def _extract_docx_text(file_path: str) -> str:
-    """Extract text from a DOCX using python-docx."""
+    """Extract text and tables from Word (.docx)."""
     try:
         from docx import Document
         doc = Document(file_path)
-        lines = [para.text for para in doc.paragraphs if para.text.strip()]
-        # Also extract table cells
+        lines = []
+
+        # Headers & Footers
+        for section in doc.sections:
+            for hp in section.header.paragraphs:
+                if hp.text.strip(): lines.append(hp.text.strip())
+
+        # Body paragraphs
+        for para in doc.paragraphs:
+            if para.text.strip():
+                lines.append(para.text.strip())
+
+        # Tables
         for table in doc.tables:
             for row in table.rows:
-                row_data = [cell.text.strip() for cell in row.cells if cell.text.strip()]
-                if row_data:
-                    lines.append(" | ".join(row_data))
+                cells = [c.text.strip() for c in row.cells if c.text.strip()]
+                if cells:
+                    lines.append(" | ".join(cells))
+
         return "\n".join(lines)
-    except ImportError:
-        logger.warning("python-docx not installed. Run: pip install python-docx")
-        return ""
     except Exception as e:
         logger.error(f"DOCX extraction failed: {e}")
         return ""
 
 
-def _pdf_page_to_image(file_path: str) -> Optional[bytes]:
-    """Convert the first page of a PDF to PNG bytes for vision analysis."""
+def _extract_plain_text(file_path: str) -> str:
+    """Extract text from TXT, MD, CSV, JSON with multi-encoding fallback."""
+    encodings = ["utf-8", "utf-8-sig", "latin-1", "cp1252", "utf-16"]
+    for enc in encodings:
+        try:
+            with open(file_path, "r", encoding=enc) as f:
+                return f.read()
+        except UnicodeDecodeError:
+            continue
+        except Exception as e:
+            logger.warning(f"Error reading text file with {enc}: {e}")
+    return ""
+
+
+def _extract_fallback_text(file_path: str) -> str:
+    """Extract readable strings from binary/unsupported formats (.doc, .rtf, .odt)."""
     try:
-        import fitz  # PyMuPDF
-        doc = fitz.open(file_path)
-        page = doc.load_page(0)
-        pix = page.get_pixmap(dpi=150)
-        return pix.tobytes("png")
-    except ImportError:
-        logger.warning("PyMuPDF not installed. Run: pip install PyMuPDF")
-        return None
+        with open(file_path, "rb") as f:
+            raw_bytes = f.read()
+
+        # Try plain text decode
+        for enc in ("utf-8", "latin-1", "cp1252"):
+            try:
+                decoded = raw_bytes.decode(enc)
+                # Remove RTF control sequences if present
+                if "{\\rtf" in decoded:
+                    clean = re.sub(r"\\[a-zA-Z0-9\-]+ ?", " ", decoded)
+                    clean = re.sub(r"[{}\\]", " ", clean)
+                    return re.sub(r"\s+", " ", clean).strip()
+                return decoded
+            except UnicodeDecodeError:
+                continue
+
+        # Printable ASCII / UTF-8 string regex extractor
+        strings = re.findall(rb"[\x20-\x7E\t\n\r]{4,}", raw_bytes)
+        return "\n".join(s.decode("latin-1", errors="ignore") for s in strings)
     except Exception as e:
-        logger.error(f"PDF→image conversion failed: {e}")
-        return None
+        logger.error(f"Fallback text extraction failed: {e}")
+        return ""
 
 
 def _dict_to_text(resume_dict: dict) -> str:
@@ -648,10 +861,12 @@ def _dict_to_text(resume_dict: dict) -> str:
         f"Skills: {resume_dict.get('skills', '')}",
     ]
     for exp in resume_dict.get("experience", []):
-        lines.append(f"Experience: {exp.get('title')} at {exp.get('company')} ({exp.get('duration')})")
-        lines.append(f"  {exp.get('description', '')}")
+        if isinstance(exp, dict):
+            lines.append(f"Experience: {exp.get('title')} at {exp.get('company')} ({exp.get('duration')})")
+            lines.append(f"  {exp.get('description', '')}")
     for edu in resume_dict.get("education", []):
-        lines.append(f"Education: {edu.get('degree')} from {edu.get('university')} ({edu.get('year')})")
+        if isinstance(edu, dict):
+            lines.append(f"Education: {edu.get('degree')} from {edu.get('university')} ({edu.get('year')})")
     return "\n".join(lines)
 
 
@@ -687,3 +902,4 @@ def _log_ai_history(action, prompt, response, model, tokens, success, error=None
         db.session.commit()
     except Exception:
         pass
+

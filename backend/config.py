@@ -49,21 +49,29 @@ class Config:
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10 MB cap (images + PDFs)
     ALLOWED_PHOTO_EXTENSIONS  = {"jpg", "jpeg", "png", "webp"}
     ALLOWED_RESUME_EXTENSIONS = {"json", "pdf", "docx", "doc"}
-    # All file types accepted by the AI file-analysis endpoint
-    ALLOWED_ANALYZE_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "pdf", "docx", "doc"}
+    # All file types accepted by the AI file-analysis & JSON extraction endpoint
+    ALLOWED_ANALYZE_EXTENSIONS = {
+        "jpg", "jpeg", "png", "webp", "bmp", "tiff", "tif",
+        "pdf", "docx", "doc", "txt", "rtf", "odt", "md", "csv", "json"
+    }
 
     # ── AI / OpenRouter ───────────────────────────────────────────────────────
     OPENROUTER_API_KEY  = os.environ.get("OPENROUTER_API_KEY", "")
     OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
-    # 3-Tier fallback model chain
-    # Primary  → high-quality reasoning (multimodal-capable)
+    # Multi-Tier Intelligent Model Fallback Chains
+    # Primary  → High-performance multimodal model (Google Gemini 2.0 Flash / 2.5 Flash)
     AI_MODEL_PRIMARY   = os.environ.get(
-        "AI_MODEL_PRIMARY", "google/gemini-2.0-flash-exp:free"
+        "AI_MODEL_PRIMARY", "google/gemini-2.0-flash-001"
     )
-    # Secondary → fast, lightweight free model
+    # Vision models for images & scanned documents (tried in order)
+    AI_MODEL_VISION    = os.environ.get(
+        "AI_MODEL_VISION",
+        "google/gemini-2.0-flash-001,qwen/qwen-2.5-vl-72b-instruct:free,meta-llama/llama-3.2-11b-vision-instruct:free,mistralai/pixtral-12b:free,openrouter/free"
+    )
+    # Secondary → High-context fast reasoning model (Llama 3.3 70B / Qwen 2.5 72B)
     AI_MODEL_SECONDARY = os.environ.get(
-        "AI_MODEL_SECONDARY", "meta-llama/llama-3.1-8b-instruct:free"
+        "AI_MODEL_SECONDARY", "meta-llama/llama-3.3-70b-instruct:free"
     )
     # Emergency → ultra-fast free fallback for zero-downtime
     AI_MODEL_EMERGENCY = os.environ.get(
@@ -71,12 +79,12 @@ class Config:
     )
     # Legacy single-model key (kept for backward compat)
     OPENROUTER_MODEL   = os.environ.get(
-        "OPENROUTER_MODEL", "google/gemini-2.0-flash-exp:free"
+        "OPENROUTER_MODEL", "google/gemini-2.0-flash-001"
     )
     # Request timeout in seconds
-    AI_REQUEST_TIMEOUT = int(os.environ.get("AI_REQUEST_TIMEOUT", "30"))
-    # Maximum tokens for AI responses
-    AI_MAX_TOKENS      = int(os.environ.get("AI_MAX_TOKENS", "1024"))
+    AI_REQUEST_TIMEOUT = int(os.environ.get("AI_REQUEST_TIMEOUT", "45"))
+    # Maximum tokens for AI responses (high limit for full document JSON extraction)
+    AI_MAX_TOKENS      = int(os.environ.get("AI_MAX_TOKENS", "4096"))
 
     # ── Rate Limiting ─────────────────────────────────────────────────────────
     RATELIMIT_STORAGE_URL = os.environ.get("REDIS_URL", "memory://")

@@ -395,5 +395,72 @@ class AuthSystemTestCase(unittest.TestCase):
         self.assertEqual(res_b_dup.status_code, 404)
 
 
+class JSONExtractorTestCase(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app(TestingConfig)
+        self.client = self.app.test_client()
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+
+    def tearDown(self):
+        self.app_context.pop()
+
+    def test_json_safe_parse(self):
+        from backend.services.ai_service import _safe_parse_json
+        sample = '```json\n{"name": "Dev", "title": "Software Engineer"}\n```'
+        parsed = _safe_parse_json(sample)
+        self.assertIsNotNone(parsed)
+        self.assertEqual(parsed.get("name"), "Dev")
+        self.assertEqual(parsed.get("title"), "Software Engineer")
+
+    def test_resume_json_normalization(self):
+        from backend.services.ai_service import _parse_and_validate_resume_json
+        raw = '''{
+            "structured_data": {
+                "name": "Jane Doe",
+                "title": "Cloud Architect",
+                "email": "jane@example.com",
+                "phone": "+1-555-0199",
+                "skills": ["AWS", "Python", "Kubernetes"],
+                "experience": [
+                    {
+                        "title": "Principal Architect",
+                        "company": "Cloud Co",
+                        "duration": "2021-Present",
+                        "description": "Architected multi-cloud infrastructure"
+                    }
+                ],
+                "education": [
+                    {
+                        "degree": "M.S. Software Engineering",
+                        "university": "Tech University",
+                        "year": "2019"
+                    }
+                ]
+            },
+            "metadata": {
+                "document_type": "Resume",
+                "confidence_score": 0.99
+            }
+        }'''
+        res = _parse_and_validate_resume_json(raw)
+        self.assertIn("structured_data", res)
+        sd = res["structured_data"]
+        self.assertEqual(sd["name"], "Jane Doe")
+        self.assertEqual(sd["title"], "Cloud Architect")
+        self.assertEqual(sd["email"], "jane@example.com")
+        self.assertIn("AWS", sd["skills"])
+        self.assertEqual(len(sd["experience"]), 1)
+        self.assertEqual(sd["experience"][0]["title"], "Principal Architect")
+        self.assertEqual(len(sd["education"]), 1)
+        self.assertEqual(res["metadata"]["document_type"], "Resume")
+
+    def test_extract_endpoint_unauthorized(self):
+        # Attempt without auth token -> 401
+        res = self.client.post("/api/extract-json")
+        self.assertEqual(res.status_code, 401)
+
+
 if __name__ == "__main__":
     unittest.main()
+
