@@ -71,7 +71,8 @@
 
                 // Redirect if on login/signup page
                 if (isGuestOnlyPage) {
-                    window.location.href = '/dashboard';
+                    const useHtmlExt = window.location.pathname.endsWith('.html') || window.location.protocol === 'file:';
+                    window.location.href = useHtmlExt ? '/dashboard.html' : '/dashboard';
                 }
             } else {
                 throw new Error('Unauthorized');
@@ -88,7 +89,9 @@
             if (isProtectedPage) {
                 // Clear any cached credentials
                 const currentPath = window.location.pathname + window.location.search;
-                window.location.href = `/login?next=${encodeURIComponent(currentPath)}`;
+                const useHtmlExt = window.location.pathname.endsWith('.html') || window.location.protocol === 'file:';
+                const loginPath = useHtmlExt ? '/login.html' : '/login';
+                window.location.href = `${loginPath}?next=${encodeURIComponent(currentPath)}`;
             }
         }
     });

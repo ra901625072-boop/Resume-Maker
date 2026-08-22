@@ -327,8 +327,9 @@
                         const data = await res.json();
                         if (data.success && data.resume_id) {
                             if (window.showToast) window.showToast('Resume cloned successfully! 🎉', 'success');
+                            const useHtmlExt = window.location.pathname.endsWith('.html') || window.location.protocol === 'file:';
                             setTimeout(() => {
-                                window.location.href = `/resume?id=${data.resume_id}`;
+                                window.location.href = useHtmlExt ? `/resume.html?id=${data.resume_id}` : `/resume?id=${data.resume_id}`;
                             }, 800);
                         } else {
                             if (window.showToast) window.showToast(data.error || 'Failed to clone resume.', 'error');

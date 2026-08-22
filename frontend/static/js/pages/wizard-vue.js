@@ -455,7 +455,8 @@ createApp({
 
                 const result = await res.json();
                 if (result.success) {
-                    window.location.href = `/resume?id=${result.resume_id}`;
+                    const useHtmlExt = window.location.pathname.endsWith('.html') || window.location.protocol === 'file:';
+                    window.location.href = useHtmlExt ? `/resume.html?id=${result.resume_id}` : `/resume?id=${result.resume_id}`;
                 } else {
                     throw new Error(result.error || 'Failed to save');
                 }

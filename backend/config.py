@@ -116,6 +116,8 @@ class DevelopmentConfig(Config):
     DEBUG = True
     TESTING = False
     SESSION_COOKIE_SECURE = False  # HTTP is fine locally
+    SESSION_COOKIE_SAMESITE = "Lax"
+    REMEMBER_COOKIE_SAMESITE = "Lax"
     SQLALCHEMY_ECHO = False         # Set True to log raw SQL queries
 
 

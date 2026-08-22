@@ -162,8 +162,9 @@
                     localStorage.setItem('wisaxis_logged_in', 'true');
                     localStorage.setItem('wisaxis_user_name', data.user.name);
                     if (window.showToast) window.showToast(`Account created! Welcome, ${data.user.name}! 🎉`, 'success');
+                    const useHtmlExt = window.location.pathname.endsWith('.html') || window.location.protocol === 'file:';
                     setTimeout(() => {
-                        window.location.href = '/dashboard';
+                        window.location.href = useHtmlExt ? '/dashboard.html' : '/dashboard';
                     }, 800);
                 } else {
                     if (window.showToast) window.showToast(data.error || 'Failed to create account.', 'error');

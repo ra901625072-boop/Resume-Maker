@@ -882,7 +882,8 @@
             if (!lastJSON) return;
             try {
                 localStorage.setItem('import_resume_data', JSON.stringify(lastJSON));
-                window.location.href = '/dashboard';
+                const useHtmlExt = window.location.pathname.endsWith('.html') || window.location.protocol === 'file:';
+                window.location.href = useHtmlExt ? '/dashboard.html' : '/dashboard';
             } catch (e) {
                 showAlert('error', 'Could not save data. Please copy the JSON and import it manually.');
             }

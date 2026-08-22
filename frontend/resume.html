@@ -828,8 +828,10 @@
             async mounted() {
                 const urlParams = new URLSearchParams(window.location.search);
                 const resumeId = urlParams.get('id');
+                const useHtmlExt = window.location.pathname.endsWith('.html') || window.location.protocol === 'file:';
+                const dashboardPath = useHtmlExt ? '/dashboard.html' : '/dashboard';
                 if (!resumeId) {
-                    window.location.href = '/dashboard';
+                    window.location.href = dashboardPath;
                     return;
                 }
 
@@ -847,14 +849,14 @@
                             }
                             this.loadTemplateStyles(this.activeTemplateId);
                         } else {
-                            window.location.href = '/dashboard';
+                            window.location.href = dashboardPath;
                         }
                     } else {
-                        window.location.href = '/dashboard';
+                        window.location.href = dashboardPath;
                     }
                 } catch (err) {
                     console.error('Error fetching resume details:', err);
-                    window.location.href = '/dashboard';
+                    window.location.href = dashboardPath;
                 } finally {
                     this.isLoading = false;
                 }

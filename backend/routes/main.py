@@ -6,69 +6,62 @@ direct visits to backend page views will return JSON API notices
 or redirect to the configured frontend.
 """
 
-from flask import Blueprint, jsonify, redirect, request, current_app
+import os
+from flask import Blueprint, jsonify, redirect, request, current_app, send_from_directory, url_for
 from flask_login import current_user, login_required
 
 main_bp = Blueprint("main", __name__)
 
 
-def _get_frontend_redirect(fallback="/"):
-    """Get the frontend origin for redirects if configured."""
-    origins = current_app.config.get("CORS_ORIGINS", "*")
-    if origins and origins != "*":
-        if isinstance(origins, list) and len(origins) > 0:
-            return origins[0]
-        return origins
-    return fallback
+def _serve_frontend_file(filename):
+    """Helper to serve static HTML files from the frontend directory."""
+    frontend_dir = os.path.abspath(os.path.join(current_app.root_path, "..", "frontend"))
+    return send_from_directory(frontend_dir, filename)
 
 
 @main_bp.route("/")
 def home():
-    """Return API server health and status notice."""
-    return jsonify({
-        "status": "online",
-        "service": "WISAXIS Resume Maker API Server",
-        "message": "Please access the application via the decoupled frontend."
-    })
+    """Serve the landing page HTML."""
+    return _serve_frontend_file("index.html")
 
 
 @main_bp.route("/dashboard")
 @login_required
 def dashboard():
-    """Redirect backend browser visits to the frontend dashboard."""
-    return redirect(_get_frontend_redirect() + "/dashboard")
+    """Serve the dashboard HTML page directly."""
+    return _serve_frontend_file("dashboard.html")
 
 
 @main_bp.route("/edit/<int:resume_id>")
 @login_required
 def edit_resume(resume_id: int):
-    """Redirect edit browser visits to the frontend edit wizard."""
-    return redirect(f"{_get_frontend_redirect()}/dashboard?id={resume_id}")
+    """Redirect edit browser visits to dashboard with ID query param."""
+    return redirect(url_for("main.dashboard", id=resume_id))
 
 
 @main_bp.route("/profile")
 @login_required
 def profile():
-    """Redirect profile browser visits to the frontend profile."""
-    return redirect(_get_frontend_redirect() + "/profile")
+    """Serve the profile HTML page directly."""
+    return _serve_frontend_file("profile.html")
 
 
 @main_bp.route("/chat")
 @login_required
 def chat():
-    """Redirect chat visits to the frontend chat assistant."""
-    return redirect(_get_frontend_redirect() + "/chat")
+    """Serve the chat assistant HTML page directly."""
+    return _serve_frontend_file("chat.html")
 
 
 @main_bp.route("/json")
 @login_required
 def json_features():
-    """Redirect json visits to the frontend json features page."""
-    return redirect(_get_frontend_redirect() + "/json")
+    """Serve the json features HTML page directly."""
+    return _serve_frontend_file("json.html")
 
 
 @main_bp.route("/upload")
 @login_required
 def upload_resume():
-    """Redirect upload visits to the frontend json features page."""
-    return redirect(_get_frontend_redirect() + "/json")
+    """Redirect upload visits to the json features page."""
+    return redirect(url_for("main.json_features"))

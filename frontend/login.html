@@ -132,8 +132,10 @@
                     
                     const urlParams = new URLSearchParams(window.location.search);
                     const next = urlParams.get('next');
+                    const useHtmlExt = window.location.pathname.endsWith('.html') || window.location.protocol === 'file:';
+                    const dashboardPath = useHtmlExt ? '/dashboard.html' : '/dashboard';
                     setTimeout(() => {
-                        window.location.href = (next && next.startsWith('/')) ? next : '/dashboard';
+                        window.location.href = (next && next.startsWith('/')) ? next : dashboardPath;
                     }, 800);
                 } else {
                     if (window.showToast) window.showToast(data.error || 'Invalid email or password.', 'error');

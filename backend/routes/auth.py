@@ -99,7 +99,10 @@ def login():
             return redirect(next_page)
         return redirect(url_for("main.dashboard"))
 
-    return redirect(_get_frontend_redirect() + "/login")
+    import os
+    from flask import send_from_directory
+    frontend_dir = os.path.abspath(os.path.join(current_app.root_path, "..", "frontend"))
+    return send_from_directory(frontend_dir, "login.html")
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -173,7 +176,10 @@ def signup():
             db.session.rollback()
             return jsonify({"success": False, "error": "Database error while registering user."}), 500
 
-    return redirect(_get_frontend_redirect() + "/signup")
+    import os
+    from flask import send_from_directory
+    frontend_dir = os.path.abspath(os.path.join(current_app.root_path, "..", "frontend"))
+    return send_from_directory(frontend_dir, "signup.html")
 
 
 # ────────────────────────────────────────────────────────────────────────────
