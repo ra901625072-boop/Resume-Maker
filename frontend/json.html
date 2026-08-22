@@ -447,37 +447,60 @@
             flex-wrap: wrap;
         }
 
-        /* View Mode Tabs */
+        /* ── Symmetrical Result View Tabs ── */
         .result-view-tabs {
-            display: flex;
-            border-bottom: 1px solid var(--surface-border);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             background: var(--surface);
-            padding: 0 16px;
-            gap: 4px;
+            border-bottom: 1px solid var(--surface-border);
+            padding: 6px;
+            gap: 6px;
         }
 
         .view-tab {
-            padding: 12px 18px;
-            background: none;
-            border: none;
-            border-bottom: 2px solid transparent;
+            padding: 12px 14px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 10px;
             font-size: var(--text-xs);
             font-weight: 700;
             color: var(--text-muted);
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
-            transition: color 0.2s, border-color 0.2s;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
         }
 
         .view-tab:hover {
             color: var(--text-main);
+            background: var(--surface-2);
         }
 
         .view-tab.active {
             color: var(--accent-indigo);
-            border-bottom-color: var(--accent-indigo);
+            background: var(--surface-paper);
+            border-color: rgba(99, 102, 241, 0.35);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .view-tab-icon {
+            font-size: 14px;
+        }
+
+        .view-tab-text {
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .view-tab-badge {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent-indigo);
+            padding: 2px 8px;
+            border-radius: 99px;
+            font-size: 10px;
+            font-weight: 800;
         }
 
         .view-panel {
@@ -489,13 +512,14 @@
             display: block;
         }
 
-        /* Syntax Highlighted JSON Container */
+        /* ── Panel 1: Professional IDE Code Editor ── */
         .json-code-wrap {
             position: relative;
             background: #0d1117;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
             overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
         }
 
         .json-code-toolbar {
@@ -508,27 +532,162 @@
             font-size: 11px;
             color: #8b949e;
             font-weight: 600;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .editor-left-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .editor-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .editor-dot.red { background: #ff5f56; }
+        .editor-dot.yellow { background: #ffbd2e; }
+        .editor-dot.green { background: #27c93f; }
+
+        .editor-filename {
+            color: #c9d1d9;
+            font-weight: 700;
+            font-family: monospace;
+            margin-left: 4px;
+        }
+
+        .editor-tag {
+            background: rgba(255, 255, 255, 0.08);
+            color: #8b949e;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .editor-right-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .editor-mini-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #c9d1d9;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .editor-mini-btn:hover {
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .editor-body {
+            display: flex;
+            background: #0d1117;
+            max-height: 560px;
+            overflow-y: auto;
+        }
+
+        .editor-gutter {
+            width: 48px;
+            padding: 18px 10px 18px 0;
+            background: #090d12;
+            color: #484f58;
+            font-family: 'SFMono-Regular', Consolas, monospace;
+            font-size: 12px;
+            text-align: right;
+            user-select: none;
+            line-height: 1.6;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .json-code-block {
-            display: block;
-            padding: 20px;
+            flex: 1;
+            padding: 18px;
             font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
             font-size: 13px;
             color: #c9d1d9;
+            white-space: pre;
             overflow-x: auto;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .json-code-block.wrap-lines {
             white-space: pre-wrap;
             word-break: break-word;
-            line-height: 1.6;
-            max-height: 540px;
         }
 
         /* Syntax colors */
-        .json-key { color: #79c0ff; font-weight: 600; }
+        .json-key { color: #79c0ff; font-weight: 700; }
         .json-string { color: #a5d6ff; }
-        .json-number { color: #ffa657; }
-        .json-boolean { color: #ff7b72; font-weight: 600; }
+        .json-number { color: #ffa657; font-weight: 600; }
+        .json-boolean { color: #ff7b72; font-weight: 700; }
         .json-null { color: #8b949e; font-style: italic; }
+
+        /* ── Panel 3: Professional Raw Text / OCR Inspector ── */
+        .rawtext-wrap {
+            background: var(--surface-2);
+            border-radius: 14px;
+            border: 1px solid var(--surface-border);
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+        }
+
+        .rawtext-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface-paper);
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--surface-border);
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .rawtext-left-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .rawtext-badge {
+            font-weight: 800;
+            color: var(--text-main);
+            font-size: 12px;
+        }
+
+        .rawtext-body {
+            padding: 24px;
+            max-height: 560px;
+            overflow-y: auto;
+            background: var(--surface);
+        }
+
+        .rawtext-content {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-size: 13.5px;
+            line-height: 1.75;
+            color: var(--text-main);
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 0;
+        }
 
         /* ── Symmetrical Visual Dashboard Grid ── */
         .visual-tree-container {
@@ -955,43 +1114,75 @@
                     </div>
 
                     <!-- Result View Mode Tabs -->
-                    <div class="result-view-tabs">
-                        <button class="view-tab active" data-view="formatted">
-                            <span>💻 Formatted Code</span>
+                    <div class="result-view-tabs" role="tablist">
+                        <button class="view-tab active" data-view="formatted" role="tab" aria-selected="true">
+                            <span class="view-tab-icon">💻</span>
+                            <span class="view-tab-text">Formatted Code</span>
+                            <span class="view-tab-badge" id="tab-code-badge">JSON</span>
                         </button>
-                        <button class="view-tab" data-view="visual">
-                            <span>👁️ Symmetrical Card Explorer</span>
+                        <button class="view-tab" data-view="visual" role="tab" aria-selected="false">
+                            <span class="view-tab-icon">👁️</span>
+                            <span class="view-tab-text">Symmetrical Card Explorer</span>
+                            <span class="view-tab-badge" id="tab-visual-badge">16 Sections</span>
                         </button>
-                        <button class="view-tab" data-view="rawtext">
-                            <span>📄 Extracted Plain Text</span>
+                        <button class="view-tab" data-view="rawtext" role="tab" aria-selected="false">
+                            <span class="view-tab-icon">📄</span>
+                            <span class="view-tab-text">Extracted Plain Text</span>
+                            <span class="view-tab-badge" id="tab-text-badge">OCR Stream</span>
                         </button>
                     </div>
 
-                    <!-- Panel 1: Syntax Highlighted JSON -->
-                    <div class="view-panel active" id="view-formatted">
+                    <!-- Panel 1: Syntax Highlighted IDE JSON -->
+                    <div class="view-panel active" id="view-formatted" role="tabpanel">
                         <div class="json-code-wrap">
                             <div class="json-code-toolbar">
-                                <span id="json-stats-display">JSON Object · 0 keys</span>
-                                <span>UTF-8 Validated · 4-Tier Standard</span>
+                                <div class="editor-left-meta">
+                                    <span class="editor-dot red"></span>
+                                    <span class="editor-dot yellow"></span>
+                                    <span class="editor-dot green"></span>
+                                    <span class="editor-filename">resume_schema_v3.json</span>
+                                    <span class="editor-tag" id="json-line-count">0 lines</span>
+                                    <span class="editor-tag" id="json-size-tag">0 KB</span>
+                                    <span class="editor-tag" id="json-stats-display">JSON Object · 0 keys</span>
+                                </div>
+                                <div class="editor-right-actions">
+                                    <button class="editor-mini-btn" id="wrap-code-toggle-btn" title="Toggle Line Wrap">⇄ Wrap</button>
+                                    <button class="editor-mini-btn" id="copy-code-inline-btn" title="Copy Code">📋 Copy Code</button>
+                                </div>
                             </div>
-                            <pre class="json-code-block" id="formatted-json-code"></pre>
+                            <div class="editor-body">
+                                <div class="editor-gutter" id="json-gutter">1</div>
+                                <pre class="json-code-block" id="formatted-json-code"></pre>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Panel 2: Symmetrical Visual Card View -->
-                    <div class="view-panel" id="view-visual">
+                    <div class="view-panel" id="view-visual" role="tabpanel">
                         <div class="visual-tree-container" id="visual-tree-container">
                             <!-- Injected dynamically in 2-column layout -->
                         </div>
                     </div>
 
-                    <!-- Panel 3: Extracted Plain Text -->
-                    <div class="view-panel" id="view-rawtext">
-                        <div class="json-code-wrap">
-                            <div class="json-code-toolbar">
-                                <span>Verbatim OCR & Extracted Document Text</span>
+                    <!-- Panel 3: Extracted Plain Text & OCR Inspector -->
+                    <div class="view-panel" id="view-rawtext" role="tabpanel">
+                        <div class="rawtext-wrap">
+                            <div class="rawtext-toolbar">
+                                <div class="rawtext-left-meta">
+                                    <span class="rawtext-badge">📄 OCR Plain Text Stream</span>
+                                    <span class="editor-tag" id="rawtext-lines-tag">0 lines</span>
+                                    <span class="editor-tag" id="rawtext-words-tag">0 words</span>
+                                    <span class="editor-tag" id="rawtext-chars-tag">0 chars</span>
+                                    <span class="editor-tag" id="rawtext-readtime-tag">~1 min read</span>
+                                </div>
+                                <div class="editor-right-actions">
+                                    <button class="editor-mini-btn" id="copy-rawtext-inline-btn" title="Copy Plain Text">📋 Copy Text</button>
+                                    <button class="editor-mini-btn" id="download-rawtext-btn" title="Download Plain Text">💾 Download .txt</button>
+                                </div>
                             </div>
-                            <pre class="json-code-block" id="raw-text-content" style="color:#8b949e;"></pre>
+                            <div class="rawtext-body">
+                                <pre class="rawtext-content" id="raw-text-content"></pre>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1312,19 +1503,52 @@
 
         // ── Render Results into Panels ─────────────────────────────────────────
         function renderResult(data, model, tokens) {
-            // Formatted JSON
+            const rawJSONStr = JSON.stringify(data, null, 2);
+            const jsonLines = rawJSONStr.split('\n');
+
+            // 1. Formatted JSON + Line Numbers
             const formattedHTML = syntaxHighlight(data);
             formattedJsonCode.innerHTML = formattedHTML;
+            
+            const gutterEl = document.getElementById('json-gutter');
+            if (gutterEl) {
+                gutterEl.innerHTML = jsonLines.map((_, i) => i + 1).join('<br>');
+            }
+
+            const sizeKB = (new Blob([rawJSONStr]).size / 1024).toFixed(1);
+            const lineCountEl = document.getElementById('json-line-count');
+            if (lineCountEl) lineCountEl.textContent = `${jsonLines.length} lines`;
+            const sizeTagEl = document.getElementById('json-size-tag');
+            if (sizeTagEl) sizeTagEl.textContent = `${sizeKB} KB`;
+            const codeBadgeEl = document.getElementById('tab-code-badge');
+            if (codeBadgeEl) codeBadgeEl.textContent = `${jsonLines.length} L`;
 
             const cand = data.candidate || data.structured_data || data;
             const keyCount = Object.keys(cand).length;
-            const atsScore = (data.analysis && data.analysis.ats_score) ? data.analysis.ats_score : 85;
-            jsonStatsDisplay.textContent = `4-Tier Production JSON · ATS Score: ${atsScore}/100 · ${keyCount} sections`;
+            const atsScore = (data.analysis && data.analysis.ats_score) ? data.analysis.ats_score : 88;
+            jsonStatsDisplay.textContent = `ATS Score: ${atsScore}/100 · ${keyCount} sections`;
 
-            // Raw Text panel
-            rawTextContent.textContent = data.raw_text || '(No raw text available)';
+            // 2. Raw Text Panel & Stats
+            const rawText = data.raw_text || '(No verbatim OCR text stream available)';
+            rawTextContent.textContent = rawText;
 
-            // Visual Card View
+            const wordsCount = rawText ? (rawText.trim().match(/\S+/g) || []).length : 0;
+            const linesCount = rawText ? rawText.split('\n').length : 0;
+            const charsCount = rawText.length;
+            const readMins = Math.max(1, Math.ceil(wordsCount / 200));
+
+            const rtLines = document.getElementById('rawtext-lines-tag');
+            if (rtLines) rtLines.textContent = `${linesCount} lines`;
+            const rtWords = document.getElementById('rawtext-words-tag');
+            if (rtWords) rtWords.textContent = `${wordsCount} words`;
+            const rtChars = document.getElementById('rawtext-chars-tag');
+            if (rtChars) rtChars.textContent = `${charsCount} chars`;
+            const rtRead = document.getElementById('rawtext-readtime-tag');
+            if (rtRead) rtRead.textContent = `~${readMins} min read`;
+            const textBadgeEl = document.getElementById('tab-text-badge');
+            if (textBadgeEl) textBadgeEl.textContent = `${wordsCount} words`;
+
+            // 3. Visual Symmetrical Card View
             renderVisualTree(data);
 
             resultSection.style.display = 'block';
@@ -1659,14 +1883,71 @@
         // ── View Tabs Switcher ─────────────────────────────────────────────────
         document.querySelectorAll('.view-tab').forEach(tab => {
             tab.addEventListener('click', () => {
-                document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.view-tab').forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
                 document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
                 tab.classList.add('active');
-                document.getElementById('view-' + tab.dataset.view).classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                const targetPanel = document.getElementById('view-' + tab.dataset.view);
+                if (targetPanel) targetPanel.classList.add('active');
             });
         });
 
-        // ── Copy JSON ─────────────────────────────────────────────────────────
+        // ── Toggle Line Wrapping in Code Editor ────────────────────────────────
+        const wrapToggleBtn = document.getElementById('wrap-code-toggle-btn');
+        if (wrapToggleBtn) {
+            wrapToggleBtn.addEventListener('click', () => {
+                formattedJsonCode.classList.toggle('wrap-lines');
+                wrapToggleBtn.textContent = formattedJsonCode.classList.contains('wrap-lines') ? '⇄ Un-wrap' : '⇄ Wrap';
+            });
+        }
+
+        // ── Copy Code (Inline Button) ──────────────────────────────────────────
+        const copyCodeInlineBtn = document.getElementById('copy-code-inline-btn');
+        if (copyCodeInlineBtn) {
+            copyCodeInlineBtn.addEventListener('click', () => {
+                if (!lastJSON) return;
+                navigator.clipboard.writeText(JSON.stringify(lastJSON, null, 2)).then(() => {
+                    copyCodeInlineBtn.textContent = '✅ Copied!';
+                    if (window.showToast) window.showToast('JSON code copied! 📋', 'success');
+                    setTimeout(() => copyCodeInlineBtn.textContent = '📋 Copy Code', 2000);
+                });
+            });
+        }
+
+        // ── Copy Raw Text ─────────────────────────────────────────────────────
+        const copyRawTextInlineBtn = document.getElementById('copy-rawtext-inline-btn');
+        if (copyRawTextInlineBtn) {
+            copyRawTextInlineBtn.addEventListener('click', () => {
+                const text = rawTextContent.textContent || '';
+                navigator.clipboard.writeText(text).then(() => {
+                    copyRawTextInlineBtn.textContent = '✅ Copied!';
+                    if (window.showToast) window.showToast('Plain text copied! 📋', 'success');
+                    setTimeout(() => copyRawTextInlineBtn.textContent = '📋 Copy Text', 2000);
+                });
+            });
+        }
+
+        // ── Download Raw Text (.txt) ──────────────────────────────────────────
+        const downloadRawTextBtn = document.getElementById('download-rawtext-btn');
+        if (downloadRawTextBtn) {
+            downloadRawTextBtn.addEventListener('click', () => {
+                const text = rawTextContent.textContent || '';
+                const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(text);
+                const downloadAnchor = document.createElement('a');
+                const name = (selectedFile ? selectedFile.name.replace(/\.[^/.]+$/, "") : "document") + "_extracted.txt";
+                downloadAnchor.setAttribute("href", dataStr);
+                downloadAnchor.setAttribute("download", name);
+                document.body.appendChild(downloadAnchor);
+                downloadAnchor.click();
+                downloadAnchor.remove();
+                if (window.showToast) window.showToast(`Downloaded ${name}! 💾`, 'success');
+            });
+        }
+
+        // ── Copy JSON (Header Button) ─────────────────────────────────────────
         document.getElementById('copy-json-btn').addEventListener('click', () => {
             if (!lastJSON) return;
             navigator.clipboard.writeText(JSON.stringify(lastJSON, null, 2)).then(() => {
@@ -1677,7 +1958,7 @@
             });
         });
 
-        // ── Download .JSON File ────────────────────────────────────────────────
+        // ── Download .JSON File (Header Button) ────────────────────────────────
         document.getElementById('download-json-btn').addEventListener('click', () => {
             if (!lastJSON) return;
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(lastJSON, null, 2));
