@@ -60,7 +60,7 @@ def create_app(config_override=None) -> Flask:
 
 **Key design choices:**
 - `template_folder` and `static_folder` point to the `frontend/` directory — Flask serves all templates and assets without a separate web server in development
-- `/js/<filename>` is served via a dedicated `send_from_directory` route for the `frontend/js/` directory
+- Client-side scripts are served directly from the standard `frontend/static/js/` directory using Flask's native static assets router.
 - `db.create_all()` runs inside `app_context()` — tables are created automatically on first run, no migration command needed for SQLite
 
 ---

@@ -2,18 +2,17 @@
 #  WISAXIS Resume Maker — Python Dependencies
 # ============================================================
 #
-# !! IMPORTANT — Use Python 3.11 (venv311), NOT Python 3.14 !!
-#    Pillow 11.x has no pre-built wheel for Python 3.14 on Windows.
+# !! IMPORTANT — Use Python 3.12 (venv) !!
 #
 # Correct commands to run the app:
-#   & d:/resume2.0/venv311/Scripts/python.exe d:/resume2.0/app.py
+#   & d:/Resume/venv/Scripts/python.exe d:/Resume/app.py
 #
 # Or activate the venv first:
-#   d:/resume2.0/venv311/Scripts/Activate.ps1
+#   d:/Resume/venv/Scripts/Activate.ps1
 #   python app.py
 #
-# To install / update packages (use venv311 pip, not system pip):
-#   & d:/resume2.0/venv311/Scripts/pip.exe install -r requirements.txt
+# To install / update packages (use venv pip, not system pip):
+#   & d:/Resume/venv/Scripts/pip.exe install -r requirements.txt
 
 # Core
 Flask==3.1.1
@@ -29,6 +28,9 @@ requests==2.32.3
 
 # Production WSGI server
 gunicorn==23.0.0
+
+# PostgreSQL adapter (required for Render / production)
+psycopg2-binary==2.9.9
 
 # Environment variable loading
 python-dotenv==1.1.0

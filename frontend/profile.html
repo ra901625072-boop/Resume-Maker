@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | WISAXIS Resume Maker</title>
+    <meta name="description" content="View and manage your WISAXIS resume history and account details.">
+    <!-- 1. Design Tokens -->
+    <link rel="stylesheet" href="/static/css/base/variables.css">
+    <!-- 2. Reset -->
+    <link rel="stylesheet" href="/static/css/base/reset.css">
+    <!-- 3. Theme -->
+    <link rel="stylesheet" href="/static/css/base/theme.css">
+    <!-- 4. Effects -->
+    <link rel="stylesheet" href="/static/css/base/effects.css">
+    <!-- 4.1 Global Background -->
+    <link rel="stylesheet" href="/static/css/base/background.css">
+    <!-- 5. Components -->
+    <link class="hdr-css" rel="stylesheet" href="/static/css/components/header.css">
+    <link rel="stylesheet" href="/static/css/components/buttons.css">
+    <link rel="stylesheet" href="/static/css/components/cards.css">
+    <!-- 6. Page specific -->
+    <link rel="stylesheet" href="/static/css/pages/profile-desktop.css">
+    <!-- 7. Utilities -->
+    <link rel="stylesheet" href="/static/css/utilities/utilities.css">
+
+    <!-- Vue 3, Config & Auth Guard -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/core/auth-guard.js"></script>
+    <script src="/static/js/core/theme-controller.js"></script>
+</head>
+
+<body class="protected-page">
+
+    <!-- Global Background -->
+    <div class="global-bg" aria-hidden="true">
+        <div class="bg-layer-base"></div>
+        <div class="bg-layer-overlay"></div>
+        <div class="bg-layer-gradient"></div>
+        <div class="bg-layer-noise"></div>
+        <div class="bg-layer-particles"></div>
+    </div>
+
+    <header class="app-header" role="banner">
+        <div class="header-inner">
+            <a href="/" class="brand" aria-label="Wisaxis Resume Maker Home">
+                <img src="/static/images/brand/logo.png" alt="" class="brand-logo" width="32" height="32">
+                <span class="brand-text">WISAXIS <span>Resume Maker</span></span>
+            </a>
+
+            <div class="header-actions-wrap">
+                <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" type="button">
+                    <svg class="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+
+                <div class="user-dropdown">
+                    <button class="user-dropdown-trigger" id="userDropdownBtn" aria-label="User menu" aria-haspopup="true" aria-expanded="false" type="button">
+                        <span class="user-avatar js-user-avatar">?</span>
+                        <span class="user-name js-user-name">User</span>
+                        <svg class="dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu" id="userDropdownMenu" role="menu" aria-labelledby="userDropdownBtn">
+                        <a href="/dashboard" role="menuitem">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="3" width="7" height="9"></rect>
+                                <rect x="14" y="3" width="7" height="5"></rect>
+                                <rect x="14" y="12" width="7" height="9"></rect>
+                                <rect x="3" y="16" width="7" height="5"></rect>
+                            </svg>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="/chat" role="menuitem">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            <span>AI Chat Assistant</span>
+                        </a>
+                        <a href="/json" role="menuitem">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <span>JSON Format</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/logout" class="dropdown-logout" role="menuitem">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="profileApp" class="profile-container">
+
+        <!-- PROFILE HERO - COMPACT IDENTITY -->
+        <div class="profile-hero adaptive-card fade-up">
+            <div class="profile-avatar" aria-hidden="true">
+                {{ userInitials }}
+            </div>
+            <div class="profile-meta">
+                <h1 class="profile-name">{{ user.name }}</h1>
+                <p class="profile-email">{{ user.email }}</p>
+            </div>
+            <div class="profile-stat">
+                <span class="stat-value">{{ totalResumes }}</span>
+                <span class="stat-label">Resumes</span>
+            </div>
+        </div>
+
+        <!-- RESUME HISTORY -->
+        <div class="history-section">
+            <div class="section-header">
+                <h2>Your Resume History</h2>
+            </div>
+
+            <!-- Loader State -->
+            <div v-if="isLoading" style="text-align: center; padding: 3rem;">
+                <span class="spinner" style="width:32px;height:32px;border:3px solid var(--border-strong);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite;display:inline-block;"></span>
+                <p style="margin-top: 1rem; color: var(--text-secondary);">Loading resumes...</p>
+            </div>
+
+            <div v-else-if="resumes.length > 0" class="history-grid">
+                <div class="resume-card adaptive-card fade-up" v-for="r in resumes" :key="r.id">
+                    <div class="resume-card-header">
+                        <span class="resume-template-tag">{{ r.template }}</span>
+                        <span class="resume-date">{{ formatDate(r.updated_at) }}</span>
+                    </div>
+                    <h3 class="resume-title">{{ r.title }}</h3>
+                    <p class="resume-subtitle">Professional Resume</p>
+
+                    <!-- SWIPE-ACTION READY 4-COLUMN ACTION GRID -->
+                    <div class="resume-actions" role="group" aria-label="Resume actions">
+                        <a :href="'/resume?id=' + r.id" class="btn-action btn-view" aria-label="View resume">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <span>View</span>
+                        </a>
+                        <a :href="'/dashboard?id=' + r.id" class="btn-action btn-edit" aria-label="Edit resume">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            <span>Edit</span>
+                        </a>
+                        <button type="button" @click="downloadJson(r.id)" class="btn-action btn-dl" aria-label="Download JSON">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            <span>JSON</span>
+                        </button>
+                        <button type="button" @click="deleteResume(r.id)" class="btn-action btn-del" aria-label="Delete resume">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            <span>Delete</span>
+                        </button>
+                    </div>
+
+                    <!-- CLONE TEMPLATE ROW -->
+                    <form @submit.prevent="duplicateResume(r.id, r.selectedTemplate)" class="clone-row">
+                        <select v-model="r.selectedTemplate" aria-label="Select template to duplicate into" required>
+                            <option value="">Switch Template</option>
+                            <option v-for="i in 8" :key="i" :value="'template' + i">Template {{ i }}</option>
+                        </select>
+                        <button type="submit" class="btn-duplicate">Clone</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- EMPTY STATE - ILLUSTRATIVE, ACTIONABLE -->
+            <div v-else class="empty-state adaptive-card fade-up">
+                <div class="empty-illustration">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                </div>
+                <h2 class="empty-title">Start your professional journey</h2>
+                <p class="empty-desc">You haven't generated any resumes yet. Create a stunning document with our guided builder now.</p>
+                <a href="/dashboard" class="cta-primary">
+                    <span>Build My First Resume</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/components/toast.js"></script>
+    <script src="/static/js/core/header-scroll.js"></script>
+    <script src="/static/js/core/global-effects.js"></script>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    user: { name: '', email: '' },
+                    resumes: [],
+                    totalResumes: 0,
+                    isLoading: true
+                }
+            },
+            computed: {
+                userInitials() {
+                    if (!this.user.name) return '?';
+                    const parts = this.user.name.split(' ');
+                    if (parts.length >= 2) {
+                        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+                    }
+                    return parts[0][0].toUpperCase();
+                }
+            },
+            async mounted() {
+                await this.loadData();
+            },
+            methods: {
+                async loadData() {
+                    this.isLoading = true;
+                    try {
+                        const apiBase = window.API_BASE_URL || '';
+                        
+                        // Load profile info
+                        const userRes = await fetch(`${apiBase}/api/me`, { credentials: 'include' });
+                        if (userRes.ok) {
+                            const userData = await userRes.json();
+                            this.user = userData.data;
+                        }
+
+                        // Load resumes
+                        const resumesRes = await fetch(`${apiBase}/api/resumes`, { credentials: 'include' });
+                        if (resumesRes.ok) {
+                            const resumesData = await resumesRes.json();
+                            this.resumes = resumesData.data.map(r => ({ ...r, selectedTemplate: '' }));
+                            this.totalResumes = resumesData.meta.total;
+                        }
+                    } catch (err) {
+                        console.error('Error fetching profile data:', err);
+                        if (window.showToast) window.showToast('Failed to load profile data.', 'error');
+                    } finally {
+                        this.isLoading = false;
+                    }
+                },
+                formatDate(dateStr) {
+                    if (!dateStr) return '—';
+                    try {
+                        const date = new Date(dateStr);
+                        const day = date.getDate();
+                        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                        const month = months[date.getMonth()];
+                        const year = date.getFullYear();
+                        return `${day} ${month} ${year}`;
+                    } catch (e) {
+                        return '—';
+                    }
+                },
+                async downloadJson(resumeId) {
+                    try {
+                        const apiBase = window.API_BASE_URL || '';
+                        const res = await fetch(`${apiBase}/api/resumes/${resumeId}`, { credentials: 'include' });
+                        const data = await res.json();
+                        if (data.success) {
+                            const blob = new Blob([JSON.stringify(data.data, null, 2)], { type: 'application/json' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `resume_${data.data.name.replace(/\s+/g, '_')}.json`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                        }
+                    } catch (err) {
+                        if (window.showToast) window.showToast('Download failed.', 'error');
+                    }
+                },
+                async deleteResume(resumeId) {
+                    if (!confirm('Are you sure you want to delete this resume?')) return;
+                    try {
+                        const apiBase = window.API_BASE_URL || '';
+                        const res = await fetch(`${apiBase}/resume/${resumeId}/delete`, {
+                            method: 'POST',
+                            credentials: 'include'
+                        });
+                        const data = await res.json();
+                        if (data.success) {
+                            if (window.showToast) window.showToast('Resume deleted.', 'info');
+                            await this.loadData();
+                        } else {
+                            if (window.showToast) window.showToast(data.error || 'Failed to delete resume.', 'error');
+                        }
+                    } catch (err) {
+                        if (window.showToast) window.showToast('Network error, please try again.', 'error');
+                    }
+                },
+                async duplicateResume(resumeId, duplicateTemplate) {
+                    if (!duplicateTemplate) return;
+                    try {
+                        const apiBase = window.API_BASE_URL || '';
+                        const fd = new FormData();
+                        fd.append('duplicate_template', duplicateTemplate);
+                        
+                        const res = await fetch(`${apiBase}/resume/${resumeId}/duplicate`, {
+                            method: 'POST',
+                            credentials: 'include',
+                            body: fd
+                        });
+                        const data = await res.json();
+                        if (data.success && data.resume_id) {
+                            if (window.showToast) window.showToast('Resume cloned successfully! 🎉', 'success');
+                            setTimeout(() => {
+                                window.location.href = `/resume?id=${data.resume_id}`;
+                            }, 800);
+                        } else {
+                            if (window.showToast) window.showToast(data.error || 'Failed to clone resume.', 'error');
+                        }
+                    } catch (err) {
+                        if (window.showToast) window.showToast('Network error, please try again.', 'error');
+                    }
+                }
+            }
+        }).mount('#profileApp');
+
+        // Dropdown toggle
+        const dropdownTrigger = document.getElementById('userDropdownBtn');
+        const dropdownContainer = document.querySelector('.user-dropdown');
+        if (dropdownTrigger && dropdownContainer) {
+            dropdownTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isActive = dropdownContainer.classList.toggle('active');
+                dropdownTrigger.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+            });
+            document.addEventListener('click', () => {
+                dropdownContainer.classList.remove('active');
+                dropdownTrigger.setAttribute('aria-expanded', 'false');
+            });
+        }
+    </script>
+</body>
+</html>

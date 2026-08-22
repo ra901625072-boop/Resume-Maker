@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>View Resume | WISAXIS Resume Maker</title>
+    
+    <!-- Anti-flash: apply saved theme BEFORE CSS renders -->
+    <script>(function(){var t=localStorage.getItem('wisaxis-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
+    
+    <!-- 1. Design Tokens (MUST be first) -->
+    <link rel="stylesheet" href="/static/css/base/variables.css">
+    <!-- 2. Reset & Baseline -->
+    <link rel="stylesheet" href="/static/css/base/reset.css">
+    <!-- 3. Body & Theme -->
+    <link rel="stylesheet" href="/static/css/base/theme.css">
+    <!-- 4. Effects & Animations -->
+    <link rel="stylesheet" href="/static/css/base/effects.css">
+    <!-- 5. Components -->
+    <link rel="stylesheet" href="/static/css/components/header.css">
+    <link rel="stylesheet" href="/static/css/components/buttons.css">
+    <link rel="stylesheet" href="/static/css/components/dropdowns.css">
+    <link rel="stylesheet" href="/static/css/components/cards.css">
+    <!-- 4.1 Global Background -->
+    <link rel="stylesheet" href="/static/css/base/background.css">
+    <!-- 6. Layout -->
+    <link rel="stylesheet" href="/static/css/layout/template-layout.css">
+    <!-- 7. Utilities -->
+    <link rel="stylesheet" href="/static/css/utilities/utilities.css">
+
+    <style>
+        @supports not (backdrop-filter: blur(18px)) {
+            .app-header,
+            .header-inner,
+            .dropdown-menu,
+            .download-options {
+                background: rgba(10, 15, 25, 0.98) !important;
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            }
+            body.template-shell {
+                background: #09090f;
+            }
+        }
+    </style>
+
+    <!-- External library dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/core/auth-guard.js"></script>
+</head>
+
+<body
+    id="resumeApp"
+    class="template-shell"
+    :class="'bg-template-' + activeTemplateId"
+    :data-pdf-filename="'resume_' + (resumeData ? resumeData.name.replace(/\s+/g, '_') : 'download') + '.pdf'"
+    :data-print-mode="printMode ? 'true' : 'false'">
+
+    <header class="app-header" role="banner">
+        <div class="header-inner">
+            <a href="/dashboard" class="brand" aria-label="WISAXIS Resume Maker Home">
+                <img src="/static/images/brand/logo.png" alt="WISAXIS Logo" class="brand-logo" />
+                <span class="brand-text">WISAXIS<span>Resume Maker</span></span>
+            </a>
+
+            <div class="header-actions-wrap">
+                <!-- THEME TOGGLE -->
+                <button
+                    id="themeToggleBtn"
+                    class="theme-toggle-btn"
+                    aria-label="Toggle light/dark mode"
+                    title="Toggle theme"
+                    @click="toggleTheme"
+                    :class="{ 'is-light': currentTheme === 'light' }"
+                >
+                    <!-- Moon icon (shown in light mode) -->
+                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                    <!-- Sun icon (shown in dark mode) -->
+                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                </button>
+
+                <!-- USER DROPDOWN: tap logo → Dashboard / Profile / Logout -->
+                <div class="user-dropdown">
+                    <button class="user-dropdown-trigger" id="userDropdownBtn" aria-haspopup="true" aria-expanded="false">
+                        <span class="user-avatar js-user-avatar" aria-hidden="true">?</span>
+                        <span class="user-name js-user-name">User</span>
+                    </button>
+                    <div class="dropdown-menu" id="userDropdownMenu" role="menu" aria-labelledby="userDropdownBtn">
+                        <a href="/dashboard" role="menuitem">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="3" width="7" height="9"></rect>
+                                <rect x="14" y="3" width="7" height="5"></rect>
+                                <rect x="14" y="12" width="7" height="9"></rect>
+                                <rect x="3" y="16" width="7" height="5"></rect>
+                            </svg>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="/profile" role="menuitem">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <span>Profile</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/logout" class="dropdown-logout" role="menuitem">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Global Background -->
+    <div class="global-bg" aria-hidden="true">
+        <div class="bg-layer-base"></div>
+        <div class="bg-layer-overlay"></div>
+        <div class="bg-layer-gradient"></div>
+        <div class="bg-layer-noise"></div>
+        <div class="bg-layer-particles"></div>
+    </div>
+
+    <!-- Template Switcher Carousel -->
+    <nav class="template-scroll" aria-label="Resume template switcher" v-if="resumeData">
+        <div class="template-track" id="template-track">
+            <!-- LOOP SET 1 -->
+            <button
+                v-for="template_number in 8"
+                :key="'t1-' + template_number"
+                v-show="template_number !== activeTemplateId"
+                type="button"
+                class="template-link"
+                :aria-label="'Switch to template ' + template_number"
+                @click="switchTemplate(template_number)"
+                style="background:none;border:none;cursor:pointer;padding:0; width:100%;"
+            >
+                <div :class="'template-thumb thumb-template-' + template_number"></div>
+            </button>
+
+            <!-- LOOP SET 2 (duplicate for infinite scroll loop) -->
+            <button
+                v-for="template_number in 8"
+                :key="'t2-' + template_number"
+                v-show="template_number !== activeTemplateId"
+                type="button"
+                class="template-link"
+                @click="switchTemplate(template_number)"
+                style="background:none;border:none;cursor:pointer;padding:0; width:100%;"
+                aria-hidden="true"
+                tabindex="-1"
+            >
+                <div :class="'template-thumb thumb-template-' + template_number"></div>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Loading indicator -->
+    <div v-if="isLoading" style="text-align: center; padding: 10rem 2rem;">
+        <span class="spinner" style="width:40px;height:40px;border:3px solid var(--border-strong);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite;display:inline-block;"></span>
+        <p style="margin-top: 1.5rem; color: var(--text-secondary);">Compiling resume...</p>
+    </div>
+
+    <!-- Main Container -->
+    <main class="resume-container" v-else-if="resumeData">
+        
+        <!-- ================= TEMPLATE 1 ================= -->
+        <article v-if="activeTemplateId === 1" class="page" data-resume-root>
+            <aside class="sidebar">
+                <div class="photo-wrap">
+                    <img v-if="photoExists" :src="photoUrl" alt="Photo">
+                    <div v-else class="photo-placeholder">{{ initials }}</div>
+                </div>
+                <div class="name-role">
+                    <div class="name">{{ resumeData.name || 'Your Name' }}</div>
+                    <div class="role">{{ resumeData.title || 'Job Title' }}</div>
+                </div>
+                <hr>
+                <section class="side-section contact">
+                    <h3>CONTACT</h3>
+                    <ul class="side-list">
+                        <li v-if="resumeData.phone">{{ resumeData.phone }}</li>
+                        <li v-if="resumeData.email">{{ resumeData.email }}</li>
+                        <li v-if="resumeData.address">{{ resumeData.address }}</li>
+                    </ul>
+                </section>
+                <hr>
+                <section class="side-section skills">
+                    <h3>SKILLS</h3>
+                    <ul class="side-list" v-if="splitSkills(resumeData.skills).length">
+                        <li v-for="s in splitSkills(resumeData.skills)">{{ s }}</li>
+                    </ul>
+                    <p v-else class="muted">No skills</p>
+                </section>
+                <hr>
+                <section class="side-section languages">
+                    <h3>LANGUAGES</h3>
+                    <ul class="side-list" v-if="resumeData.languages && resumeData.languages.length">
+                        <li v-for="l in resumeData.languages">{{ l }}</li>
+                    </ul>
+                    <p v-else class="muted">No languages</p>
+                </section>
+            </aside>
+            <main class="content">
+                <section class="section summary">
+                    <h2>PROFESSIONAL SUMMARY</h2>
+                    <div v-if="resumeData.summary" v-html="resumeData.summary"></div>
+                    <p v-else class="muted">No profile summary</p>
+                </section>
+                <section class="section education">
+                    <h2>EDUCATION</h2>
+                    <div v-if="resumeData.education && resumeData.education.length">
+                        <div class="edu" v-for="ed in resumeData.education" :key="ed.id || ed.degree">
+                            <div v-if="ed.year" class="muted">{{ ed.year }}</div>
+                            <div class="job-title">{{ ed.degree }}</div>
+                            <div class="job-company">{{ ed.university }}</div>
+                        </div>
+                    </div>
+                    <p v-else class="muted">No education provided</p>
+                </section>
+                <section class="section experience">
+                    <h2>EXPERIENCE</h2>
+                    <div v-if="resumeData.experience && resumeData.experience.length">
+                        <div class="job" v-for="exp in resumeData.experience" :key="exp.id || exp.title">
+                            <div class="muted">{{ exp.duration }}</div>
+                            <div class="job-title">{{ exp.title }}</div>
+                            <div class="job-company">{{ exp.company }}</div>
+                            <div v-if="exp.description" class="job-desc" v-html="formatNl2br(exp.description)"></div>
+                        </div>
+                    </div>
+                    <p v-else class="muted">No experience provided</p>
+                </section>
+            </main>
+        </article>
+
+        <!-- ================= TEMPLATE 2 ================= -->
+        <article v-else-if="activeTemplateId === 2" class="page" data-resume-root role="document" aria-label="Resume">
+            <header class="header">
+                <div class="photo">
+                    <img v-if="photoExists" :src="photoUrl" alt="Photo">
+                    <div v-else class="photo-placeholder">{{ initials }}</div>
+                </div>
+                <div class="head-left">
+                    <h1 class="name">{{ resumeData.name || 'Your Name' }}</h1>
+                    <div class="title">{{ resumeData.title || 'Job Title' }}</div>
+                </div>
+            </header>
+            <main class="body">
+                <aside class="sidebar">
+                    <div class="block">
+                        <div class="contact">
+                            <h4>CONTACT</h4>
+                            <div v-if="resumeData.email" class="item">{{ resumeData.email }}</div>
+                            <div v-if="resumeData.phone" class="item">{{ resumeData.phone }}</div>
+                            <div v-if="resumeData.address" class="item" v-html="resumeData.address"></div>
+                        </div>
+                        <h4>SKILLS</h4>
+                        <ul class="list">
+                            <template v-if="splitSkills(resumeData.skills).length">
+                                <li v-for="skill in splitSkills(resumeData.skills)">{{ skill }}</li>
+                            </template>
+                            <li v-else>No skills added</li>
+                        </ul>
+                    </div>
+                </aside>
+                <section class="main">
+                    <div class="section">
+                        <h3>EDUCATION</h3>
+                        <div v-if="resumeData.education && resumeData.education.length">
+                            <div class="education-item" v-for="edu in resumeData.education" :key="edu.degree">
+                                <div class="edu-years">{{ edu.year || '20XX' }}</div>
+                                <div class="edu-body">
+                                    <div class="deg">{{ edu.degree || 'Degree Name' }}</div>
+                                    <div class="inst">{{ edu.university || 'School / University' }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="education-item">
+                            <div class="edu-years">20XX - 20XX</div>
+                            <div class="edu-body">
+                                <div class="deg">Degree Name</div>
+                                <div class="inst">School / University — Location</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h3>EXPERIENCE</h3>
+                        <div v-if="resumeData.experience && resumeData.experience.length">
+                            <div class="exp-item" v-for="exp in resumeData.experience" :key="exp.title">
+                                <div class="exp-years">{{ exp.duration || '20XX - 20XX' }}</div>
+                                <div class="exp-body">
+                                    <div class="role">{{ exp.title || 'Job Title' }}</div>
+                                    <div class="company">{{ exp.company || 'Company Name' }}</div>
+                                    <div v-if="exp.description" v-html="exp.description"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="exp-item">
+                            <div class="exp-years">20XX - 20XX</div>
+                            <div class="exp-body">
+                                <div class="role">Job Title</div>
+                                <div class="company">Company Name — Location</div>
+                                <ul class="list">
+                                    <li>Responsibility or achievement 1</li>
+                                    <li>Responsibility or achievement 2</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h3>PROFILE / ABOUT ME</h3>
+                        <p v-if="resumeData.summary" style="font-size:13px;line-height:1.5;color:#333;" v-html="resumeData.summary"></p>
+                        <p v-else class="muted">No profile summary added</p>
+                    </div>
+                </section>
+            </main>
+            <div class="footer-strip"></div>
+        </article>
+
+        <!-- ================= TEMPLATE 3 ================= -->
+        <div v-else-if="activeTemplateId === 3" class="wrap" data-resume-root>
+            <header class="banner">
+                <img v-if="photoExists" :src="photoUrl" alt="Photo" class="photo">
+                <div v-else class="placeholder-photo">{{ initials }}</div>
+                <div class="name-block">
+                    <h1 class="name">{{ resumeData.name || 'Your Name' }}</h1>
+                    <div class="title">{{ resumeData.title || 'Job Title' }}</div>
+                </div>
+            </header>
+            <div class="content">
+                <aside class="left">
+                    <div class="section contact">
+                        <div class="sec-title">CONTACT</div>
+                        <p v-if="resumeData.email">{{ resumeData.email }}</p>
+                        <p v-if="resumeData.phone">{{ resumeData.phone }}</p>
+                        <p v-if="resumeData.address" v-html="resumeData.address"></p>
+                    </div>
+                    <div class="section" v-if="splitSkills(resumeData.skills).length">
+                        <div class="sec-title">SKILLS</div>
+                        <ul class="skill-list">
+                            <li v-for="skill in splitSkills(resumeData.skills)">{{ skill }}</li>
+                        </ul>
+                    </div>
+                    <div class="section" v-if="resumeData.languages && resumeData.languages.length">
+                        <div class="sec-title">LANGUAGES</div>
+                        <ul class="lang-list">
+                            <li v-for="lang in resumeData.languages">{{ lang }}</li>
+                        </ul>
+                    </div>
+                </aside>
+                <section class="right">
+                    <div class="section summary" v-if="resumeData.summary">
+                        <div class="sec-title">SUMMARY / PROFILE / ABOUT ME</div>
+                        <div v-html="resumeData.summary"></div>
+                    </div>
+                    <div class="section education" v-if="resumeData.education && resumeData.education.length">
+                        <div class="sec-title">EDUCATION</div>
+                        <div class="edu-item" v-for="edu in resumeData.education" :key="edu.degree">
+                            <div class="edu-title">
+                                {{ edu.degree }}
+                                <span v-if="edu.year"> — {{ edu.year }}</span>
+                            </div>
+                            <div v-if="edu.university" class="school">{{ edu.university }}</div>
+                        </div>
+                    </div>
+                    <div class="section experience" v-if="resumeData.experience && resumeData.experience.length">
+                        <div class="sec-title">EXPERIENCE / WORK HISTORY</div>
+                        <article class="exp-item" v-for="exp in resumeData.experience" :key="exp.title">
+                            <div class="exp-title">
+                                {{ exp.title }}
+                                <span v-if="exp.duration"> — {{ exp.duration }}</span>
+                            </div>
+                            <div v-if="exp.company" class="exp-company">{{ exp.company }}</div>
+                            <div v-if="exp.description" class="exp-body" v-html="exp.description"></div>
+                        </article>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- ================= TEMPLATE 4 ================= -->
+        <article v-else-if="activeTemplateId === 4" class="container" data-resume-root role="document" aria-label="Resume">
+            <header class="header-ref">
+                <div class="header-text">
+                    <h1>{{ resumeData.name || 'NAME SURNAME' }}</h1>
+                    <h2 class="job-title">{{ resumeData.title || 'Job Title' }}</h2>
+                    <p v-if="resumeData.summary" class="summary" v-html="resumeData.summary"></p>
+                    <div class="contact-row">
+                        <span v-if="resumeData.email">{{ resumeData.email }}</span>
+                        <span v-if="resumeData.address" v-html="resumeData.address"></span>
+                        <span v-if="resumeData.phone">{{ resumeData.phone }}</span>
+                    </div>
+                </div>
+                <div class="header-photo">
+                    <img v-if="photoExists" :src="photoUrl" alt="Profile photo">
+                    <div v-else class="photo-placeholder">{{ initials }}</div>
+                </div>
+            </header>
+            <hr class="top-divider">
+            
+            <!-- LANGUAGES -->
+            <section class="block" v-if="resumeData.languages && resumeData.languages.length">
+                <div class="label">LANGUAGES</div>
+                <div class="lang-row" v-for="lang in resumeData.languages" :key="lang">
+                    <span>{{ typeof lang === 'object' ? (lang.name || lang) : lang }}</span>
+                    <div class="bar">
+                        <i :style="{ width: (typeof lang === 'object' && lang.level ? lang.level : 70) + '%' }"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EDUCATION -->
+            <section class="block" v-if="resumeData.education && resumeData.education.length">
+                <div class="label">EDUCATION</div>
+                <div class="two-col" v-for="edu in resumeData.education" :key="edu.degree">
+                    <div class="date-col">
+                        {{ edu.year }}<br>
+                        {{ edu.location }}
+                    </div>
+                    <div>
+                        <strong>{{ edu.degree }}</strong><br>
+                        {{ edu.university }}
+                    </div>
+                </div>
+            </section>
+
+            <!-- SKILLS -->
+            <section class="block" v-if="splitSkills(resumeData.skills).length">
+                <div class="label">SKILLS</div>
+                <p>{{ splitSkills(resumeData.skills).join(', ') }}</p>
+            </section>
+
+            <!-- EXPERIENCE -->
+            <section class="block" v-if="resumeData.experience && resumeData.experience.length">
+                <div class="label">PROFESSIONAL EXPERIENCE</div>
+                <div class="job-block" v-for="job in resumeData.experience" :key="job.title">
+                    <div class="two-col">
+                        <div class="date-col">
+                            {{ job.duration }}<br>
+                            {{ job.location }}
+                        </div>
+                        <div>
+                            <strong>{{ job.company }}</strong><br>
+                            <em>{{ job.title }}</em>
+                        </div>
+                    </div>
+                    <ul v-if="job.description" v-html="job.description"></ul>
+                </div>
+            </section>
+        </article>
+
+        <!-- ================= TEMPLATE 5 ================= -->
+        <article v-else-if="activeTemplateId === 5" class="page" data-resume-root>
+            <aside class="sidebar">
+                <div class="photo-wrap">
+                    <img v-if="photoExists" :src="photoUrl" alt="Photo">
+                    <div v-else class="photo-placeholder">{{ initials }}</div>
+                </div>
+                <hr>
+                <section class="side-section contact">
+                    <h3>CONTACT</h3>
+                    <ul class="side-list">
+                        <li v-if="resumeData.phone"><i class="fa-solid fa-phone"></i>{{ resumeData.phone }}</li>
+                        <li v-if="resumeData.email"><i class="fa-solid fa-envelope"></i>{{ resumeData.email }}</li>
+                        <li v-if="resumeData.address"><i class="fa-solid fa-location-dot"></i>{{ resumeData.address }}</li>
+                    </ul>
+                </section>
+                <hr>
+                <section class="side-section skills">
+                    <h3>SKILLS</h3>
+                    <ul class="skill-bars" v-if="splitSkills(resumeData.skills).length">
+                        <li v-for="s in splitSkills(resumeData.skills)" :key="s">
+                            <span>{{ s }}</span>
+                            <div class="bar">
+                                <div class="fill"></div>
+                            </div>
+                        </li>
+                    </ul>
+                    <p v-else class="muted">No skills</p>
+                </section>
+                <hr>
+                <section class="side-section languages">
+                    <h3>LANGUAGES</h3>
+                    <ul class="side-list" v-if="resumeData.languages && resumeData.languages.length">
+                        <li v-for="l in resumeData.languages">{{ l }}</li>
+                    </ul>
+                    <p v-else class="muted">No languages</p>
+                </section>
+            </aside>
+            <main class="content">
+                <div class="header-name-role">
+                    <div class="name">{{ resumeData.name }}</div>
+                    <div class="role">{{ resumeData.title }}</div>
+                    <hr class="header-accent-bar">
+                </div>
+                <section class="section summary">
+                    <h2>PROFESSIONAL SUMMARY</h2>
+                    <div v-if="resumeData.summary" v-html="resumeData.summary"></div>
+                    <p v-else class="muted">No profile summary</p>
+                </section>
+                <section class="section experience">
+                    <h2>EXPERIENCE</h2>
+                    <div v-if="resumeData.experience && resumeData.experience.length">
+                        <div class="job" v-for="exp in resumeData.experience" :key="exp.title">
+                            <div class="job-title">{{ exp.title }}</div>
+                            <div class="job-company">{{ exp.company }}</div>
+                            <div class="muted">{{ exp.duration }}</div>
+                            <div v-if="exp.description" class="job-desc" v-html="formatNl2br(exp.description)"></div>
+                        </div>
+                    </div>
+                    <p v-else class="muted">No experience provided</p>
+                </section>
+                <section class="section education">
+                    <h2>EDUCATION</h2>
+                    <div v-if="resumeData.education && resumeData.education.length">
+                        <div class="edu" v-for="ed in resumeData.education" :key="ed.degree">
+                            <div class="job-title">{{ ed.degree }}</div>
+                            <div class="job-company">{{ ed.university }}</div>
+                            <div v-if="ed.year" class="muted">{{ ed.year }}</div>
+                        </div>
+                    </div>
+                    <p v-else class="muted">No education provided</p>
+                </section>
+            </main>
+        </article>
+
+        <!-- ================= TEMPLATE 6 ================= -->
+        <article v-else-if="activeTemplateId === 6" class="page" data-resume-root>
+            <header class="sidebar">
+                <div class="sidebar-inner">
+                    <div class="name-role">
+                        <div class="name">{{ resumeData.name }}</div>
+                        <div class="role">{{ resumeData.title }}</div>
+                    </div>
+                    <section class="side-section">
+                        <h3>CONTACT</h3>
+                        <ul class="side-list">
+                            <li v-if="resumeData.phone">{{ resumeData.phone }}</li>
+                            <li v-if="resumeData.email">{{ resumeData.email }}</li>
+                            <li v-if="resumeData.address">{{ resumeData.address }}</li>
+                        </ul>
+                    </section>
+                </div>
+                <div class="header-photo">
+                    <img v-if="photoExists" :src="photoUrl" alt="Profile Photo">
+                    <div v-else class="photo-placeholder">{{ initials }}</div>
+                </div>
+            </header>
+            <main class="content">
+                <div class="left-column">
+                    <section class="section">
+                        <h2>PROFESSIONAL PROFILE</h2>
+                        <div v-if="resumeData.summary" class="section-block" v-html="resumeData.summary"></div>
+                        <p v-else class="muted">No profile summary</p>
+                    </section>
+                    <section class="section">
+                        <h2>WORK EXPERIENCE</h2>
+                        <div v-if="resumeData.experience && resumeData.experience.length">
+                            <div class="section-block" v-for="exp in resumeData.experience" :key="exp.title">
+                                <div class="job-title">{{ exp.title }}</div>
+                                <div class="job-company">{{ exp.company }}</div>
+                                <div class="job-meta">{{ exp.duration }}</div>
+                                <div v-if="exp.description" class="job-desc" v-html="formatNl2br(exp.description)"></div>
+                            </div>
+                        </div>
+                        <p v-else class="muted">No experience provided</p>
+                    </section>
+                </div>
+                <div class="right-column">
+                    <section class="section">
+                        <h2>EDUCATION</h2>
+                        <div v-if="resumeData.education && resumeData.education.length">
+                            <div class="section-block" v-for="ed in resumeData.education" :key="ed.degree">
+                                <div class="job-title">{{ ed.degree }}</div>
+                                <div class="job-company">{{ ed.university }}</div>
+                                <div v-if="ed.year" class="job-meta">{{ ed.year }}</div>
+                            </div>
+                        </div>
+                        <p v-else class="muted">No education provided</p>
+                    </section>
+                    <section class="section">
+                        <h2>SKILLS</h2>
+                        <ul v-if="splitSkills(resumeData.skills).length">
+                            <li v-for="s in splitSkills(resumeData.skills)">{{ s }}</li>
+                        </ul>
+                        <p v-else class="muted">No skills listed</p>
+                    </section>
+                    <section class="section">
+                        <h2>LANGUAGES</h2>
+                        <ul v-if="resumeData.languages && resumeData.languages.length">
+                            <li v-for="l in resumeData.languages">{{ l }}</li>
+                        </ul>
+                        <p v-else class="muted">No languages listed</p>
+                    </section>
+                </div>
+            </main>
+        </article>
+
+        <!-- ================= TEMPLATE 7 ================= -->
+        <article v-else-if="activeTemplateId === 7" class="page" data-resume-root>
+            <aside class="sidebar">
+                <div class="photo-wrap">
+                    <img v-if="photoExists" :src="photoUrl" alt="Photo">
+                    <div v-else class="photo-placeholder">{{ initials }}</div>
+                </div>
+                <section class="side-section contact">
+                    <h3>CONTACT</h3>
+                    <ul class="side-list">
+                        <li v-if="resumeData.phone">{{ resumeData.phone }}</li>
+                        <li v-if="resumeData.email">{{ resumeData.email }}</li>
+                        <li v-if="resumeData.address">{{ resumeData.address }}</li>
+                    </ul>
+                </section>
+                <hr>
+                <section class="side-section skills">
+                    <h3>SKILLS</h3>
+                    <ul class="side-list" v-if="splitSkills(resumeData.skills).length">
+                        <li v-for="s in splitSkills(resumeData.skills)">{{ s }}</li>
+                    </ul>
+                    <p v-else class="muted">No skills</p>
+                </section>
+                <hr>
+                <section class="side-section languages">
+                    <h3>LANGUAGES</h3>
+                    <ul class="side-list" v-if="resumeData.languages && resumeData.languages.length">
+                        <li v-for="l in resumeData.languages">
+                            <span>{{ l }}</span>
+                            <div class="lang-bar">
+                                <div class="lang-level" style="width: 70%"></div>
+                            </div>
+                        </li>
+                    </ul>
+                    <p v-else class="muted">No languages</p>
+                </section>
+            </aside>
+            <main class="content">
+                <div class="header-strip">
+                    <div class="name-banner">
+                        <div class="name">{{ resumeData.name }}</div>
+                        <div class="role">{{ resumeData.title }}</div>
+                    </div>
+                </div>
+                <section class="section summary">
+                    <h2>PROFESSIONAL SUMMARY</h2>
+                    <div v-if="resumeData.summary" v-html="resumeData.summary"></div>
+                    <p v-else class="muted">No profile summary</p>
+                </section>
+                <section class="section education">
+                    <h2>EDUCATION</h2>
+                    <div v-if="resumeData.education && resumeData.education.length">
+                        <div class="edu" v-for="ed in resumeData.education" :key="ed.degree">
+                            <div class="job-title">{{ ed.degree }}</div>
+                            <div class="job-company">{{ ed.university }}</div>
+                            <div v-if="ed.year" class="muted">{{ ed.year }}</div>
+                        </div>
+                    </div>
+                    <p v-else class="muted">No education provided</p>
+                </section>
+                <section class="section experience">
+                    <h2>EXPERIENCE</h2>
+                    <div v-if="resumeData.experience && resumeData.experience.length">
+                        <div class="job" v-for="exp in resumeData.experience" :key="exp.title">
+                            <div class="job-title">{{ exp.title }}</div>
+                            <div class="job-company">{{ exp.company }}</div>
+                            <div class="muted">{{ exp.duration }}</div>
+                            <div v-if="exp.description" v-html="formatNl2br(exp.description)"></div>
+                        </div>
+                    </div>
+                    <p v-else class="muted">No experience provided</p>
+                </section>
+            </main>
+        </article>
+
+        <!-- ================= TEMPLATE 8 ================= -->
+        <main v-else-if="activeTemplateId === 8" class="resume" data-resume-root>
+            <header class="header">
+                <div class="header-left">
+                    <h1>{{ resumeData.name }}</h1>
+                    <p>{{ resumeData.title }}</p>
+                    <div class="contact">
+                        <span v-if="resumeData.address">{{ resumeData.address }}</span>
+                        <span v-if="resumeData.phone">{{ resumeData.phone }}</span>
+                        <span v-if="resumeData.email">{{ resumeData.email }}</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <img v-if="photoExists" :src="photoUrl" alt="Photo">
+                    <div v-else class="photo-placeholder">{{ initials }}</div>
+                </div>
+            </header>
+            <section class="grid">
+                <div class="left">
+                    <div class="section" v-if="resumeData.summary">
+                        <div class="section-title">Resume Summary</div>
+                        <div v-html="resumeData.summary"></div>
+                    </div>
+                    <div class="section" v-if="resumeData.experience && resumeData.experience.length">
+                        <div class="section-title">Work Experience</div>
+                        <div class="item" v-for="exp in resumeData.experience" :key="exp.title">
+                            <span v-if="exp.duration" class="date">{{ exp.duration }}</span>
+                            <h3>{{ exp.title }}</h3>
+                            <strong>{{ exp.company }}</strong>
+                            <p v-if="exp.description" v-html="formatNl2br(exp.description)"></p>
+                        </div>
+                    </div>
+                    <div class="section" v-if="resumeData.education && resumeData.education.length">
+                        <div class="section-title">Education</div>
+                        <div class="item" v-for="ed in resumeData.education" :key="ed.degree">
+                            <span v-if="ed.year" class="date">{{ ed.year }}</span>
+                            <h3>{{ ed.degree }}</h3>
+                            <strong>{{ ed.university }}</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="section" v-if="splitSkills(resumeData.skills).length">
+                        <div class="section-title">Skills</div>
+                        <div class="skill" v-for="s in splitSkills(resumeData.skills)" :key="s" style="--level: 85%">
+                            <span>{{ s }}</span>
+                            <div class="bar">
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section" v-if="resumeData.strengths && resumeData.strengths.length">
+                        <div class="section-title">Core Strengths</div>
+                        <div class="circles">
+                            <div class="circle" v-for="c in resumeData.strengths" :key="c.name">
+                                <strong>{{ c.value }}</strong>
+                                <span>{{ c.name }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section" v-if="resumeData.references">
+                        <div class="section-title">References</div>
+                        <p>{{ resumeData.references }}</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+    </main>
+
+    <!-- Download/Export toolbar -->
+    <div class="resume-actions" data-shell-control v-if="resumeData">
+        <div class="download-menu" :class="{ active: isDownloadMenuOpen }" data-shell-control>
+            <button class="download-btn" id="downloadBtn" type="button" @click="toggleDownloadMenu" aria-haspopup="true" :aria-expanded="isDownloadMenuOpen">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span class="btn-text" v-if="!isExporting">Download</span>
+                <span class="btn-loader" v-else aria-hidden="true">
+                    <svg class="spin-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                    </svg>
+                    Exporting...
+                </span>
+            </button>
+            <div class="download-options">
+                <button type="button" class="option" @click="exportPdf">PDF</button>
+                <button type="button" class="option" @click="exportDoc">DOC</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/core/global-effects.js"></script>
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    resumeData: null,
+                    isLoading: true,
+                    activeTemplateId: 1,
+                    printMode: false,
+                    isDownloadMenuOpen: false,
+                    isExporting: false,
+                    currentTheme: localStorage.getItem('wisaxis-theme') || 'dark'
+                }
+            },
+            computed: {
+                photoUrl() {
+                    if (!this.resumeData || !this.resumeData.photo_url) return '';
+                    const url = this.resumeData.photo_url;
+                    return url.startsWith('http') || url.startsWith('/') ? url : (window.API_BASE_URL || '') + url;
+                },
+                photoExists() {
+                    return !!(this.resumeData && this.resumeData.photo_url && this.resumeData.photo_url.trim());
+                },
+                initials() {
+                    if (!this.resumeData || !this.resumeData.name) return '?';
+                    const parts = this.resumeData.name.trim().split(/\s+/);
+                    if (parts.length >= 2) {
+                        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+                    }
+                    return parts[0][0].toUpperCase();
+                }
+            },
+            watch: {
+                activeTemplateId(newId) {
+                    this.loadTemplateStyles(newId);
+                }
+            },
+            async mounted() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const resumeId = urlParams.get('id');
+                if (!resumeId) {
+                    window.location.href = '/dashboard';
+                    return;
+                }
+
+                try {
+                    const apiBase = window.API_BASE_URL || '';
+                    const res = await fetch(`${apiBase}/api/resumes/${resumeId}`, {
+                        credentials: 'include'
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.success && data.data) {
+                            this.resumeData = data.data;
+                            if (this.resumeData.template) {
+                                this.activeTemplateId = parseInt(this.resumeData.template.replace('template', '')) || 1;
+                            }
+                            this.loadTemplateStyles(this.activeTemplateId);
+                        } else {
+                            window.location.href = '/dashboard';
+                        }
+                    } else {
+                        window.location.href = '/dashboard';
+                    }
+                } catch (err) {
+                    console.error('Error fetching resume details:', err);
+                    window.location.href = '/dashboard';
+                } finally {
+                    this.isLoading = false;
+                }
+
+                // Close dropdown on click outside
+                document.addEventListener('click', (e) => {
+                    const menu = document.querySelector('.download-menu');
+                    if (menu && !menu.contains(e.target)) {
+                        this.isDownloadMenuOpen = false;
+                    }
+                });
+            },
+            methods: {
+                loadTemplateStyles(id) {
+                    const existing = document.querySelectorAll('link[data-template-style]');
+                    existing.forEach(el => el.remove());
+
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = `/static/css/resumes/desktop/template${id}.css`;
+                    link.setAttribute('data-template-style', 'true');
+                    document.head.appendChild(link);
+
+                    const linkMobile = document.createElement('link');
+                    linkMobile.rel = 'stylesheet';
+                    linkMobile.media = 'screen and (max-width: 500px)';
+                    linkMobile.href = `/static/css/resumes/mobile/template${id}.css`;
+                    linkMobile.setAttribute('data-template-style', 'true');
+                    document.head.appendChild(linkMobile);
+                },
+                splitSkills(skillsStr) {
+                    if (!skillsStr) return [];
+                    return skillsStr.split(',').map(s => s.trim()).filter(s => s);
+                },
+                formatNl2br(val) {
+                    if (!val) return '';
+                    return val.replace(/\n/g, '<br>');
+                },
+                toggleTheme() {
+                    const html = document.documentElement;
+                    const nextTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+                    html.setAttribute('data-theme', nextTheme);
+                    localStorage.setItem('wisaxis-theme', nextTheme);
+                    this.currentTheme = nextTheme;
+                },
+                toggleDownloadMenu(e) {
+                    e.stopPropagation();
+                    this.isDownloadMenuOpen = !this.isDownloadMenuOpen;
+                },
+                async switchTemplate(templateNum) {
+                    this.activeTemplateId = templateNum;
+                    const resumeId = this.resumeData.id;
+                    try {
+                        const apiBase = window.API_BASE_URL || '';
+                        const fd = new FormData();
+                        fd.append('template', 'template' + templateNum);
+
+                        await fetch(`${apiBase}/resume/${resumeId}/switch-template`, {
+                            method: 'POST',
+                            credentials: 'include',
+                            body: fd
+                        });
+                    } catch (err) {
+                        console.error('Failed to update template backend:', err);
+                    }
+                },
+                async exportPdf() {
+                    this.isDownloadMenuOpen = false;
+                    this.isExporting = true;
+                    try {
+                        const element = document.querySelector('.resume-container');
+                        const opt = {
+                            margin: 0,
+                            filename: `resume_${this.resumeData.name.replace(/\s+/g, '_')}.pdf`,
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 2, useCORS: true, logging: false },
+                            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                        };
+                        await html2pdf().set(opt).from(element).save();
+                    } catch (err) {
+                        console.error('PDF Export failed:', err);
+                        alert('PDF export failed. Please try again.');
+                    } finally {
+                        this.isExporting = false;
+                    }
+                },
+                async exportDoc() {
+                    this.isDownloadMenuOpen = false;
+                    const resumeId = this.resumeData.id;
+                    try {
+                        const apiBase = window.API_BASE_URL || '';
+                        const res = await fetch(`${apiBase}/resume/${resumeId}/download-doc`, {
+                            credentials: 'include'
+                        });
+                        if (res.ok) {
+                            const blob = await res.blob();
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `resume_${this.resumeData.name.replace(/\s+/g, '_')}.txt`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                        } else {
+                            alert('Failed to download DOC file.');
+                        }
+                    } catch (err) {
+                        console.error('DOC Download failed:', err);
+                        alert('DOC download failed. Please try again.');
+                    }
+                }
+            }
+        }).mount('#resumeApp');
+
+        // Dropdown menu toggle
+        (function() {
+            const btn = document.getElementById("userDropdownBtn");
+            const dropdown = document.querySelector(".user-dropdown");
+            if (btn && dropdown) {
+                btn.addEventListener("click", function(e) {
+                    e.stopPropagation();
+                    const isActive = dropdown.classList.toggle("active");
+                    btn.setAttribute("aria-expanded", isActive ? "true" : "false");
+                });
+                document.addEventListener("click", function() {
+                    dropdown.classList.remove("active");
+                    btn.setAttribute("aria-expanded", "false");
+                });
+                document.addEventListener("keydown", function(e) {
+                    if (e.key === "Escape" && dropdown.classList.contains("active")) {
+                        dropdown.classList.remove("active");
+                        btn.setAttribute("aria-expanded", "false");
+                        btn.focus();
+                    }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+databases:
+  - name: wisaxis-db
+    plan: free
+    databaseName: wisaxis
+    user: wisaxis_user
+
+services:
+  - type: web
+    name: wisaxis-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn "backend:create_app()" --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PYTHON_VERSION
+        value: "3.12.3"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: wisaxis-db
+          property: connectionURI
+      - key: CORS_ORIGINS
+        value: "https://your-vercel-app.vercel.app"
+      - key: SESSION_COOKIE_SAMESITE
+        value: "None"
+      - key: REMEMBER_COOKIE_SAMESITE
+        value: "None"
+      - key: OPENROUTER_API_KEY
+        sync: false

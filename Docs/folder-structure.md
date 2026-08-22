@@ -33,7 +33,12 @@ backend/
 ├── extensions.py               # Instantiates extensions (SQLAlchemy, LoginManager, Limiter) without app context.
 │
 ├── models/                     # Database Layer
-│   └── __init__.py             # Defines all SQLAlchemy classes (User, Resume, Experience, etc.) and relationships.
+│   ├── __init__.py             # Exposes all modular models for backward-compatibility.
+│   ├── user.py                 # User & UserSettings models.
+│   ├── resume.py               # Resume, Experience, Education, and ResumeVersion models.
+│   ├── export_history.py       # ExportHistory model.
+│   ├── ai_history.py           # AIHistory model.
+│   └── template.py             # Template model and seeding logic.
 │
 ├── routes/                     # API and Routing Layer (Blueprints)
 │   ├── __init__.py
@@ -61,7 +66,6 @@ The frontend combines server-side rendered (SSR) Jinja2 templates with client-si
 frontend/
 ├── templates/                  # Jinja2 HTML Templates
 │   ├── home.html               # Landing page
-│   ├── index.html              # The Vue.js Resume Builder Wizard page
 │   ├── login.html & signup.html# Authentication views
 │   ├── profile.html            # User dashboard showing resume history
 │   ├── chat.html               # Dedicated AI assistant chat interface
@@ -74,27 +78,27 @@ frontend/
 │       ├── template_switcher.html # The horizontal template selection strip
 │       └── global_bg.html      # The mesh gradient background elements
 │
-├── static/                     # Publicly served assets (/static/...)
-│   ├── css/                    # Modular CSS Architecture
-│   │   ├── 00-variables.css    # Design tokens (colors, spacing, typography)
-│   │   ├── 01-reset.css        # Browser normalization
-│   │   ├── 02-theme.css        # Dark/light mode variables and body styles
-│   │   ├── 03-global-effects.css # Keyframe animations and glassmorphism
-│   │   ├── 04-global-background.css # Background layer styles
-│   │   ├── 05-components/      # Isolated component styles (buttons.css, header.css, etc.)
-│   │   ├── 06-layout/          # Structural layout styles
-│   │   ├── 07-pages/           # Page-specific styles (auth.css, home.css)
-│   │   └── 09-utilities.css    # Helper classes and print-mode specific CSS
-│   │
-│   ├── images/                 # Template preview thumbnails and logos
-│   └── fonts/                  # Locally hosted fonts
-│
-└── js/                         # Client-side JavaScript
-    ├── wizard-vue.js           # Core Vue 3 application logic managing the resume builder state
-    ├── toast.js                # Custom toast notification system
-    ├── theme-controller.js     # Manages the dark/light mode toggle and localStorage
-    ├── carousel.js             # Logic for the landing page template carousel
-    └── ...                     # Other interaction scripts
+└── static/                     # Publicly served assets (/static/...)
+    ├── css/                    # Modular CSS Architecture
+    │   ├── 00-variables.css    # Design tokens (colors, spacing, typography)
+    │   ├── 01-reset.css        # Browser normalization
+    │   ├── 02-theme.css        # Dark/light mode variables and body styles
+    │   ├── 03-global-effects.css # Keyframe animations and glassmorphism
+    │   ├── 04-global-background.css # Background layer styles
+    │   ├── 05-components/      # Isolated component styles (buttons.css, header.css, etc.)
+    │   ├── 06-layout/          # Structural layout styles
+    │   ├── 07-pages/           # Page-specific styles (auth.css, home.css)
+    │   └── 09-utilities.css    # Helper classes and print-mode specific CSS
+    │
+    ├── images/                 # Template preview thumbnails and logos
+    ├── fonts/                  # Locally hosted fonts (empty, reserved)
+    │
+    └── js/                     # Client-side JavaScript
+        ├── wizard-vue.js       # Core Vue 3 application logic managing the resume builder state
+        ├── toast.js            # Custom toast notification system
+        ├── theme-controller.js # Manages the dark/light mode toggle and localStorage
+        ├── carousel.js         # Logic for the landing page template carousel
+        └── ...                 # Other interaction scripts
 ```
 
 ### Architecture Rule: CSS Organization

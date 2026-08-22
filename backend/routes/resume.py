@@ -19,7 +19,7 @@ import os
 import uuid
 
 from flask import (Blueprint, abort, current_app, flash, jsonify,
-                   redirect, render_template, request, url_for)
+                   redirect, request, url_for)
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
@@ -167,20 +167,17 @@ def generate():
 @login_required
 def view_resume(resume_id: int):
     """
-    Render the selected template with the resume data.
-    Maps Resume.template ("template1") → Jinja template file ("template1.html").
+    Return resume data as JSON.
+    The frontend renders resumes client-side via resume.html.
     """
     resume = Resume.query.filter_by(
         id=resume_id, user_id=current_user.id, is_deleted=False
     ).first_or_404()
 
     data = resume.to_dict()
-
-    # Compute helper variables used by all resume templates
-    photo_url   = resume.photo_url or ""
+    photo_url = resume.photo_url or ""
     photo_exists = bool(photo_url and photo_url.strip())
 
-    # Build initials from name (e.g. "John Doe" → "JD")
     name_parts = (resume.name or "").split()
     if len(name_parts) >= 2:
         initials = (name_parts[0][0] + name_parts[-1][0]).upper()
@@ -189,22 +186,13 @@ def view_resume(resume_id: int):
     else:
         initials = "?"
 
-    return render_template(
-        f"{resume.template}.html",
-        **data,
-        data=data,
-        user=current_user,
-        resume_id=resume.id,
-        template_id=resume.template.replace("template", ""),
-        print_mode=False,
-        photo_exists=photo_exists,
-        initials=initials,
-    )
+    data["photo_exists"] = photo_exists
+    data["initials"] = initials
+    data["template_id"] = resume.template.replace("template", "")
+
+    return jsonify({"success": True, "resume": data})
 
 
-# ────────────────────────────────────────────────────────────────────────────
-# Template Switch  (from template_switcher.html partial)
-# ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/<int:resume_id>/switch-template", methods=["POST"])
 @login_required
 def switch_template(resume_id: int):
@@ -213,12 +201,21 @@ def switch_template(resume_id: int):
         id=resume_id, user_id=current_user.id, is_deleted=False
     ).first_or_404()
 
-    new_template = request.form.get("template", resume.template)
+    # Extract template from JSON payload or form data
+    if request.is_json:
+        body = request.get_json(silent=True) or {}
+        new_template = body.get("template", resume.template)
+    else:
+        new_template = request.form.get("template", resume.template)
+
     if new_template in VALID_TEMPLATES:
         _snapshot_resume(resume)
         resume.template  = new_template
         resume.version  += 1
         db.session.commit()
+
+    if request.is_json or request.headers.get("Accept") == "application/json" or request.headers.get("Origin"):
+        return jsonify({"success": True, "message": "Template updated successfully."})
 
     return redirect(url_for("resume.view_resume", resume_id=resume.id))
 
@@ -299,6 +296,10 @@ def delete_resume(resume_id: int):
 
     resume.is_deleted = True
     db.session.commit()
+
+    if request.is_json or request.headers.get("Accept") == "application/json" or request.headers.get("Origin"):
+        return jsonify({"success": True, "message": "Resume deleted."})
+
     flash("Resume deleted.", "info")
     return redirect(url_for("main.profile"))
 
@@ -317,8 +318,15 @@ def duplicate_resume(resume_id: int):
         id=resume_id, user_id=current_user.id, is_deleted=False
     ).first_or_404()
 
-    new_template = request.form.get("duplicate_template", "template1")
+    if request.is_json:
+        body = request.get_json(silent=True) or {}
+        new_template = body.get("duplicate_template", "template1")
+    else:
+        new_template = request.form.get("duplicate_template", "template1")
+
     if new_template not in VALID_TEMPLATES:
+        if request.is_json or request.headers.get("Accept") == "application/json" or request.headers.get("Origin"):
+            return jsonify({"success": False, "error": "Invalid template selected."}), 422
         flash("Invalid template selected.", "error")
         return redirect(url_for("main.profile"))
 
@@ -361,12 +369,22 @@ def duplicate_resume(resume_id: int):
             ))
 
         db.session.commit()
+
+        if request.is_json or request.headers.get("Accept") == "application/json" or request.headers.get("Origin"):
+            return jsonify({
+                "success": True,
+                "message": f"Resume cloned with {new_template.title()} template! ✅",
+                "redirect": f"/resume?id={clone.id}"
+            })
+
         flash(f"Resume cloned with {new_template.title()} template! ✅", "success")
         return redirect(url_for("resume.view_resume", resume_id=clone.id))
 
     except Exception:
         db.session.rollback()
         current_app.logger.exception("Error duplicating resume")
+        if request.is_json or request.headers.get("Accept") == "application/json" or request.headers.get("Origin"):
+            return jsonify({"success": False, "error": "Could not duplicate resume. Please try again."}), 500
         flash("Could not duplicate resume. Please try again.", "error")
         return redirect(url_for("main.profile"))
 

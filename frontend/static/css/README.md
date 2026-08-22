@@ -1,37 +1,50 @@
 # WISAXIS CSS Architecture
 
+This folder contains the styling system for the WISAXIS Resume Maker. The architecture follows a modular, mobile-first design token-driven system.
+
 ## File Organization
 
 ```
 static/css/
-├── 00-variables.css          ← ALL design tokens (colors, spacing, z-index, etc.)
-├── 01-reset.css              ← Normalize & baseline reset
-├── 02-theme.css              ← Body, dark/light theme toggle, template-shell
-├── 03-global-effects.css     ← Keyframes, animations, cards, touch feedback
-├── 04-global-background.css  ← Unified global background layer system
+├── base/                     ← Core baseline tokens and structural foundations
+│   ├── variables.css         ← ALL design tokens (colors, spacing, z-index, typography, HSL values)
+│   ├── reset.css             ← Reset and normalize browser styling baselines
+│   ├── theme.css             ← Core theme (body styling, dark/light theme, toggle shell)
+│   ├── effects.css           ← Global keyframes, hover animations, shadow levels, transitions
+│   └── background.css        ← Unified background grid patterns and gradient layer effects
 │
-├── 05-components/            ← Component-level styles (no media queries for layout)
-│   ├── header.css            ← .app-header, .brand, .user-dropdown (mobile-first)
-│   ├── footer.css            ← .app-footer, .footer-top, .footer-links
-│   ├── buttons.css           ← .btn, .btn-primary, .cta-primary, .download-btn
-│   ├── dropdowns.css         ← .download-menu, .download-options
-│   ├── cards.css             ← .template-card, .template-thumb, .carousel-dots
-│   └── modals.css            ← .toast-container, .toast (success/error)
+├── components/               ← Component-level styles (self-contained, reusable, no layout-level constraints)
+│   ├── header.css            ← Navbar, logo branding, and user dropdown elements
+│   ├── footer.css            ← Footers and social links
+│   ├── buttons.css           ← Buttons, pill styling, CTAs, loading states
+│   ├── dropdowns.css         ← Selection menus and download dropdowns
+│   ├── cards.css             ← Resume cards, preview thumbnails, and hover grids
+│   └── modals.css            ← Notifications, alerts, popups, and toast messages
 │
-├── 06-layout/                ← Structural/layout-level styles
-│   └── template-layout.css      ← Template shell body, sidebar, resume container, actions
+├── layout/                   ← Structural/layout-level systems
+│   └── template-layout.css   ← Grid shells, sidebars, print sheet containers, toolbar layouts
 │
-├── 07-pages/                 ← Page-specific styles
-│   ├── home.css              ← Hero, carousel, info section (mobile-first)
-│   └── template.css          ← Wizard progress, bottom toolbar
+├── pages/                    ← Page-specific layout structures
+│   ├── auth.css              ← Login & signup screen layouts
+│   ├── home.css              ← Hero sections, template carousels, and landing grids
+│   ├── template.css          ← Wizard steps, inputs, and form controls
+│   ├── chat-desktop.css      ← Desktop-specific layout for AI assistant page
+│   ├── chat-mobile.css       ← Mobile-specific layout for AI assistant page
+│   ├── dashboard-desktop.css ← Desktop-specific wizard UI
+│   ├── dashboard-mobile.css  ← Mobile-specific wizard UI
+│   ├── profile-desktop.css   ← Desktop history / profile UI
+│   └── profile-mobile.css    ← Mobile history / profile UI
 │
-└── 09-utilities.css          ← Utility classes, print mode, A4 helpers
+├── resumes/                  ← Resume templates styling sheets
+│   ├── desktop/              ← Desktop layouts for templates 1–8
+│   │   ├── template1.css ... template8.css
+│   │
+│   └── mobile/               ← Mobile-optimized layouts for templates 1–8
+│       ├── template1.css ... template8.css
+│
+└── utilities/                ← Utility helper classes
+    └── utilities.css         ← Margin/padding helpers, print helpers, A4 page size handlers
 ```
-
-> **Legacy files** in `desktop/`, `mobile/`, `base/`, and `shared/` directories are
-> kept intact for backward compatibility during migration. Only `home.html`,
-> `template_background.html`, and `index.html` have been updated to use the new
-> architecture. Other pages (profile, chat, login, etc.) still use the old files.
 
 ---
 
@@ -40,37 +53,28 @@ static/css/
 Load stylesheets in this exact order:
 
 ```html
-<!-- 1. Variables (MUST be first — everything depends on these) -->
-<link rel="stylesheet" href="/css/00-variables.css">
+<!-- 1. Base files (MUST be first) -->
+<link rel="stylesheet" href="/static/css/base/variables.css">
+<link rel="stylesheet" href="/static/css/base/reset.css">
+<link rel="stylesheet" href="/static/css/base/theme.css">
+<link rel="stylesheet" href="/static/css/base/effects.css">
+<link rel="stylesheet" href="/static/css/base/background.css">
 
-<!-- 2. Reset -->
-<link rel="stylesheet" href="/css/01-reset.css">
+<!-- 2. Components (order within components doesn't matter) -->
+<link rel="stylesheet" href="/static/css/components/header.css">
+<link rel="stylesheet" href="/static/css/components/buttons.css">
+<link rel="stylesheet" href="/static/css/components/cards.css">
+<link rel="stylesheet" href="/static/css/components/dropdowns.css">
+<link rel="stylesheet" href="/static/css/components/modals.css">
 
-<!-- 3. Theme (body + toggle) -->
-<link rel="stylesheet" href="/css/02-theme.css">
+<!-- 3. Layout (only for layout containers) -->
+<link rel="stylesheet" href="/static/css/layout/template-layout.css">
 
-<!-- 4. Animations -->
-<link rel="stylesheet" href="/css/03-global-effects.css">
+<!-- 4. Page-Specific / Legacy -->
+<link rel="stylesheet" href="/static/css/pages/home.css">
 
-<!-- 4.1 Global Background -->
-<link rel="stylesheet" href="/css/04-global-background.css">
-
-<!-- 5. Components (order within doesn't matter) -->
-<link rel="stylesheet" href="/css/05-components/header.css">
-<link rel="stylesheet" href="/css/05-components/footer.css">
-<link rel="stylesheet" href="/css/05-components/buttons.css">
-<link rel="stylesheet" href="/css/05-components/dropdowns.css">
-<link rel="stylesheet" href="/css/05-components/cards.css">
-<link rel="stylesheet" href="/css/05-components/modals.css">
-
-<!-- 6. Layout (only for template editor pages) -->
-<link rel="stylesheet" href="/css/06-layout/template-layout.css">
-
-<!-- 7. Page-specific -->
-<link rel="stylesheet" href="/css/07-pages/home.css">  <!-- or template.css -->
-
-<!-- 8. Utilities (always last) -->
-<link rel="stylesheet" href="/css/09-utilities.css">
+<!-- 5. Utilities (always last) -->
+<link rel="stylesheet" href="/static/css/utilities/utilities.css">
 ```
 
 ---
@@ -101,7 +105,7 @@ Load stylesheets in this exact order:
 ## Breakpoints (Mobile-First)
 
 | Name | Min-Width | Use |
-|------|-----------|-----|
+|-------|-----------|-----|
 | Mobile | `< 500px` | Default — base styles |
 | Tablet | `500px` | Small screens & tablets |
 | Desktop | `768px` | Full layout |
@@ -114,25 +118,9 @@ Mobile-only overrides use `@media screen and (max-width: 500px)`.
 
 ## Rules for Contributors
 
-1. **Add variables** → `00-variables.css` only (never inline)
-2. **Modify a component** → open its `05-components/X.css` file
-3. **Add responsive behavior** → use `@media (min-width: X)` inside the same component file
-4. **Add page-specific styles** → `07-pages/your-page.css`
-5. **Never use `!important`** — reconsider the cascade instead
-6. **Never** add `@import` inside CSS files — use `<link>` in HTML
-
----
-
-## Architecture Benefits
-
-| Metric | Before | After |
-|--------|--------|-------|
-| CSS Files | 15 (chaotic) | 13 (organized) |
-| Duplication | ~40% | < 5% |
-| `!important` flags | 12–15 | 0 |
-| Time to find a rule | 15–20 min | < 2 min |
-| Variable conflicts | 3 conflicting `:root` blocks | 1 source of truth |
-
----
-
-*Architecture established: May 2026*
+1. **Add variables** &rarr; `base/variables.css` only (never inline).
+2. **Modify a component** &rarr; open its corresponding `components/X.css` file.
+3. **Add responsive behavior** &rarr; use `@media (min-width: X)` inside the same component file.
+4. **Add page-specific styles** &rarr; `pages/your-page.css`.
+5. **Never use `!important`** — reconsider the cascade instead.
+6. **Never** add `@import` inside CSS files — use `<link>` in HTML.

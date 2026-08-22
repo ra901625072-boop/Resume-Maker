@@ -16,13 +16,23 @@ Security:
 """
 
 from flask import (Blueprint, flash, redirect, render_template,
-                   request, session, url_for)
+                   request, session, url_for, jsonify, current_app)
 from flask_login import current_user, login_required, login_user, logout_user
 
 from backend.extensions import db, limiter, csrf
 from backend.models import User, UserSettings
 
 auth_bp = Blueprint("auth", __name__)
+
+
+def _get_frontend_redirect(fallback="/"):
+    """Get the frontend origin for redirects if configured."""
+    origins = current_app.config.get("CORS_ORIGINS", "*")
+    if origins and origins != "*":
+        if isinstance(origins, list) and len(origins) > 0:
+            return origins[0]
+        return origins
+    return fallback
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -34,27 +44,38 @@ def login():
     """Render login form (GET) or authenticate user (POST)."""
     # Already authenticated → skip to dashboard
     if current_user.is_authenticated:
+        if request.is_json or request.headers.get("Accept") == "application/json":
+            return jsonify({"success": True, "user": current_user.to_dict()})
         return redirect(url_for("main.dashboard"))
 
     if request.method == "POST":
-        email    = request.form.get("email", "").strip().lower()
-        password = request.form.get("password", "")
+        # Extract credentials
+        if request.is_json:
+            body = request.get_json(silent=True) or {}
+            email = body.get("email", "").strip().lower()
+            password = body.get("password", "")
+        else:
+            email    = request.form.get("email", "").strip().lower()
+            password = request.form.get("password", "")
 
         # Basic server-side validation
         if not email or not password:
-            flash("Email and password are required.", "error")
-            return render_template("login.html"), 400
+            if request.is_json:
+                return jsonify({"success": False, "error": "Email and password are required."}), 400
+            return jsonify({"success": False, "error": "Email and password are required."}), 400
 
         user = User.query.filter_by(email=email).first()
 
         # Intentionally vague error — prevents user enumeration
         if not user or not user.check_password(password):
-            flash("Invalid email or password.", "error")
-            return render_template("login.html"), 401
+            if request.is_json:
+                return jsonify({"success": False, "error": "Invalid email or password."}), 401
+            return jsonify({"success": False, "error": "Invalid email or password."}), 401
 
         if not user.is_active:
-            flash("Your account has been deactivated. Contact support.", "error")
-            return render_template("login.html"), 403
+            if request.is_json:
+                return jsonify({"success": False, "error": "Your account has been deactivated. Contact support."}), 403
+            return jsonify({"success": False, "error": "Your account has been deactivated. Contact support."}), 403
 
         # Update last_login timestamp
         from datetime import datetime, timezone
@@ -62,6 +83,14 @@ def login():
         db.session.commit()
 
         login_user(user, remember=True)
+        
+        if request.is_json or request.headers.get("Accept") == "application/json" or request.headers.get("Origin"):
+            return jsonify({
+                "success": True,
+                "message": f"Welcome back, {user.name}! 👋",
+                "user": user.to_dict()
+            })
+
         flash(f"Welcome back, {user.name}! 👋", "success")
 
         # Honour the ?next= redirect parameter (must be relative path)
@@ -70,7 +99,7 @@ def login():
             return redirect(next_page)
         return redirect(url_for("main.dashboard"))
 
-    return render_template("login.html")
+    return redirect(_get_frontend_redirect() + "/login")
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -81,13 +110,22 @@ def login():
 def signup():
     """Render signup form (GET) or create a new account (POST)."""
     if current_user.is_authenticated:
+        if request.is_json or request.headers.get("Accept") == "application/json":
+            return jsonify({"success": True, "user": current_user.to_dict()})
         return redirect(url_for("main.dashboard"))
 
     if request.method == "POST":
-        name             = request.form.get("name", "").strip()
-        email            = request.form.get("email", "").strip().lower()
-        password         = request.form.get("password", "")
-        confirm_password = request.form.get("confirm_password", "")
+        if request.is_json:
+            body = request.get_json(silent=True) or {}
+            name = body.get("name", "").strip()
+            email = body.get("email", "").strip().lower()
+            password = body.get("password", "")
+            confirm_password = body.get("confirm_password", "")
+        else:
+            name             = request.form.get("name", "").strip()
+            email            = request.form.get("email", "").strip().lower()
+            password         = request.form.get("password", "")
+            confirm_password = request.form.get("confirm_password", "")
 
         # ── Server-side validation ────────────────────────────────────────────
         errors = []
@@ -101,32 +139,41 @@ def signup():
             errors.append("Passwords do not match.")
 
         if errors:
-            for err in errors:
-                flash(err, "error")
-            return render_template("signup.html"), 400
+            return jsonify({"success": False, "error": errors[0]}), 400
 
         # ── Duplicate email check ─────────────────────────────────────────────
         if User.query.filter_by(email=email).first():
-            flash("An account with that email already exists. Try logging in.", "error")
-            return render_template("signup.html"), 409
+            return jsonify({"success": False, "error": "An account with that email already exists. Try logging in."}), 409
 
         # ── Create user + default settings ───────────────────────────────────
-        new_user = User(name=name, email=email)
-        new_user.set_password(password)
+        try:
+            new_user = User(name=name, email=email)
+            new_user.set_password(password)
 
-        db.session.add(new_user)
-        db.session.flush()  # get the new_user.id before commit
+            db.session.add(new_user)
+            db.session.flush()  # get the new_user.id before commit
 
-        # Every user gets a default settings row
-        default_settings = UserSettings(user_id=new_user.id)
-        db.session.add(default_settings)
-        db.session.commit()
+            # Every user gets a default settings row
+            default_settings = UserSettings(user_id=new_user.id)
+            db.session.add(default_settings)
+            db.session.commit()
 
-        login_user(new_user, remember=True)
-        flash(f"Welcome to WISAXIS, {new_user.name}! 🎉 Let's build your first resume.", "success")
-        return redirect(url_for("main.dashboard"))
+            login_user(new_user, remember=True)
+            
+            if request.is_json or request.headers.get("Accept") == "application/json" or request.headers.get("Origin"):
+                return jsonify({
+                    "success": True,
+                    "message": f"Welcome to WISAXIS, {new_user.name}! 🎉",
+                    "user": new_user.to_dict()
+                })
 
-    return render_template("signup.html")
+            flash(f"Welcome to WISAXIS, {new_user.name}! 🎉 Let's build your first resume.", "success")
+            return redirect(url_for("main.dashboard"))
+        except Exception:
+            db.session.rollback()
+            return jsonify({"success": False, "error": "Database error while registering user."}), 500
+
+    return redirect(_get_frontend_redirect() + "/signup")
 
 
 # ────────────────────────────────────────────────────────────────────────────

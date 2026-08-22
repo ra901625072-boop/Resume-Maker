@@ -19,18 +19,25 @@ class Config:
     WTF_CSRF_ENABLED = True
     WTF_CSRF_TIME_LIMIT = 3600  # 1 hour token lifetime
 
+
+
     # ── Session ───────────────────────────────────────────────────────────────
     SESSION_COOKIE_HTTPONLY = True
-    SESSION_COOKIE_SAMESITE = "Lax"
+    SESSION_COOKIE_SAMESITE = os.environ.get("SESSION_COOKIE_SAMESITE", "Lax")
+    REMEMBER_COOKIE_SAMESITE = os.environ.get("REMEMBER_COOKIE_SAMESITE", "Lax")
     PERMANENT_SESSION_LIFETIME = timedelta(days=7)
 
     # ── Database ──────────────────────────────────────────────────────────────
     # Uses SQLite by default (file-based, zero infrastructure)
     BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
+    _db_url = os.environ.get(
         "DATABASE_URL",
         f"sqlite:///{os.path.join(BASE_DIR, 'instance', 'wisaxis.db')}"
     )
+    # Render provides postgres:// but SQLAlchemy requires postgresql://
+    if _db_url.startswith("postgres://"):
+        _db_url = _db_url.replace("postgres://", "postgresql://", 1)
+    SQLALCHEMY_DATABASE_URI = _db_url
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_pre_ping": True,        # detect stale connections
@@ -80,7 +87,18 @@ class Config:
     LOG_FILE = os.path.join(BASE_DIR, "instance", "app.log")
 
     # ── CORS ──────────────────────────────────────────────────────────────────
-    CORS_ORIGINS = os.environ.get("CORS_ORIGINS", "*")
+    _origins = [
+        "http://127.0.0.1:3000",
+        "http://localhost:3000",
+        "http://127.0.0.1:5000",
+        "http://localhost:5000",
+        "http://127.0.0.1:5500",
+        "http://localhost:5500"
+    ]
+    _env_origins = os.environ.get("CORS_ORIGINS", "")
+    if _env_origins:
+        _origins.extend([o.strip() for o in _env_origins.split(",") if o.strip()])
+    CORS_ORIGINS = _origins
 
     # ── Pagination ────────────────────────────────────────────────────────────
     RESUMES_PER_PAGE = 12
@@ -119,6 +137,9 @@ class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
     SESSION_COOKIE_SECURE = True   # Requires HTTPS
+    SESSION_COOKIE_SAMESITE = "None"  # Requires cross-site cookies for Vercel -> Backend API
+    REMEMBER_COOKIE_SECURE = True
+    REMEMBER_COOKIE_SAMESITE = "None"
     WTF_CSRF_SSL_STRICT = True
 
 
