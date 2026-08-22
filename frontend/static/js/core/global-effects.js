@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             try {
                 const apiBase = window.API_BASE_URL || '';
-                const response = await fetch(`${apiBase}/api/auth/logout`, {
+                const response = await fetch(`${apiBase}/logout`, {
                     method: 'POST',
                     credentials: 'include',
                     headers: {
@@ -84,8 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // 4. Force hard redirect to home with cache-busting parameter
                 // This guarantees the browser fetches the fresh unauthenticated state
-                const useHtmlExt = window.location.pathname.endsWith('.html') || window.location.protocol === 'file:';
-                window.location.href = (useHtmlExt ? '/index.html' : '/') + '?t=' + new Date().getTime();
+                window.location.href = '/?t=' + new Date().getTime();
             } catch (err) {
                 // Fallback to GET logout on backend if network error occurs
                 const apiBase = window.API_BASE_URL || '';

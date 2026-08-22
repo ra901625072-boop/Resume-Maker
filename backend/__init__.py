@@ -85,12 +85,41 @@ def create_app(config_override=None) -> Flask:
             return jsonify({"success": False, "error": "Unauthorized"}), 401
         return redirect(url_for("auth.login"))
 
-    # ── User loader for Flask-Login ───────────────────────────────────────────
+    # ── User loaders for Flask-Login (Dual Auth: Session + Bearer Token) ─────
     from backend.models import User
+    from backend.services.auth_token_service import verify_auth_token
 
     @login_manager.user_loader
     def load_user(user_id: str):
-        return User.query.get(int(user_id))
+        try:
+            return User.query.get(int(user_id))
+        except (ValueError, TypeError):
+            return None
+
+    @login_manager.request_loader
+    def load_user_from_request(req):
+        # 1. Check Authorization header: 'Bearer <token>'
+        auth_header = req.headers.get("Authorization")
+        if auth_header:
+            parts = auth_header.split(" ", 1)
+            if len(parts) == 2 and parts[0].lower() == "bearer":
+                token = parts[1].strip()
+                user_id = verify_auth_token(token)
+                if user_id:
+                    user = User.query.get(user_id)
+                    if user and user.is_active:
+                        return user
+
+        # 2. Check query parameter: ?auth_token=<token>
+        token_param = req.args.get("auth_token")
+        if token_param:
+            user_id = verify_auth_token(token_param)
+            if user_id:
+                user = User.query.get(user_id)
+                if user and user.is_active:
+                    return user
+
+        return None
 
     # ── Register Blueprints ───────────────────────────────────────────────────
     from backend.routes.auth import auth_bp

@@ -116,8 +116,6 @@ class DevelopmentConfig(Config):
     DEBUG = True
     TESTING = False
     SESSION_COOKIE_SECURE = False  # HTTP is fine locally
-    SESSION_COOKIE_SAMESITE = "Lax"
-    REMEMBER_COOKIE_SAMESITE = "Lax"
     SQLALCHEMY_ECHO = False         # Set True to log raw SQL queries
 
 
@@ -140,9 +138,9 @@ class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
     SESSION_COOKIE_SECURE = True   # Requires HTTPS
-    SESSION_COOKIE_SAMESITE = "Lax"  # First-party via Vercel proxy — Lax is safe and universally supported
+    SESSION_COOKIE_SAMESITE = "None"  # Requires cross-site cookies for Vercel -> Backend API
     REMEMBER_COOKIE_SECURE = True
-    REMEMBER_COOKIE_SAMESITE = "Lax"
+    REMEMBER_COOKIE_SAMESITE = "None"
     WTF_CSRF_SSL_STRICT = True
 
 

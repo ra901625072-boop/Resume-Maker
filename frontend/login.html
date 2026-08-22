@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | WISAXIS Resume Maker</title>
-    <meta name="description" content="Log in to your WISAXIS Resume Maker account to access your resumes.">
+    <meta name="description" content="Sign in to your WISAXIS Resume Maker account to manage, create, and download professional ATS-friendly resumes.">
 
     <!-- 1. Design Tokens -->
     <link rel="stylesheet" href="/static/css/base/variables.css">
@@ -39,6 +39,10 @@
         <div class="bg-layer-particles"></div>
     </div>
 
+    <!-- Ambient Glow Orbs -->
+    <div class="auth-orb auth-orb-1" aria-hidden="true"></div>
+    <div class="auth-orb auth-orb-2" aria-hidden="true"></div>
+
     <!-- Minimal Header -->
     <header class="app-header" role="banner">
         <div class="header-inner">
@@ -66,29 +70,54 @@
                     <img src="/static/images/brand/logo.png" alt="" class="auth-logo">
                 </div>
                 <h1>Welcome back</h1>
-                <p class="auth-subtitle">Sign in to access your resumes</p>
+                <p class="auth-subtitle">Sign in to access your resumes and builder</p>
+            </div>
+
+            <!-- Error Banner -->
+            <div class="auth-alert auth-alert-error" id="authErrorBanner" style="display: none;" role="alert">
+                <svg class="auth-alert-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span id="authErrorText">Invalid email or password.</span>
             </div>
 
             <form novalidate class="auth-form" id="loginForm">
+                <!-- Email Field -->
                 <div class="auth-field">
                     <label for="email">Email Address</label>
                     <div class="auth-input-wrap">
                         <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                        <input type="email" id="email" name="email" class="auth-input" placeholder="name@company.com" required autocomplete="email">
+                        <input type="email" id="email" name="email" class="auth-input" placeholder="name@example.com" required autocomplete="email" autofocus>
                     </div>
+                    <div class="field-error-text" id="emailError">Please enter a valid email address.</div>
                 </div>
 
+                <!-- Password Field -->
                 <div class="auth-field">
                     <label for="password">Password</label>
                     <div class="auth-input-wrap">
                         <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                         <input type="password" id="password" name="password" class="auth-input" placeholder="••••••••" required autocomplete="current-password">
+                        <button type="button" class="toggle-password-btn" id="togglePasswordBtn" aria-label="Show password" tabindex="-1">
+                            <svg class="eye-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            <svg class="eye-closed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                        </button>
                     </div>
+                    <div class="field-error-text" id="passwordError">Password is required.</div>
                 </div>
 
+                <!-- Remember Me & Forgot Password -->
+                <div class="auth-options-row">
+                    <label class="auth-checkbox-label">
+                        <input type="checkbox" id="rememberMe" checked>
+                        <span>Remember me</span>
+                    </label>
+                    <a href="javascript:void(0)" class="auth-forgot-link" id="forgotPasswordBtn">Forgot password?</a>
+                </div>
+
+                <!-- Submit Button -->
                 <button type="submit" class="auth-submit" id="loginSubmitBtn">
-                    <span class="btn-text">Access My Dashboard</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <span class="btn-text" id="btnText">Access My Dashboard</span>
+                    <span class="auth-spinner" id="btnSpinner" style="display: none;"></span>
+                    <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
             </form>
 
@@ -101,51 +130,149 @@
     <script src="/static/js/core/global-effects.js"></script>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const btn = document.getElementById('loginSubmitBtn');
-            
-            if (!email || !password) {
-                if (window.showToast) window.showToast('Email and password are required.', 'error');
-                return;
-            }
-            
-            btn.disabled = true;
-            try {
-                const apiBase = window.API_BASE_URL || '';
-                const res = await fetch(`${apiBase}/api/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({ email, password })
-                });
-                
-                const data = await res.json();
-                if (res.ok && data.success) {
-                    localStorage.setItem('wisaxis_logged_in', 'true');
-                    localStorage.setItem('wisaxis_user_name', data.user.name);
-                    if (window.showToast) window.showToast(`Welcome back, ${data.user.name}! 👋`, 'success');
-                    
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const next = urlParams.get('next');
-                    const useHtmlExt = window.location.pathname.endsWith('.html') || window.location.protocol === 'file:';
-                    const dashboardPath = useHtmlExt ? '/dashboard.html' : '/dashboard';
-                    setTimeout(() => {
-                        window.location.href = (next && next.startsWith('/')) ? next : dashboardPath;
-                    }, 800);
+        (function() {
+            // Password Show/Hide Toggle
+            const toggleBtn = document.getElementById('togglePasswordBtn');
+            const passwordInput = document.getElementById('password');
+            const eyeOpen = toggleBtn.querySelector('.eye-open');
+            const eyeClosed = toggleBtn.querySelector('.eye-closed');
+
+            toggleBtn.addEventListener('click', () => {
+                const isPassword = passwordInput.type === 'password';
+                passwordInput.type = isPassword ? 'text' : 'password';
+                eyeOpen.style.display = isPassword ? 'none' : 'block';
+                eyeClosed.style.display = isPassword ? 'block' : 'none';
+                toggleBtn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+            });
+
+            // Forgot Password helper
+            document.getElementById('forgotPasswordBtn').addEventListener('click', () => {
+                if (window.showToast) {
+                    window.showToast('Please contact support@wisaxis.com or sign up for a new account.', 'info');
                 } else {
-                    if (window.showToast) window.showToast(data.error || 'Invalid email or password.', 'error');
-                    btn.disabled = false;
+                    alert('Please contact support@wisaxis.com to reset your credentials.');
                 }
-            } catch (err) {
-                if (window.showToast) window.showToast('Network error, please try again.', 'error');
-                btn.disabled = false;
+            });
+
+            // Form Submit Handler
+            const loginForm = document.getElementById('loginForm');
+            const emailInput = document.getElementById('email');
+            const btn = document.getElementById('loginSubmitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const btnIcon = btn.querySelector('.btn-icon');
+            const errorBanner = document.getElementById('authErrorBanner');
+            const errorText = document.getElementById('authErrorText');
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+
+            function hideErrors() {
+                errorBanner.style.display = 'none';
+                emailInput.classList.remove('is-invalid');
+                passwordInput.classList.remove('is-invalid');
+                emailError.classList.remove('is-visible');
+                passwordError.classList.remove('is-visible');
             }
-        });
+
+            function showError(msg) {
+                errorText.textContent = msg;
+                errorBanner.style.display = 'flex';
+                if (window.showToast) {
+                    window.showToast(msg, 'error');
+                }
+            }
+
+            function setLoading(isLoading) {
+                btn.disabled = isLoading;
+                btnSpinner.style.display = isLoading ? 'inline-block' : 'none';
+                btnIcon.style.display = isLoading ? 'none' : 'block';
+                btnText.textContent = isLoading ? 'Signing In...' : 'Access My Dashboard';
+            }
+
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                hideErrors();
+
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+                const remember = document.getElementById('rememberMe').checked;
+
+                let hasError = false;
+
+                if (!email || !email.includes('@')) {
+                    emailInput.classList.add('is-invalid');
+                    emailError.classList.add('is-visible');
+                    hasError = true;
+                }
+
+                if (!password) {
+                    passwordInput.classList.add('is-invalid');
+                    passwordError.classList.add('is-visible');
+                    hasError = true;
+                }
+
+                if (hasError) return;
+
+                setLoading(true);
+
+                try {
+                    const apiBase = window.API_BASE_URL || '';
+                    const res = await fetch(`${apiBase}/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({ email, password })
+                    });
+
+                    const data = await res.json();
+
+                    if (res.ok && data.success) {
+                        // Persist Token & User data via central AuthGuard
+                        if (window.AuthGuard) {
+                            window.AuthGuard.setAuth(data.token, data.user, remember);
+                        } else {
+                            localStorage.setItem('wisaxis_auth_token', data.token);
+                            localStorage.setItem('wisaxis_logged_in', 'true');
+                            localStorage.setItem('wisaxis_user_name', data.user.name);
+                        }
+
+                        if (window.showToast) {
+                            window.showToast(data.message || `Welcome back, ${data.user.name}! 👋`, 'success');
+                        }
+
+                        // Determine destination
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const next = urlParams.get('next');
+                        const destination = (next && next.startsWith('/') && !next.startsWith('//')) ? next : '/dashboard';
+
+                        setTimeout(() => {
+                            window.location.href = destination;
+                        }, 500);
+                    } else {
+                        showError(data.error || 'Invalid email or password. Please try again.');
+                        setLoading(false);
+                        passwordInput.value = '';
+                        passwordInput.focus();
+                    }
+                } catch (err) {
+                    showError('Unable to connect to server. Please check your network.');
+                    setLoading(false);
+                }
+            });
+
+            // Clear errors on input
+            emailInput.addEventListener('input', () => {
+                emailInput.classList.remove('is-invalid');
+                emailError.classList.remove('is-visible');
+            });
+            passwordInput.addEventListener('input', () => {
+                passwordInput.classList.remove('is-invalid');
+                passwordError.classList.remove('is-visible');
+            });
+        })();
     </script>
 </body>
 </html>
