@@ -120,6 +120,107 @@ def test_auth_login_flow(client):
     assert res_bad_user.get_json()["error"] == "Invalid email or password."
 
 
+def test_auth_update_profile(client):
+    res_signup = client.post("/api/auth/signup", json={
+        "name": "Original Name",
+        "email": "orig@example.com",
+        "password": "Password123!",
+        "confirm_password": "Password123!"
+    })
+    token = res_signup.get_json()["token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    res_update = client.put("/api/auth/profile", headers=headers, json={
+        "name": "Updated Name",
+        "email": "updated@example.com",
+        "default_template": "template4",
+        "theme_preference": "light",
+        "email_notifications": False
+    })
+    assert res_update.status_code == 200
+    data = res_update.get_json()
+    assert data["success"] is True
+    assert data["user"]["name"] == "Updated Name"
+    assert data["user"]["email"] == "updated@example.com"
+    assert data["user"]["settings"]["default_template"] == "template4"
+
+    # Verify /api/auth/me
+    new_token = data["token"]
+    res_me = client.get("/api/auth/me", headers={"Authorization": f"Bearer {new_token}"})
+    assert res_me.status_code == 200
+    assert res_me.get_json()["data"]["name"] == "Updated Name"
+
+
+def test_auth_change_password(client):
+    res_signup = client.post("/api/auth/signup", json={
+        "name": "Password Tester",
+        "email": "pw@example.com",
+        "password": "OldPassword123!",
+        "confirm_password": "OldPassword123!"
+    })
+    token = res_signup.get_json()["token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # Wrong current password
+    res_fail = client.post("/api/auth/change-password", headers=headers, json={
+        "current_password": "WrongPassword!",
+        "new_password": "NewPassword123!",
+        "confirm_password": "NewPassword123!"
+    })
+    assert res_fail.status_code == 401
+
+    # Valid change
+    res_ok = client.post("/api/auth/change-password", headers=headers, json={
+        "current_password": "OldPassword123!",
+        "new_password": "NewPassword123!",
+        "confirm_password": "NewPassword123!"
+    })
+    assert res_ok.status_code == 200
+    assert res_ok.get_json()["success"] is True
+
+    # New login works
+    res_login = client.post("/api/auth/login", json={
+        "email": "pw@example.com",
+        "password": "NewPassword123!"
+    })
+    assert res_login.status_code == 200
+
+
+def test_user_stats_and_exports(client):
+    res_signup = client.post("/api/auth/signup", json={
+        "name": "Stats User",
+        "email": "stats@example.com",
+        "password": "Password123!",
+        "confirm_password": "Password123!"
+    })
+    token = res_signup.get_json()["token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # Create resume
+    r1 = client.post("/generate", headers=headers, json={
+        "name": "Resume 1",
+        "title": "Engineer",
+        "email": "stats@example.com",
+        "template": "template1",
+        "skills": ["Python"],
+        "languages": [],
+        "experience": [],
+        "education": []
+    })
+    r1_id = r1.get_json()["resume_id"]
+
+    # Downloads
+    assert client.get(f"/resume/{r1_id}/download", headers=headers).status_code == 200
+    assert client.get(f"/resume/{r1_id}/download-doc", headers=headers).status_code == 200
+
+    # Stats
+    res_stats = client.get("/api/user/stats", headers=headers)
+    assert res_stats.status_code == 200
+    stats = res_stats.get_json()["data"]
+    assert stats["total_resumes"] == 1
+    assert stats["total_exports"] == 2
+
+
 def test_protected_routes_without_token(client):
     # Resume routes
     assert client.get("/api/resumes").status_code == 401

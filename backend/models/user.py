@@ -22,6 +22,10 @@ class User(db.Model):
     created_at    = db.Column(db.DateTime(timezone=True), default=_utcnow, nullable=False)
     updated_at    = db.Column(db.DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
 
+    # ── Relationships ─────────────────────────────────────────────────────────
+    settings = db.relationship("UserSettings", backref="user", uselist=False, cascade="all, delete-orphan")
+    resumes  = db.relationship("Resume", backref="user", lazy="dynamic", cascade="all, delete-orphan")
+
     # ── Password management ───────────────────────────────────────────────────
     def set_password(self, raw_password: str) -> None:
         """Hash raw password with PBKDF2-SHA256 (260k iterations)."""
@@ -37,8 +41,8 @@ class User(db.Model):
         return check_password_hash(self.password_hash, raw_password)
 
     # ── Serialisation ─────────────────────────────────────────────────────────
-    def to_dict(self) -> dict:
-        return {
+    def to_dict(self, include_settings: bool = True) -> dict:
+        data = {
             "id":            self.id,
             "name":          self.name,
             "email":         self.email,
@@ -47,6 +51,16 @@ class User(db.Model):
             "last_login_at": self.last_login_at.isoformat() if self.last_login_at else None,
             "created_at":    self.created_at.isoformat() if self.created_at else None,
         }
+        if include_settings:
+            if self.settings:
+                data["settings"] = self.settings.to_dict()
+            else:
+                data["settings"] = {
+                    "default_template": "template1",
+                    "email_notifications": True,
+                    "theme_preference": "dark",
+                }
+        return data
 
     def __repr__(self):
         return f"<User id={self.id} email={self.email!r}>"
@@ -66,5 +80,13 @@ class UserSettings(db.Model):
     theme_preference    = db.Column(db.String(20), default="dark")
     updated_at          = db.Column(db.DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
 
+    def to_dict(self) -> dict:
+        return {
+            "default_template":    self.default_template or "template1",
+            "email_notifications": bool(self.email_notifications),
+            "theme_preference":    self.theme_preference or "dark",
+        }
+
     def __repr__(self):
         return f"<UserSettings user_id={self.user_id}>"
+

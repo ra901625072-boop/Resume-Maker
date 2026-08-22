@@ -182,10 +182,35 @@ def list_templates():
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# Current User Info
+# Current User Info & Stats
 # ────────────────────────────────────────────────────────────────────────────
 @api_bp.route("/api/me")
 @token_required
 def me():
     """Return authenticated user profile data as JSON."""
     return jsonify({"success": True, "data": g.current_user.to_dict()})
+
+
+@api_bp.route("/api/user/stats")
+@token_required
+def api_user_stats():
+    """Return summary activity metrics for the authenticated user."""
+    from backend.models.resume import Resume
+    from backend.models.export_history import ExportHistory
+    from backend.models.ai_history import AIHistory
+
+    user_id = g.current_user.id
+    total_resumes = Resume.query.filter_by(user_id=user_id, is_deleted=False).count()
+    total_exports = ExportHistory.query.filter_by(user_id=user_id).count()
+    total_ai_requests = AIHistory.query.filter_by(user_id=user_id).count()
+
+    return jsonify({
+        "success": True,
+        "data": {
+            "total_resumes": total_resumes,
+            "total_exports": total_exports,
+            "total_ai_requests": total_ai_requests,
+            "member_since": g.current_user.created_at.isoformat() if g.current_user.created_at else None,
+            "last_login": g.current_user.last_login_at.isoformat() if g.current_user.last_login_at else None,
+        }
+    })

@@ -214,6 +214,15 @@ def download_doc(resume_id: int):
         id=resume_id, user_id=g.current_user.id, is_deleted=False
     ).first_or_404()
 
+    # Log the export
+    export = ExportHistory(
+        resume_id=resume.id,
+        user_id=g.current_user.id,
+        format="doc",
+    )
+    db.session.add(export)
+    db.session.commit()
+
     lines = [
         resume.name, resume.title, resume.email, resume.phone or "",
         resume.address or "", "",
@@ -249,6 +258,7 @@ def download_resume(resume_id: int):
     # Log the export
     export = ExportHistory(
         resume_id=resume.id,
+        user_id=g.current_user.id,
         format="json",
     )
     db.session.add(export)

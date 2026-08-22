@@ -658,14 +658,23 @@ def _dict_to_text(resume_dict: dict) -> str:
 # ────────────────────────────────────────────────────────────────────────────
 # AI History logger
 # ────────────────────────────────────────────────────────────────────────────
-def _log_ai_history(action, prompt, response, model, tokens, success, error=None):
+def _log_ai_history(action, prompt, response, model, tokens, success, error=None, resume_id=None):
     """Persist an AIHistory row — silently skipped if outside app context."""
     try:
+        from flask import g, has_app_context
+        if not has_app_context():
+            return
+
         from backend.models import AIHistory
         from backend.extensions import db
 
+        user_id = None
+        if hasattr(g, "current_user") and g.current_user:
+            user_id = getattr(g.current_user, "id", None)
+
         record = AIHistory(
-            user_id       = None,
+            user_id       = user_id,
+            resume_id     = resume_id,
             action        = action,
             prompt        = prompt[:2000] if prompt else None,
             response      = response[:4000] if response else None,

@@ -152,6 +152,148 @@ class AuthSystemTestCase(unittest.TestCase):
         self.assertEqual(res_bad_user.status_code, 401)
         self.assertEqual(res_bad_user.get_json()["error"], "Invalid email or password.")
 
+    def test_auth_update_profile(self):
+        # Register user
+        res_signup = self.client.post("/api/auth/signup", json={
+            "name": "Original Name",
+            "email": "orig@example.com",
+            "password": "Password123!",
+            "confirm_password": "Password123!"
+        })
+        token = res_signup.get_json()["token"]
+        headers = {"Authorization": f"Bearer {token}"}
+
+        # Update profile name, email, and preferences
+        res_update = self.client.put("/api/auth/profile", headers=headers, json={
+            "name": "Updated Name",
+            "email": "updated@example.com",
+            "default_template": "template4",
+            "theme_preference": "light",
+            "email_notifications": False
+        })
+        self.assertEqual(res_update.status_code, 200)
+        data = res_update.get_json()
+        self.assertTrue(data["success"])
+        self.assertEqual(data["user"]["name"], "Updated Name")
+        self.assertEqual(data["user"]["email"], "updated@example.com")
+        self.assertEqual(data["user"]["settings"]["default_template"], "template4")
+        self.assertEqual(data["user"]["settings"]["theme_preference"], "light")
+        self.assertFalse(data["user"]["settings"]["email_notifications"])
+
+        # Fetch /api/auth/me to verify persistence
+        new_token = data["token"]
+        res_me = self.client.get("/api/auth/me", headers={"Authorization": f"Bearer {new_token}"})
+        self.assertEqual(res_me.status_code, 200)
+        self.assertEqual(res_me.get_json()["data"]["name"], "Updated Name")
+
+    def test_auth_change_password(self):
+        # Register user
+        res_signup = self.client.post("/api/auth/signup", json={
+            "name": "Password Tester",
+            "email": "pw@example.com",
+            "password": "OldPassword123!",
+            "confirm_password": "OldPassword123!"
+        })
+        token = res_signup.get_json()["token"]
+        headers = {"Authorization": f"Bearer {token}"}
+
+        # Change password wrong current password
+        res_fail = self.client.post("/api/auth/change-password", headers=headers, json={
+            "current_password": "WrongPassword!",
+            "new_password": "NewPassword123!",
+            "confirm_password": "NewPassword123!"
+        })
+        self.assertEqual(res_fail.status_code, 401)
+
+        # Change password mismatch
+        res_mismatch = self.client.post("/api/auth/change-password", headers=headers, json={
+            "current_password": "OldPassword123!",
+            "new_password": "NewPassword123!",
+            "confirm_password": "DifferentPassword!"
+        })
+        self.assertEqual(res_mismatch.status_code, 422)
+
+        # Successful password change
+        res_ok = self.client.post("/api/auth/change-password", headers=headers, json={
+            "current_password": "OldPassword123!",
+            "new_password": "NewPassword123!",
+            "confirm_password": "NewPassword123!"
+        })
+        self.assertEqual(res_ok.status_code, 200)
+        self.assertTrue(res_ok.get_json()["success"])
+
+        # Verify old password fails
+        res_login_old = self.client.post("/api/auth/login", json={
+            "email": "pw@example.com",
+            "password": "OldPassword123!"
+        })
+        self.assertEqual(res_login_old.status_code, 401)
+
+        # Verify new password succeeds
+        res_login_new = self.client.post("/api/auth/login", json={
+            "email": "pw@example.com",
+            "password": "NewPassword123!"
+        })
+        self.assertEqual(res_login_new.status_code, 200)
+
+    def test_user_stats_and_history_attribution(self):
+        from backend.models.export_history import ExportHistory
+        from backend.models.ai_history import AIHistory
+
+        # Register user
+        res_signup = self.client.post("/api/auth/signup", json={
+            "name": "Stats User",
+            "email": "stats@example.com",
+            "password": "Password123!",
+            "confirm_password": "Password123!"
+        })
+        token = res_signup.get_json()["token"]
+        headers = {"Authorization": f"Bearer {token}"}
+
+        # Create 2 resumes
+        r1 = self.client.post("/generate", headers=headers, json={
+            "name": "Resume 1",
+            "title": "Engineer",
+            "email": "stats@example.com",
+            "template": "template1",
+            "skills": ["Python"],
+            "languages": [],
+            "experience": [],
+            "education": []
+        })
+        r1_id = r1.get_json()["resume_id"]
+
+        r2 = self.client.post("/generate", headers=headers, json={
+            "name": "Resume 2",
+            "title": "Architect",
+            "email": "stats@example.com",
+            "template": "template2",
+            "skills": ["Go"],
+            "languages": [],
+            "experience": [],
+            "education": []
+        })
+
+        # Download JSON and DOC
+        dl_json = self.client.get(f"/resume/{r1_id}/download", headers=headers)
+        self.assertEqual(dl_json.status_code, 200)
+
+        dl_doc = self.client.get(f"/resume/{r1_id}/download-doc", headers=headers)
+        self.assertEqual(dl_doc.status_code, 200)
+
+        # Verify ExportHistory user_id attribution
+        exports = ExportHistory.query.filter_by(resume_id=r1_id).all()
+        self.assertEqual(len(exports), 2)
+        for exp in exports:
+            self.assertIsNotNone(exp.user_id)
+
+        # Check /api/user/stats
+        res_stats = self.client.get("/api/user/stats", headers=headers)
+        self.assertEqual(res_stats.status_code, 200)
+        stats_data = res_stats.get_json()["data"]
+        self.assertEqual(stats_data["total_resumes"], 2)
+        self.assertEqual(stats_data["total_exports"], 2)
+
     def test_protected_routes_without_token(self):
         # Resume routes
         self.assertEqual(self.client.get("/api/resumes").status_code, 401)

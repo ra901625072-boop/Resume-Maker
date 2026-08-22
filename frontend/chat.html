@@ -225,6 +225,14 @@
             if (savedHistory) {
                 chatHistory = JSON.parse(savedHistory);
                 renderChatHistory();
+            } else {
+                const user = window.AuthGuard ? window.AuthGuard.getUser() : null;
+                const name = user && user.name ? user.name.split(' ')[0] : '';
+                const greeting = name ? `Hello ${name}!` : 'Hello!';
+                const welcomeEl = document.querySelector('#chatMessages .chat-bubble p:first-child');
+                if (welcomeEl) {
+                    welcomeEl.innerHTML = `${greeting} I am your <strong>Wisaxis AI Resume Assistant</strong>. I am here to help you craft an outstanding, ATS-optimized resume.`;
+                }
             }
         });
 

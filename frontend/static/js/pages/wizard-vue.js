@@ -76,9 +76,26 @@ createApp({
                 localStorage.removeItem('import_resume_data');
                 this.populateData(parsed);
                 if (window.showToast) window.showToast('Resume data loaded from AI Extractor! 🎉', 'success');
+                return;
             }
         } catch (e) {
             // Silently ignore stale / malformed localStorage entries
+        }
+
+        // Priority 4: Authenticated user profile auto-fill for new resumes
+        if (window.AuthGuard && typeof window.AuthGuard.getUser === 'function') {
+            const user = window.AuthGuard.getUser();
+            if (user) {
+                if (!this.formData.name && user.name) {
+                    this.formData.name = user.name;
+                }
+                if (!this.formData.email && user.email) {
+                    this.formData.email = user.email;
+                }
+                if (!this.formData.template && user.settings && user.settings.default_template) {
+                    this.formData.template = user.settings.default_template;
+                }
+            }
         }
     },
     methods: {

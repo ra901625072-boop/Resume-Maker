@@ -42,6 +42,19 @@
             this.syncUserElements();
         },
 
+        updateUser(user) {
+            try {
+                if (user) {
+                    const current = this.getUser() || {};
+                    const merged = Object.assign({}, current, user);
+                    localStorage.setItem(USER_KEY, JSON.stringify(merged));
+                }
+            } catch (e) {
+                console.error('Failed to update user in localStorage:', e);
+            }
+            this.syncUserElements();
+        },
+
         clearAuth() {
             try {
                 localStorage.removeItem(TOKEN_KEY);

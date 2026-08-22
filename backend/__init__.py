@@ -173,5 +173,7 @@ def _configure_logging(app: Flask):
     file_handler.setFormatter(formatter)
 
     app.logger.setLevel(level)
-    if not app.debug:
+    if not app.debug and not app.testing:
         app.logger.addHandler(file_handler)
+    else:
+        file_handler.close()
