@@ -155,6 +155,8 @@ config_map = {
 
 
 def get_config() -> Config:
-    """Return the config class that matches FLASK_ENV."""
+    """Return the config class that matches FLASK_ENV or RENDER environment."""
+    if os.environ.get("RENDER", "").lower() == "true":
+        return ProductionConfig
     env = os.environ.get("FLASK_ENV", "development").lower()
     return config_map.get(env, DevelopmentConfig)
