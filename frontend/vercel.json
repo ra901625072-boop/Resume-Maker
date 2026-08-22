@@ -2,8 +2,6 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/login",          "destination": "https://resume-maker-8ljc.onrender.com/login" },
-    { "source": "/signup",         "destination": "https://resume-maker-8ljc.onrender.com/signup" },
     { "source": "/logout",         "destination": "https://resume-maker-8ljc.onrender.com/logout" },
     { "source": "/api/:path*",     "destination": "https://resume-maker-8ljc.onrender.com/api/:path*" },
     { "source": "/generate",       "destination": "https://resume-maker-8ljc.onrender.com/generate" },

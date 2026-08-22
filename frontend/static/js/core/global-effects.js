@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             try {
                 const apiBase = window.API_BASE_URL || '';
-                const response = await fetch(`${apiBase}/logout`, {
+                const response = await fetch(`${apiBase}/api/auth/logout`, {
                     method: 'POST',
                     credentials: 'include',
                     headers: {

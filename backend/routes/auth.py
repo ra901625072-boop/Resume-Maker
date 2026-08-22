@@ -30,6 +30,7 @@ auth_bp = Blueprint("auth", __name__)
 # Login
 # ────────────────────────────────────────────────────────────────────────────
 @auth_bp.route("/login", methods=["GET", "POST"])
+@auth_bp.route("/api/auth/login", methods=["POST"])
 @limiter.limit("10 per minute")   # brute-force protection
 def login():
     """Render login form (GET) or authenticate user (POST)."""
@@ -100,6 +101,7 @@ def login():
 # Sign Up
 # ────────────────────────────────────────────────────────────────────────────
 @auth_bp.route("/signup", methods=["GET", "POST"])
+@auth_bp.route("/api/auth/signup", methods=["POST"])
 @limiter.limit("5 per minute")
 def signup():
     """Render signup form (GET) or create a new account (POST)."""
@@ -177,6 +179,7 @@ def signup():
 # Logout
 # ────────────────────────────────────────────────────────────────────────────
 @auth_bp.route("/logout", methods=["GET", "POST"])
+@auth_bp.route("/api/auth/logout", methods=["POST"])
 @login_required
 @csrf.exempt
 def logout():

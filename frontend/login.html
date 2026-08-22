@@ -115,7 +115,7 @@
             btn.disabled = true;
             try {
                 const apiBase = window.API_BASE_URL || '';
-                const res = await fetch(`${apiBase}/login`, {
+                const res = await fetch(`${apiBase}/api/auth/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
