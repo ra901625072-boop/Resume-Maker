@@ -25,15 +25,6 @@ from backend.models import User, UserSettings
 auth_bp = Blueprint("auth", __name__)
 
 
-def _get_frontend_redirect(fallback="/"):
-    """Get the frontend origin for redirects if configured."""
-    origins = current_app.config.get("CORS_ORIGINS", "*")
-    if origins and origins != "*":
-        if isinstance(origins, list) and len(origins) > 0:
-            return origins[0]
-        return origins
-    return fallback
-
 
 # ────────────────────────────────────────────────────────────────────────────
 # Login

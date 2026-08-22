@@ -140,9 +140,9 @@ class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
     SESSION_COOKIE_SECURE = True   # Requires HTTPS
-    SESSION_COOKIE_SAMESITE = "None"  # Requires cross-site cookies for Vercel -> Backend API
+    SESSION_COOKIE_SAMESITE = "Lax"  # First-party via Vercel proxy — Lax is safe and universally supported
     REMEMBER_COOKIE_SECURE = True
-    REMEMBER_COOKIE_SAMESITE = "None"
+    REMEMBER_COOKIE_SAMESITE = "Lax"
     WTF_CSRF_SSL_STRICT = True
 
 
