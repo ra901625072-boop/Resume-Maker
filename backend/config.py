@@ -60,29 +60,29 @@ class Config:
     OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
     # Multi-Tier Intelligent Model Fallback Chains
-    # Primary  → High-performance multimodal model (Google Gemini 2.0 Flash / 2.5 Flash)
+    # Primary  → High-performance auto-routing model
     AI_MODEL_PRIMARY   = os.environ.get(
-        "AI_MODEL_PRIMARY", "google/gemini-2.0-flash-001"
+        "AI_MODEL_PRIMARY", "openrouter/free"
     )
     # Vision models for images & scanned documents (tried in order)
     AI_MODEL_VISION    = os.environ.get(
         "AI_MODEL_VISION",
-        "google/gemini-2.0-flash-001,qwen/qwen-2.5-vl-72b-instruct:free,meta-llama/llama-3.2-11b-vision-instruct:free,mistralai/pixtral-12b:free,openrouter/free"
+        "openrouter/free,google/gemma-4-26b-a4b-it:free,nvidia/nemotron-nano-12b-v2-vl:free,dots-studio/dots-3-note-preview:free"
     )
-    # Secondary → High-context fast reasoning model (Llama 3.3 70B / Qwen 2.5 72B)
+    # Secondary → High-context reasoning model (Gemma 4 / Nemotron)
     AI_MODEL_SECONDARY = os.environ.get(
-        "AI_MODEL_SECONDARY", "meta-llama/llama-3.3-70b-instruct:free"
+        "AI_MODEL_SECONDARY", "google/gemma-4-26b-a4b-it:free"
     )
     # Emergency → ultra-fast free fallback for zero-downtime
     AI_MODEL_EMERGENCY = os.environ.get(
-        "AI_MODEL_EMERGENCY", "mistralai/mistral-7b-instruct:free"
+        "AI_MODEL_EMERGENCY", "nvidia/nemotron-3.5-lightning:free"
     )
     # Legacy single-model key (kept for backward compat)
     OPENROUTER_MODEL   = os.environ.get(
-        "OPENROUTER_MODEL", "google/gemini-2.0-flash-001"
+        "OPENROUTER_MODEL", "openrouter/free"
     )
-    # Request timeout in seconds
-    AI_REQUEST_TIMEOUT = int(os.environ.get("AI_REQUEST_TIMEOUT", "45"))
+    # Per-model request timeout in seconds (ensures fast responses under WSGI limits)
+    AI_REQUEST_TIMEOUT = int(os.environ.get("AI_REQUEST_TIMEOUT", "18"))
     # Maximum tokens for AI responses (high limit for full document JSON extraction)
     AI_MAX_TOKENS      = int(os.environ.get("AI_MAX_TOKENS", "4096"))
 

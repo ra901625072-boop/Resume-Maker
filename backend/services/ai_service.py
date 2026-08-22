@@ -32,23 +32,21 @@ logger = logging.getLogger(__name__)
 # ── Model tiers ──────────────────────────────────────────────────────────────
 # Default text-centric reasoning models (tried in order)
 _MODELS = [
-    "google/gemini-2.0-flash-001",
-    "google/gemini-2.0-flash:free",
-    "meta-llama/llama-3.3-70b-instruct:free",
-    "qwen/qwen-2.5-72b-instruct:free",
-    "nvidia/llama-3.1-nemotron-nano-8b-v1:free",
-    "mistralai/mistral-7b-instruct:free",
     "openrouter/free",
+    "google/gemma-4-26b-a4b-it:free",
+    "nvidia/nemotron-nano-12b-v2-vl:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "nvidia/nemotron-3.5-lightning:free",
+    "google/gemini-2.0-flash-001",
 ]
 
 # Multimodal & Vision models for image/scanned document analysis (tried in order)
 _VISION_MODELS = [
-    "google/gemini-2.0-flash-001",
-    "google/gemini-2.0-flash:free",
-    "qwen/qwen-2.5-vl-72b-instruct:free",
-    "meta-llama/llama-3.2-11b-vision-instruct:free",
-    "mistralai/pixtral-12b:free",
     "openrouter/free",
+    "google/gemma-4-26b-a4b-it:free",
+    "nvidia/nemotron-nano-12b-v2-vl:free",
+    "dots-studio/dots-3-note-preview:free",
+    "google/gemini-2.0-flash-001",
 ]
 
 # Actions that need multimodal or heavy reasoning → always use primary
@@ -406,7 +404,7 @@ class AIService:
         last_error = "Unknown error"
 
         for idx, model in enumerate(models_to_try):
-            for attempt in range(2):  # 1 retry per model
+            for attempt in range(2):  # Max 1 retry for transient issues
                 try:
                     result = cls._http_call(
                         api_key=api_key,
@@ -420,18 +418,28 @@ class AIService:
                     if result["success"]:
                         result["tier"] = f"model_{idx}"
                         return result
+
                     last_error = result.get("error", "Unknown error")
-                    # Don't retry on auth errors
-                    if "401" in last_error or "API key" in last_error:
+
+                    # Global auth / billing failures -> stop cascading immediately
+                    if result.get("status") in (401, 402):
                         return result
+
+                    # Non-retryable model error (404 Not Found, 400 Bad Request, etc.) -> cascade immediately without delay
+                    if result.get("non_retryable"):
+                        logger.warning(f"[AI] Model {model} returned non-retryable error ({result.get('status')}), skipping to next fallback.")
+                        break
+
                     if attempt == 0:
-                        time.sleep(1.0)
+                        time.sleep(0.5)
 
                 except Exception as e:
                     last_error = str(e)
                     logger.warning(f"[AI] Model {model} attempt {attempt+1} failed: {e}")
+                    if "404" in str(e) or "400" in str(e) or "401" in str(e) or "403" in str(e):
+                        break
                     if attempt == 0:
-                        time.sleep(1.0)
+                        time.sleep(0.5)
 
             logger.warning(f"[AI] Model {model} exhausted, cascading to next model. Last error: {last_error}")
 
@@ -441,7 +449,7 @@ class AIService:
     @classmethod
     def _http_call(cls, api_key: str, base_url: str, model: str,
                    messages: list, max_tokens: int, timeout: int, action: str) -> dict:
-        """Single HTTP call to OpenRouter."""
+        """Single HTTP call to OpenRouter with clean status code handling."""
         headers = {
             "Authorization": f"Bearer {api_key}",
             "Content-Type":  "application/json",
@@ -455,38 +463,53 @@ class AIService:
             "temperature": 0.2,  # Lower temperature for accurate structured extraction
         }
 
-        resp = requests.post(
-            f"{base_url}/chat/completions",
-            headers=headers,
-            json=payload,
-            timeout=timeout,
-        )
+        try:
+            resp = requests.post(
+                f"{base_url}/chat/completions",
+                headers=headers,
+                json=payload,
+                timeout=timeout,
+            )
+        except requests.exceptions.Timeout:
+            return {"success": False, "error": f"Model {model} timed out after {timeout}s", "status": 408, "non_retryable": False}
+        except requests.exceptions.RequestException as e:
+            return {"success": False, "error": f"Network error connecting to {model}: {e}", "status": 500, "non_retryable": False}
 
+        if resp.status_code == 200:
+            try:
+                data = resp.json()
+            except Exception:
+                return {"success": False, "error": "Invalid JSON response from AI provider", "non_retryable": True}
+
+            raw_content = data.get("choices", [{}])[0].get("message", {}).get("content")
+            if raw_content is None:
+                finish_reason = data.get("choices", [{}])[0].get("finish_reason", "unknown")
+                return {"success": False,
+                        "error": f"Model {model} returned empty content (finish_reason={finish_reason})."}
+
+            content     = raw_content.strip()
+            tokens_used = data.get("usage", {}).get("total_tokens", 0)
+
+            _log_ai_history(action, str(messages[-1].get("content", ""))[:2000],
+                            content, model, tokens_used, True)
+
+            return {"success": True, "data": content, "tokens": tokens_used, "model": model}
+
+        # Specific OpenRouter error handling
         if resp.status_code == 401:
-            return {"success": False, "error": "Invalid OpenRouter API key. Check your .env file."}
+            return {"success": False, "error": "Invalid OpenRouter API key. Check your .env file.", "status": 401, "non_retryable": True}
         if resp.status_code == 402:
-            return {"success": False, "error": "OpenRouter credit balance too low."}
+            return {"success": False, "error": "OpenRouter credit balance too low.", "status": 402, "non_retryable": True}
+        if resp.status_code == 404:
+            return {"success": False, "error": f"Model {model} not found on OpenRouter (404).", "status": 404, "non_retryable": True}
+        if resp.status_code == 400:
+            return {"success": False, "error": f"Model {model} bad request (400): {resp.text[:120]}", "status": 400, "non_retryable": True}
         if resp.status_code == 429:
-            return {"success": False, "error": "Rate limit reached. Cascading to fallback model."}
+            return {"success": False, "error": f"Rate limit reached for {model} (429).", "status": 429, "non_retryable": False}
         if resp.status_code == 503:
-            return {"success": False, "error": f"Model {model} temporarily unavailable."}
+            return {"success": False, "error": f"Model {model} temporarily unavailable (503).", "status": 503, "non_retryable": False}
 
-        resp.raise_for_status()
-        data = resp.json()
-
-        raw_content = data.get("choices", [{}])[0].get("message", {}).get("content")
-        if raw_content is None:
-            finish_reason = data.get("choices", [{}])[0].get("finish_reason", "unknown")
-            return {"success": False,
-                    "error": f"Model {model} returned empty content (finish_reason={finish_reason})."}
-
-        content     = raw_content.strip()
-        tokens_used = data.get("usage", {}).get("total_tokens", 0)
-
-        _log_ai_history(action, str(messages[-1].get("content", ""))[:2000],
-                        content, model, tokens_used, True)
-
-        return {"success": True, "data": content, "tokens": tokens_used, "model": model}
+        return {"success": False, "error": f"Model {model} HTTP {resp.status_code}: {resp.text[:120]}", "status": resp.status_code, "non_retryable": resp.status_code < 500}
 
 
 # ────────────────────────────────────────────────────────────────────────────
