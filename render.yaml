@@ -23,7 +23,7 @@ services:
           name: wisaxis-db
           property: connectionURI
       - key: CORS_ORIGINS
-        value: "https://your-vercel-app.vercel.app"
+        value: "https://resume-maker-five-bice.vercel.app"
       - key: SESSION_COOKIE_SAMESITE
         value: "None"
       - key: REMEMBER_COOKIE_SAMESITE
