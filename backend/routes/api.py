@@ -6,21 +6,22 @@ Miscellaneous JSON API endpoints used by the frontend:
   POST /api/chat           → AI chat assistant (from chat.html)
   POST /upload-photo       → Profile photo upload (from wizard)
   GET  /api/resumes        → List current user's resumes (JSON)
-  GET  /api/resumes/<id>   → Single resume JSON
-  GET  /api/templates      → Available templates list
-  GET  /api/health         → Health check (no auth required)
+  GET  /api/resumes/<id>   → Single resume JSON (owner scoped)
+  GET  /api/templates      → Available templates list (public)
+  GET  /api/health         → Health check (public)
   GET  /api/me             → Current user info (JSON)
 """
 
 import os
 import uuid
 
-from flask import (Blueprint, current_app, jsonify, request, url_for)
+from flask import (Blueprint, current_app, g, jsonify, request, url_for)
 from werkzeug.utils import secure_filename
 
 from backend.extensions import limiter
 from backend.models import Resume, Template
 from backend.services.ai_service import AIService
+from backend.services.auth_token_service import token_required
 
 api_bp = Blueprint("api", __name__)
 
@@ -50,6 +51,7 @@ def health_check():
 # AI Chat  (called by chat.html via fetch('/api/chat'))
 # ────────────────────────────────────────────────────────────────────────────
 @api_bp.route("/api/chat", methods=["POST"])
+@token_required
 @limiter.limit("60 per hour")
 def chat():
     """
@@ -73,6 +75,7 @@ def chat():
 # Photo Upload  (called by wizard-vue.js → fetch('/upload-photo'))
 # ────────────────────────────────────────────────────────────────────────────
 @api_bp.route("/upload-photo", methods=["POST"])
+@token_required
 @limiter.limit("20 per hour")
 def upload_photo():
     """
@@ -87,7 +90,7 @@ def upload_photo():
     # Validate extension
     filename   = secure_filename(photo.filename)
     ext        = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
-    allowed    = current_app.config.get("ALLOWED_PHOTO_EXTENSIONS", {"jpg", "jpeg", "png"})
+    allowed    = current_app.config.get("ALLOWED_PHOTO_EXTENSIONS", {"jpg", "jpeg", "png", "webp"})
 
     if ext not in allowed:
         return jsonify({
@@ -95,12 +98,11 @@ def upload_photo():
             "error":   f"File type not allowed. Use: {', '.join(sorted(allowed))}"
         }), 415
 
-    # Validate file size (already capped by MAX_CONTENT_LENGTH in Flask,
-    # but double-check for explicit error message)
+    # Validate file size
     photo.seek(0, 2)  # seek to end
     size = photo.tell()
     photo.seek(0)     # reset
-    max_size = current_app.config.get("MAX_CONTENT_LENGTH", 5 * 1024 * 1024)
+    max_size = current_app.config.get("MAX_CONTENT_LENGTH", 10 * 1024 * 1024)
     if size > max_size:
         return jsonify({
             "success": False,
@@ -114,8 +116,7 @@ def upload_photo():
     save_path   = os.path.join(save_dir, unique_name)
     photo.save(save_path)
 
-    # Build a URL the browser can fetch  (/static/uploads/abc.jpg)
-    # We serve uploads via a dedicated route below
+    # Build a URL the browser can fetch
     photo_url = url_for("api.serve_upload", filename=unique_name, _external=False)
 
     return jsonify({"success": True, "url": photo_url})
@@ -133,14 +134,15 @@ def serve_upload(filename: str):
 # Resumes — JSON REST API
 # ────────────────────────────────────────────────────────────────────────────
 @api_bp.route("/api/resumes")
+@token_required
 def list_resumes():
-    """Return a paginated list of all resumes."""
+    """Return a paginated list of the current user's resumes."""
     page     = request.args.get("page", 1, type=int)
     per_page = current_app.config.get("RESUMES_PER_PAGE", 12)
 
     pagination = (
         Resume.query
-        .filter_by(is_deleted=False)
+        .filter_by(user_id=g.current_user.id, is_deleted=False)
         .order_by(Resume.updated_at.desc())
         .paginate(page=page, per_page=per_page, error_out=False)
     )
@@ -160,10 +162,11 @@ def list_resumes():
 
 
 @api_bp.route("/api/resumes/<int:resume_id>")
+@token_required
 def get_resume(resume_id: int):
-    """Return a single resume as JSON."""
+    """Return a single resume owned by the current user as JSON."""
     resume = Resume.query.filter_by(
-        id=resume_id, is_deleted=False
+        id=resume_id, user_id=g.current_user.id, is_deleted=False
     ).first_or_404()
     return jsonify({"success": True, "data": resume.to_dict()})
 
@@ -179,9 +182,10 @@ def list_templates():
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# Current User Info (Guest profile)
+# Current User Info
 # ────────────────────────────────────────────────────────────────────────────
 @api_bp.route("/api/me")
+@token_required
 def me():
-    """Return guest user profile data as JSON."""
-    return jsonify({"success": True, "data": {"name": "Guest User", "email": ""}})
+    """Return authenticated user profile data as JSON."""
+    return jsonify({"success": True, "data": g.current_user.to_dict()})

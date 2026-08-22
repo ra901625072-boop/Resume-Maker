@@ -50,6 +50,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script src="/static/js/config.js"></script>
     <script src="/static/js/core/auth-guard.js"></script>
+    <script src="/static/js/core/api-client.js"></script>
 </head>
 
 <body
@@ -831,10 +832,7 @@
                 }
 
                 try {
-                    const apiBase = window.API_BASE_URL || '';
-                    const res = await fetch(`${apiBase}/api/resumes/${resumeId}`, {
-                        credentials: 'include'
-                    });
+                    const res = await window.apiFetch(`/api/resumes/${resumeId}`);
                     if (res.ok) {
                         const data = await res.json();
                         if (data.success && data.data) {
@@ -905,13 +903,11 @@
                     this.activeTemplateId = templateNum;
                     const resumeId = this.resumeData.id;
                     try {
-                        const apiBase = window.API_BASE_URL || '';
                         const fd = new FormData();
                         fd.append('template', 'template' + templateNum);
 
-                        await fetch(`${apiBase}/resume/${resumeId}/switch-template`, {
+                        await window.apiFetch(`/resume/${resumeId}/switch-template`, {
                             method: 'POST',
-                            credentials: 'include',
                             body: fd
                         });
                     } catch (err) {
@@ -942,10 +938,7 @@
                     this.isDownloadMenuOpen = false;
                     const resumeId = this.resumeData.id;
                     try {
-                        const apiBase = window.API_BASE_URL || '';
-                        const res = await fetch(`${apiBase}/resume/${resumeId}/download-doc`, {
-                            credentials: 'include'
-                        });
+                        const res = await window.apiFetch(`/resume/${resumeId}/download-doc`);
                         if (res.ok) {
                             const blob = await res.blob();
                             const url = URL.createObjectURL(blob);

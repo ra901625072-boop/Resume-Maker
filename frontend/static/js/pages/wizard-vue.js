@@ -40,10 +40,7 @@ createApp({
             this.isEditing = true;
             this.formData.resume_id = resumeId;
             try {
-                const apiBase = window.API_BASE_URL || '';
-                const res = await fetch(`${apiBase}/api/resumes/${resumeId}`, {
-                    credentials: 'include'
-                });
+                const res = await window.apiFetch(`/api/resumes/${resumeId}`);
                 if (res.ok) {
                     const data = await res.json();
                     if (data.success && data.data) {
@@ -321,21 +318,13 @@ createApp({
 
             this.isGeneratingSummary = true;
             try {
-                const apiBase = window.API_BASE_URL || '';
-                const csrfEl = document.querySelector('input[name="csrf_token"]');
-                const csrfToken = csrfEl ? csrfEl.value : '';
-                const headers = { 'Content-Type': 'application/json' };
-                if (csrfToken) headers['X-CSRFToken'] = csrfToken;
-
-                const res = await fetch(`${apiBase}/api/generate-summary`, {
+                const res = await window.apiFetch('/api/generate-summary', {
                     method: 'POST',
-                    credentials: 'include',
-                    headers: headers,
-                    body: JSON.stringify({
+                    body: {
                         name: this.formData.name,
                         title: this.formData.title,
                         skills: this.formData.skills
-                    })
+                    }
                 });
                 const data = await res.json();
                 if (data.success) {
@@ -359,22 +348,14 @@ createApp({
 
             exp.isGenerating = true;
             try {
-                const apiBase = window.API_BASE_URL || '';
-                const csrfEl = document.querySelector('input[name="csrf_token"]');
-                const csrfToken = csrfEl ? csrfEl.value : '';
-                const headers = { 'Content-Type': 'application/json' };
-                if (csrfToken) headers['X-CSRFToken'] = csrfToken;
-
-                const res = await fetch(`${apiBase}/api/generate-experience`, {
+                const res = await window.apiFetch('/api/generate-experience', {
                     method: 'POST',
-                    credentials: 'include',
-                    headers: headers,
-                    body: JSON.stringify({
+                    body: {
                         title: exp.title,
                         company: exp.company,
                         duration: exp.duration,
                         skills: this.formData.skills
-                    })
+                    }
                 });
                 const data = await res.json();
                 if (data.success) {
@@ -398,24 +379,15 @@ createApp({
 
             this.isSaving = true;
             try {
-                const apiBase = window.API_BASE_URL || '';
-                const csrfEl = document.querySelector('input[name="csrf_token"]');
-                const csrfToken = csrfEl ? csrfEl.value : '';
-                
                 let photoUrl = '';
 
                 // Upload photo first if exists
                 if (this.photoFile) {
                     const fd = new FormData();
                     fd.append('photo', this.photoFile);
-                    
-                    const photoHeaders = {};
-                    if (csrfToken) photoHeaders['X-CSRFToken'] = csrfToken;
 
-                    const photoRes = await fetch(`${apiBase}/upload-photo`, {
+                    const photoRes = await window.apiFetch('/upload-photo', {
                         method: 'POST',
-                        credentials: 'include',
-                        headers: photoHeaders,
                         body: fd
                     });
                     const photoData = await photoRes.json();
@@ -443,14 +415,9 @@ createApp({
                 payload.education = payload.education.filter(e => e.degree.trim() !== '');
 
                 // Async JSON API
-                const headers = { 'Content-Type': 'application/json' };
-                if (csrfToken) headers['X-CSRFToken'] = csrfToken;
-
-                const res = await fetch(`${apiBase}/generate`, {
+                const res = await window.apiFetch('/generate', {
                     method: 'POST',
-                    credentials: 'include',
-                    headers: headers,
-                    body: JSON.stringify(payload)
+                    body: payload
                 });
 
                 const result = await res.json();

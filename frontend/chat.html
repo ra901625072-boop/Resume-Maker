@@ -27,6 +27,7 @@
     <!-- Config & Auth Guard -->
     <script src="/static/js/config.js"></script>
     <script src="/static/js/core/auth-guard.js"></script>
+    <script src="/static/js/core/api-client.js"></script>
     <script src="/static/js/core/theme-controller.js"></script>
 </head>
 
@@ -98,6 +99,9 @@
                                 <line x1="12" y1="3" x2="12" y2="15"></line>
                             </svg>
                             <span>JSON Format</span>
+                        </a>
+                        <a href="#" class="btn-logout" data-action="logout" role="menuitem" style="color: var(--danger, #ef4444);">
+                            <span>Log Out</span>
                         </a>
                     </div>
                 </div>
@@ -378,17 +382,12 @@
             showLoading();
 
             try {
-                const apiBase = window.API_BASE_URL || '';
-                const response = await fetch(`${apiBase}/api/chat`, {
+                const response = await window.apiFetch('/api/chat', {
                     method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
+                    body: {
                         message: message,
                         history: chatHistory
-                    })
+                    }
                 });
 
                 const result = await response.json();

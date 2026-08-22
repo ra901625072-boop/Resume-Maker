@@ -73,16 +73,19 @@ def create_app(config_override=None) -> Flask:
     from backend.routes.resume import resume_bp
     from backend.routes.ai import ai_bp
     from backend.routes.api import api_bp
+    from backend.routes.auth import auth_bp
 
     app.register_blueprint(main_bp)            # /  /dashboard  /profile  /chat  /json-features
     app.register_blueprint(resume_bp)          # /generate  /resume/<id>  /resume/<id>/edit  …
     app.register_blueprint(ai_bp)              # /api/generate-summary  /api/generate-experience  …
     app.register_blueprint(api_bp)             # /api/chat  /upload-photo  /api/resumes  …
+    app.register_blueprint(auth_bp)            # /api/auth/signup  /api/auth/login  …
 
     # Exempt CORS API blueprints from CSRF checks
     csrf.exempt(resume_bp)
     csrf.exempt(ai_bp)
     csrf.exempt(api_bp)
+    csrf.exempt(auth_bp)
 
 
 

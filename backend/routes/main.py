@@ -31,6 +31,18 @@ def home():
     })
 
 
+@main_bp.route("/login")
+def login_redirect():
+    """Redirect backend login visits to frontend login."""
+    return redirect(_get_frontend_redirect() + "/login")
+
+
+@main_bp.route("/signup")
+def signup_redirect():
+    """Redirect backend signup visits to frontend signup."""
+    return redirect(_get_frontend_redirect() + "/signup")
+
+
 @main_bp.route("/dashboard")
 def dashboard():
     """Redirect backend browser visits to the frontend dashboard."""

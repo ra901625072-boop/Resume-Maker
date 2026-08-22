@@ -1,30 +1,31 @@
 """
 routes/resume.py — Resume CRUD Blueprint
 ==========================================
-All resume-document operations:
+All resume-document operations with Bearer token authentication
+and horizontal ownership checks (IDOR protection):
 
   POST /generate                          → create or update resume (from wizard)
-  GET  /resume/<id>                       → view rendered resume (template page)
+  GET  /resume/<id>                       → view resume data JSON
+  GET  /resume/<id>/download-doc          → download as text
   GET  /resume/<id>/download              → download as JSON
-  POST /resume/<id>/delete                → hard delete
+  POST /resume/<id>/delete                → soft delete
   POST /resume/<id>/duplicate             → clone with a different template
   POST /resume/process-json               → parse uploaded file → JSON schema
-
-The wizard sends one unified JSON payload to POST /generate regardless
-of whether this is a create or an update (resume_id present = update).
+  GET  /resume/<id>/versions              → version history list
 """
 
 import json
 import os
 import uuid
 
-from flask import (Blueprint, abort, current_app, flash, jsonify,
+from flask import (Blueprint, abort, current_app, flash, g, jsonify,
                    redirect, request, url_for)
 from werkzeug.utils import secure_filename
 
 from backend.extensions import db, limiter
 from backend.models import (Education, Experience, ExportHistory, Resume,
                              ResumeVersion)
+from backend.services.auth_token_service import token_required
 
 resume_bp = Blueprint("resume", __name__)
 
@@ -36,29 +37,12 @@ VALID_TEMPLATES = {f"template{i}" for i in range(1, 9)}
 # Create / Update Resume  (called by wizard-vue.js → POST /generate)
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/generate", methods=["POST"])
+@token_required
 @limiter.limit("30 per hour")
 def generate():
     """
     Accept the Vue wizard payload and persist it to the database.
-
-    Expected JSON body (mirrors formData from wizard-vue.js):
-    {
-        "resume_id": null | int,    ← null = create, int = update
-        "template":  "template1",
-        "name":      "John Doe",
-        "title":     "Senior Engineer",
-        "email":     "john@example.com",
-        "phone":     "1234567890",
-        "address":   "New York, NY",
-        "photo":     "/static/uploads/abc.jpg",   ← optional
-        "summary":   "...",
-        "skills":    ["Python", "Flask"],          ← array from wizard
-        "languages": ["English (Native)"],
-        "experience": [{ title, company, duration, description }],
-        "education":  [{ degree, university, year }]
-    }
-
-    Returns JSON: { "success": true, "redirect": "/resume/<id>" }
+    Owned by the authenticated user in g.current_user.
     """
     data = request.get_json(silent=True)
     if not data:
@@ -75,7 +59,7 @@ def generate():
     try:
         if is_update:
             resume = Resume.query.filter_by(
-                id=resume_id, is_deleted=False
+                id=resume_id, user_id=g.current_user.id, is_deleted=False
             ).first()
             if not resume:
                 return jsonify({"success": False, "error": "Resume not found."}), 404
@@ -89,7 +73,7 @@ def generate():
             Experience.query.filter_by(resume_id=resume.id).delete()
             Education.query.filter_by(resume_id=resume.id).delete()
         else:
-            resume = Resume()
+            resume = Resume(user_id=g.current_user.id)
             db.session.add(resume)
 
         # ── Populate fields ───────────────────────────────────────────────────
@@ -145,30 +129,31 @@ def generate():
             db.session.add(edu)
 
         db.session.commit()
-        flash("Resume saved successfully! ✅", "success")
         return jsonify({
-            "success":  True,
-            "redirect": url_for("resume.view_resume", resume_id=resume.id),
+            "success":   True,
+            "message":   "Resume saved successfully! ✅",
+            "redirect":  url_for("resume.view_resume", resume_id=resume.id),
             "resume_id": resume.id,
         })
 
-    except Exception as exc:
+    except Exception:
         db.session.rollback()
         current_app.logger.exception("Error saving resume")
         return jsonify({"success": False, "error": "Failed to save resume. Please try again."}), 500
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# View Resume (rendered template page)
+# View Resume (rendered template data)
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/<int:resume_id>")
+@token_required
 def view_resume(resume_id: int):
     """
     Return resume data as JSON.
     The frontend renders resumes client-side via resume.html.
     """
     resume = Resume.query.filter_by(
-        id=resume_id, is_deleted=False
+        id=resume_id, user_id=g.current_user.id, is_deleted=False
     ).first_or_404()
 
     data = resume.to_dict()
@@ -191,10 +176,11 @@ def view_resume(resume_id: int):
 
 
 @resume_bp.route("/resume/<int:resume_id>/switch-template", methods=["POST"])
+@token_required
 def switch_template(resume_id: int):
     """Quick template switch without duplicating — updates in place."""
     resume = Resume.query.filter_by(
-        id=resume_id, is_deleted=False
+        id=resume_id, user_id=g.current_user.id, is_deleted=False
     ).first_or_404()
 
     # Extract template from JSON payload or form data
@@ -217,14 +203,15 @@ def switch_template(resume_id: int):
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# Download DOC (plain-text placeholder; real DOCX needs python-docx)
+# Download DOC (plain-text)
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/<int:resume_id>/download-doc")
+@token_required
 def download_doc(resume_id: int):
     """Download resume as plain text (DOCX generation is a future enhancement)."""
-    from flask import current_app, Response
+    from flask import Response
     resume = Resume.query.filter_by(
-        id=resume_id, is_deleted=False
+        id=resume_id, user_id=g.current_user.id, is_deleted=False
     ).first_or_404()
 
     lines = [
@@ -249,13 +236,14 @@ def download_doc(resume_id: int):
 # Download JSON
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/<int:resume_id>/download")
+@token_required
 def download_resume(resume_id: int):
     """
     Return the resume as a downloadable JSON file.
     Also records an ExportHistory entry.
     """
     resume = Resume.query.filter_by(
-        id=resume_id, is_deleted=False
+        id=resume_id, user_id=g.current_user.id, is_deleted=False
     ).first_or_404()
 
     # Log the export
@@ -280,10 +268,11 @@ def download_resume(resume_id: int):
 # Delete Resume
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/<int:resume_id>/delete", methods=["POST"])
+@token_required
 def delete_resume(resume_id: int):
     """Soft-delete the resume so it disappears from the profile page."""
     resume = Resume.query.filter_by(
-        id=resume_id, is_deleted=False
+        id=resume_id, user_id=g.current_user.id, is_deleted=False
     ).first_or_404()
 
     resume.is_deleted = True
@@ -300,13 +289,14 @@ def delete_resume(resume_id: int):
 # Duplicate / Clone Resume with a Different Template
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/<int:resume_id>/duplicate", methods=["POST"])
+@token_required
 def duplicate_resume(resume_id: int):
     """
     Clone a resume with a new template (the "Switch Template / Clone" UI).
     Creates a brand-new Resume row with the same data but a different template.
     """
     source = Resume.query.filter_by(
-        id=resume_id, is_deleted=False
+        id=resume_id, user_id=g.current_user.id, is_deleted=False
     ).first_or_404()
 
     if request.is_json:
@@ -323,6 +313,7 @@ def duplicate_resume(resume_id: int):
 
     try:
         clone = Resume(
+            user_id   = g.current_user.id,
             template  = new_template,
             name      = source.name,
             title     = source.title,
@@ -362,9 +353,10 @@ def duplicate_resume(resume_id: int):
 
         if request.is_json or request.headers.get("Accept") == "application/json" or request.headers.get("Origin"):
             return jsonify({
-                "success": True,
-                "message": f"Resume cloned with {new_template.title()} template! ✅",
-                "redirect": f"/resume?id={clone.id}"
+                "success":   True,
+                "message":   f"Resume cloned with {new_template.title()} template! ✅",
+                "redirect":  f"/resume?id={clone.id}",
+                "resume_id": clone.id,
             })
 
         flash(f"Resume cloned with {new_template.title()} template! ✅", "success")
@@ -383,20 +375,20 @@ def duplicate_resume(resume_id: int):
 # JSON Resume Parser  (upload → extract → display)
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/process-json", methods=["POST"])
+@token_required
 @limiter.limit("10 per hour")
 def process_json():
     """
     Accept a PDF / DOCX / JSON file upload, extract structured data
     using the AI service, and redirect to the wizard pre-filled with
     that data.
-
-    For JSON files: parse directly.
-    For PDF/DOCX: use the AI service to extract structured data.
     """
     from backend.services.ai_service import AIService
 
     uploaded_file = request.files.get("json_file")
     if not uploaded_file or not uploaded_file.filename:
+        if request.is_json or request.headers.get("Accept") == "application/json" or request.headers.get("Origin"):
+            return jsonify({"success": False, "error": "No file selected."}), 400
         flash("No file selected.", "error")
         return redirect(url_for("main.json_features"))
 
@@ -405,7 +397,10 @@ def process_json():
 
     allowed = current_app.config.get("ALLOWED_RESUME_EXTENSIONS", {"json", "pdf", "docx"})
     if ext not in allowed:
-        flash(f"Unsupported file type: .{ext}. Please upload JSON, PDF, or DOCX.", "error")
+        msg = f"Unsupported file type: .{ext}. Please upload JSON, PDF, or DOCX."
+        if request.is_json or request.headers.get("Accept") == "application/json" or request.headers.get("Origin"):
+            return jsonify({"success": False, "error": msg}), 415
+        flash(msg, "error")
         return redirect(url_for("main.json_features"))
 
     try:
@@ -426,17 +421,25 @@ def process_json():
                 if os.path.exists(save_path):
                     os.remove(save_path)
 
-        # Re-direct to wizard with parsed data serialized in session
+        if request.is_json or request.headers.get("Accept") == "application/json" or request.headers.get("Origin"):
+            return jsonify({"success": True, "data": parsed_data})
+
         from flask import session
         session["import_data"] = parsed_data
         flash("Resume parsed successfully! Fill in any missing details below.", "success")
         return redirect(url_for("main.dashboard"))
 
     except json.JSONDecodeError:
-        flash("The JSON file is malformed. Please check and try again.", "error")
-    except Exception as exc:
+        msg = "The JSON file is malformed. Please check and try again."
+        if request.is_json or request.headers.get("Accept") == "application/json" or request.headers.get("Origin"):
+            return jsonify({"success": False, "error": msg}), 422
+        flash(msg, "error")
+    except Exception:
         current_app.logger.exception("File processing error")
-        flash("Could not process the file. Please try again.", "error")
+        msg = "Could not process the file. Please try again."
+        if request.is_json or request.headers.get("Accept") == "application/json" or request.headers.get("Origin"):
+            return jsonify({"success": False, "error": msg}), 500
+        flash(msg, "error")
 
     return redirect(url_for("main.json_features"))
 
@@ -445,10 +448,11 @@ def process_json():
 # Version History
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/<int:resume_id>/versions")
+@token_required
 def version_history(resume_id: int):
     """Return JSON list of version snapshots for a resume."""
     resume = Resume.query.filter_by(
-        id=resume_id, is_deleted=False
+        id=resume_id, user_id=g.current_user.id, is_deleted=False
     ).first_or_404()
 
     versions = (

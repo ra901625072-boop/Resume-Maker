@@ -28,6 +28,7 @@
     <!-- Config & Auth Guard -->
     <script src="/static/js/config.js"></script>
     <script src="/static/js/core/auth-guard.js"></script>
+    <script src="/static/js/core/api-client.js"></script>
     <script src="/static/js/core/theme-controller.js"></script>
 
     <style>
@@ -537,6 +538,9 @@
                             </svg>
                             <span>AI Chat Assistant</span>
                         </a>
+                        <a href="#" class="btn-logout" data-action="logout" role="menuitem" style="color: var(--danger, #ef4444);">
+                            <span>Log Out</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -808,18 +812,10 @@
             try {
                 const fd = new FormData();
                 fd.append('file', selectedFile);
-                
-                const csrfMeta = document.querySelector('meta[name="csrf-token"]');
-                const csrfToken = csrfMeta ? csrfMeta.content : '';
-                const headers = {};
-                if (csrfToken) headers['X-CSRFToken'] = csrfToken;
 
-                const apiBase = window.API_BASE_URL || '';
-                const resp = await fetch(`${apiBase}/api/extract-json`, { 
-                    method: 'POST', 
-                    credentials: 'include',
-                    body: fd, 
-                    headers: headers 
+                const resp = await window.apiFetch('/api/extract-json', {
+                    method: 'POST',
+                    body: fd
                 });
                 
                 clearInterval(ticker);

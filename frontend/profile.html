@@ -29,6 +29,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script src="/static/js/config.js"></script>
     <script src="/static/js/core/auth-guard.js"></script>
+    <script src="/static/js/core/api-client.js"></script>
     <script src="/static/js/core/theme-controller.js"></script>
 </head>
 
@@ -99,6 +100,9 @@
                                 <line x1="12" y1="3" x2="12" y2="15"></line>
                             </svg>
                             <span>JSON Format</span>
+                        </a>
+                        <a href="#" class="btn-logout" data-action="logout" role="menuitem" style="color: var(--danger, #ef4444);">
+                            <span>Log Out</span>
                         </a>
                     </div>
                 </div>
@@ -232,21 +236,19 @@
                 async loadData() {
                     this.isLoading = true;
                     try {
-                        const apiBase = window.API_BASE_URL || '';
-                        
                         // Load profile info
-                        const userRes = await fetch(`${apiBase}/api/me`, { credentials: 'include' });
+                        const userRes = await window.apiFetch('/api/me');
                         if (userRes.ok) {
                             const userData = await userRes.json();
                             this.user = userData.data;
                         }
 
                         // Load resumes
-                        const resumesRes = await fetch(`${apiBase}/api/resumes`, { credentials: 'include' });
+                        const resumesRes = await window.apiFetch('/api/resumes');
                         if (resumesRes.ok) {
                             const resumesData = await resumesRes.json();
-                            this.resumes = resumesData.data.map(r => ({ ...r, selectedTemplate: '' }));
-                            this.totalResumes = resumesData.meta.total;
+                            this.resumes = (resumesData.data || []).map(r => ({ ...r, selectedTemplate: '' }));
+                            this.totalResumes = resumesData.meta ? resumesData.meta.total : this.resumes.length;
                         }
                     } catch (err) {
                         console.error('Error fetching profile data:', err);
@@ -270,8 +272,7 @@
                 },
                 async downloadJson(resumeId) {
                     try {
-                        const apiBase = window.API_BASE_URL || '';
-                        const res = await fetch(`${apiBase}/api/resumes/${resumeId}`, { credentials: 'include' });
+                        const res = await window.apiFetch(`/api/resumes/${resumeId}`);
                         const data = await res.json();
                         if (data.success) {
                             const blob = new Blob([JSON.stringify(data.data, null, 2)], { type: 'application/json' });
@@ -291,10 +292,8 @@
                 async deleteResume(resumeId) {
                     if (!confirm('Are you sure you want to delete this resume?')) return;
                     try {
-                        const apiBase = window.API_BASE_URL || '';
-                        const res = await fetch(`${apiBase}/resume/${resumeId}/delete`, {
-                            method: 'POST',
-                            credentials: 'include'
+                        const res = await window.apiFetch(`/resume/${resumeId}/delete`, {
+                            method: 'POST'
                         });
                         const data = await res.json();
                         if (data.success) {
@@ -310,13 +309,11 @@
                 async duplicateResume(resumeId, duplicateTemplate) {
                     if (!duplicateTemplate) return;
                     try {
-                        const apiBase = window.API_BASE_URL || '';
                         const fd = new FormData();
                         fd.append('duplicate_template', duplicateTemplate);
                         
-                        const res = await fetch(`${apiBase}/resume/${resumeId}/duplicate`, {
+                        const res = await window.apiFetch(`/resume/${resumeId}/duplicate`, {
                             method: 'POST',
-                            credentials: 'include',
                             body: fd
                         });
                         const data = await res.json();

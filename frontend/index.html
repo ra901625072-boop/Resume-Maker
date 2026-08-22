@@ -32,6 +32,7 @@
     <!-- Config & Auth Guard -->
     <script src="/static/js/config.js"></script>
     <script src="/static/js/core/auth-guard.js"></script>
+    <script src="/static/js/core/api-client.js"></script>
     <script src="/static/js/core/theme-controller.js"></script>
 </head>
 
@@ -59,14 +60,19 @@
                     <a href="#templates">Templates</a>
                     <a href="/chat">AI Assistant</a>
                     <a href="/json">JSON Extractor</a>
-                    <a href="/profile">My Resumes</a>
-                    <a href="/dashboard" class="btn-primary">Create Resume</a>
+                    <a href="/profile" data-show-auth>My Resumes</a>
+                    <a href="/login.html" data-show-guest>Log In</a>
+                    <a href="/signup.html" data-show-guest class="btn-primary">Sign Up</a>
+                    <a href="/dashboard" data-show-auth class="btn-primary">Create Resume</a>
+                    <a href="#" data-show-auth class="btn-logout" data-action="logout" style="color: var(--text-muted); font-size: var(--text-sm); margin-left: 6px;">Log Out</a>
                 </nav>
 
                 <!-- Mobile nav (shown ≤500px via CSS) -->
                 <nav class="mobile-nav-pills" aria-label="Mobile Navigation">
-                    <a href="/profile" class="mobile-nav-login">My Resumes</a>
-                    <a href="/dashboard" class="mobile-nav-signup">Create</a>
+                    <a href="/login.html" data-show-guest class="mobile-nav-login">Log In</a>
+                    <a href="/signup.html" data-show-guest class="mobile-nav-signup">Sign Up</a>
+                    <a href="/profile" data-show-auth class="mobile-nav-login">My Resumes</a>
+                    <a href="/dashboard" data-show-auth class="mobile-nav-signup">Create</a>
                 </nav>
 
                 <button class="nav-icon-btn" id="theme-toggle" aria-label="Toggle dark mode" type="button">
