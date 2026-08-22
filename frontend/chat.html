@@ -30,7 +30,7 @@
     <script src="/static/js/core/theme-controller.js"></script>
 </head>
 
-<body class="chat-page protected-page">
+<body class="chat-page">
 
     <!-- Global Background -->
     <div class="global-bg" aria-hidden="true">
@@ -67,9 +67,9 @@
                 </button>
 
                 <div class="user-dropdown">
-                    <button class="user-dropdown-trigger" id="userDropdownBtn" aria-label="User menu" aria-haspopup="true" aria-expanded="false" type="button">
-                        <span class="user-avatar js-user-avatar">?</span>
-                        <span class="user-name js-user-name">User</span>
+                    <button class="user-dropdown-trigger" id="userDropdownBtn" aria-label="Navigation menu" aria-haspopup="true" aria-expanded="false" type="button">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                        <span class="user-name" style="display: inline;">Menu</span>
                         <svg class="dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
@@ -89,7 +89,7 @@
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                 <circle cx="12" cy="7" r="4"></circle>
                             </svg>
-                            <span>Profile</span>
+                            <span>My Resumes</span>
                         </a>
                         <a href="/json" role="menuitem">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -98,15 +98,6 @@
                                 <line x1="12" y1="3" x2="12" y2="15"></line>
                             </svg>
                             <span>JSON Format</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="/logout" class="dropdown-logout" role="menuitem">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                <polyline points="16 17 21 12 16 7"></polyline>
-                                <line x1="21" y1="12" x2="9" y2="12"></line>
-                            </svg>
-                            <span>Logout</span>
                         </a>
                     </div>
                 </div>

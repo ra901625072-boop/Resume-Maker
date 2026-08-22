@@ -16,7 +16,6 @@ import os
 import uuid
 
 from flask import (Blueprint, current_app, jsonify, request, url_for)
-from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
 from backend.extensions import limiter
@@ -51,7 +50,6 @@ def health_check():
 # AI Chat  (called by chat.html via fetch('/api/chat'))
 # ────────────────────────────────────────────────────────────────────────────
 @api_bp.route("/api/chat", methods=["POST"])
-@login_required
 @limiter.limit("60 per hour")
 def chat():
     """
@@ -75,7 +73,6 @@ def chat():
 # Photo Upload  (called by wizard-vue.js → fetch('/upload-photo'))
 # ────────────────────────────────────────────────────────────────────────────
 @api_bp.route("/upload-photo", methods=["POST"])
-@login_required
 @limiter.limit("20 per hour")
 def upload_photo():
     """
@@ -136,15 +133,14 @@ def serve_upload(filename: str):
 # Resumes — JSON REST API
 # ────────────────────────────────────────────────────────────────────────────
 @api_bp.route("/api/resumes")
-@login_required
 def list_resumes():
-    """Return a paginated list of the current user's resumes."""
+    """Return a paginated list of all resumes."""
     page     = request.args.get("page", 1, type=int)
     per_page = current_app.config.get("RESUMES_PER_PAGE", 12)
 
     pagination = (
         Resume.query
-        .filter_by(user_id=current_user.id, is_deleted=False)
+        .filter_by(is_deleted=False)
         .order_by(Resume.updated_at.desc())
         .paginate(page=page, per_page=per_page, error_out=False)
     )
@@ -164,11 +160,10 @@ def list_resumes():
 
 
 @api_bp.route("/api/resumes/<int:resume_id>")
-@login_required
 def get_resume(resume_id: int):
     """Return a single resume as JSON."""
     resume = Resume.query.filter_by(
-        id=resume_id, user_id=current_user.id, is_deleted=False
+        id=resume_id, is_deleted=False
     ).first_or_404()
     return jsonify({"success": True, "data": resume.to_dict()})
 
@@ -184,10 +179,9 @@ def list_templates():
 
 
 # ────────────────────────────────────────────────────────────────────────────
-# Current User Info
+# Current User Info (Guest profile)
 # ────────────────────────────────────────────────────────────────────────────
 @api_bp.route("/api/me")
-@login_required
 def me():
-    """Return current user profile data as JSON."""
-    return jsonify({"success": True, "data": current_user.to_dict()})
+    """Return guest user profile data as JSON."""
+    return jsonify({"success": True, "data": {"name": "Guest User", "email": ""}})

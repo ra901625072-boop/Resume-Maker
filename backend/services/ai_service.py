@@ -661,15 +661,11 @@ def _dict_to_text(resume_dict: dict) -> str:
 def _log_ai_history(action, prompt, response, model, tokens, success, error=None):
     """Persist an AIHistory row — silently skipped if outside app context."""
     try:
-        from flask_login import current_user
         from backend.models import AIHistory
         from backend.extensions import db
 
-        if not current_user or not current_user.is_authenticated:
-            return
-
         record = AIHistory(
-            user_id       = current_user.id,
+            user_id       = None,
             action        = action,
             prompt        = prompt[:2000] if prompt else None,
             response      = response[:4000] if response else None,

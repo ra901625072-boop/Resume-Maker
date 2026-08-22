@@ -13,8 +13,7 @@ class ExportHistory(db.Model):
     id          = db.Column(db.Integer, primary_key=True)
     resume_id   = db.Column(db.Integer, db.ForeignKey("resumes.id", ondelete="CASCADE"),
                              nullable=False, index=True)
-    user_id     = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"),
-                             nullable=False)
+    user_id     = db.Column(db.Integer, nullable=True)
     format      = db.Column(db.String(10), default="pdf")   # "pdf" | "json"
     exported_at = db.Column(db.DateTime(timezone=True), default=_utcnow, nullable=False)
 

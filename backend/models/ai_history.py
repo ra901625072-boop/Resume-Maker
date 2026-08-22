@@ -11,8 +11,7 @@ class AIHistory(db.Model):
     __tablename__ = "ai_history"
 
     id            = db.Column(db.Integer, primary_key=True)
-    user_id       = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"),
-                               nullable=False, index=True)
+    user_id       = db.Column(db.Integer, nullable=True, index=True)
     resume_id     = db.Column(db.Integer, db.ForeignKey("resumes.id", ondelete="SET NULL"),
                                nullable=True)
     action        = db.Column(db.String(60), nullable=False)

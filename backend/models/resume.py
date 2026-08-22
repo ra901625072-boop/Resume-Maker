@@ -12,8 +12,7 @@ class Resume(db.Model):
     __tablename__ = "resumes"
 
     id          = db.Column(db.Integer, primary_key=True)
-    user_id     = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"),
-                             nullable=False, index=True)
+    user_id     = db.Column(db.Integer, nullable=True, index=True)
     template    = db.Column(db.String(50), nullable=False, default="template1")
 
     # Personal info (Step 1 of wizard)

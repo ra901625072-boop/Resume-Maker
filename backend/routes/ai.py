@@ -17,7 +17,6 @@ import os
 import uuid
 
 from flask import Blueprint, current_app, jsonify, request
-from flask_login import login_required
 from werkzeug.utils import secure_filename
 
 from backend.extensions import limiter
@@ -30,7 +29,6 @@ ai_bp = Blueprint("ai", __name__, url_prefix="/api")
 # Generate Professional Summary
 # ────────────────────────────────────────────────────────────────────────────
 @ai_bp.route("/generate-summary", methods=["POST"])
-@login_required
 @limiter.limit("20 per hour")
 def generate_summary():
     """Body: { name, title, skills }"""
@@ -52,7 +50,6 @@ def generate_summary():
 # Generate Experience Description
 # ────────────────────────────────────────────────────────────────────────────
 @ai_bp.route("/generate-experience", methods=["POST"])
-@login_required
 @limiter.limit("20 per hour")
 def generate_experience():
     """Body: { title, company, duration, skills }"""
@@ -75,7 +72,6 @@ def generate_experience():
 # Suggest Skills
 # ────────────────────────────────────────────────────────────────────────────
 @ai_bp.route("/suggest-skills", methods=["POST"])
-@login_required
 @limiter.limit("15 per hour")
 def suggest_skills():
     """Body: { job_title, existing_skills }"""
@@ -94,7 +90,6 @@ def suggest_skills():
 # Improve Grammar / Tone
 # ────────────────────────────────────────────────────────────────────────────
 @ai_bp.route("/improve-grammar", methods=["POST"])
-@login_required
 @limiter.limit("15 per hour")
 def improve_grammar():
     """Body: { text }"""
@@ -112,7 +107,6 @@ def improve_grammar():
 # ATS Resume Score
 # ────────────────────────────────────────────────────────────────────────────
 @ai_bp.route("/ats-score", methods=["POST"])
-@login_required
 @limiter.limit("10 per hour")
 def ats_score():
     """Body: { resume_id }  OR  full resume dict"""
@@ -122,9 +116,8 @@ def ats_score():
     resume_id = body.get("resume_id")
 
     if resume_id:
-        from flask_login import current_user
         resume = Resume.query.filter_by(
-            id=resume_id, user_id=current_user.id, is_deleted=False
+            id=resume_id, is_deleted=False
         ).first()
         if not resume:
             return jsonify({"success": False, "error": "Resume not found."}), 404
@@ -140,7 +133,6 @@ def ats_score():
 # Cover Letter Generator
 # ────────────────────────────────────────────────────────────────────────────
 @ai_bp.route("/cover-letter", methods=["POST"])
-@login_required
 @limiter.limit("10 per hour")
 def cover_letter():
     """Body: { name, title, company, job_description, skills }"""
@@ -172,7 +164,6 @@ def cover_letter():
 # Returns: { success, data: { name, title, email, ... } }
 # ────────────────────────────────────────────────────────────────────────────
 @ai_bp.route("/extract-json", methods=["POST"])
-@login_required
 @limiter.limit("10 per hour")
 def extract_json():
     """

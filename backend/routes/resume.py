@@ -20,7 +20,6 @@ import uuid
 
 from flask import (Blueprint, abort, current_app, flash, jsonify,
                    redirect, request, url_for)
-from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
 from backend.extensions import db, limiter
@@ -37,7 +36,6 @@ VALID_TEMPLATES = {f"template{i}" for i in range(1, 9)}
 # Create / Update Resume  (called by wizard-vue.js → POST /generate)
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/generate", methods=["POST"])
-@login_required
 @limiter.limit("30 per hour")
 def generate():
     """
@@ -77,7 +75,7 @@ def generate():
     try:
         if is_update:
             resume = Resume.query.filter_by(
-                id=resume_id, user_id=current_user.id, is_deleted=False
+                id=resume_id, is_deleted=False
             ).first()
             if not resume:
                 return jsonify({"success": False, "error": "Resume not found."}), 404
@@ -91,7 +89,7 @@ def generate():
             Experience.query.filter_by(resume_id=resume.id).delete()
             Education.query.filter_by(resume_id=resume.id).delete()
         else:
-            resume = Resume(user_id=current_user.id)
+            resume = Resume()
             db.session.add(resume)
 
         # ── Populate fields ───────────────────────────────────────────────────
@@ -164,14 +162,13 @@ def generate():
 # View Resume (rendered template page)
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/<int:resume_id>")
-@login_required
 def view_resume(resume_id: int):
     """
     Return resume data as JSON.
     The frontend renders resumes client-side via resume.html.
     """
     resume = Resume.query.filter_by(
-        id=resume_id, user_id=current_user.id, is_deleted=False
+        id=resume_id, is_deleted=False
     ).first_or_404()
 
     data = resume.to_dict()
@@ -194,11 +191,10 @@ def view_resume(resume_id: int):
 
 
 @resume_bp.route("/resume/<int:resume_id>/switch-template", methods=["POST"])
-@login_required
 def switch_template(resume_id: int):
     """Quick template switch without duplicating — updates in place."""
     resume = Resume.query.filter_by(
-        id=resume_id, user_id=current_user.id, is_deleted=False
+        id=resume_id, is_deleted=False
     ).first_or_404()
 
     # Extract template from JSON payload or form data
@@ -224,12 +220,11 @@ def switch_template(resume_id: int):
 # Download DOC (plain-text placeholder; real DOCX needs python-docx)
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/<int:resume_id>/download-doc")
-@login_required
 def download_doc(resume_id: int):
     """Download resume as plain text (DOCX generation is a future enhancement)."""
     from flask import current_app, Response
     resume = Resume.query.filter_by(
-        id=resume_id, user_id=current_user.id, is_deleted=False
+        id=resume_id, is_deleted=False
     ).first_or_404()
 
     lines = [
@@ -254,20 +249,18 @@ def download_doc(resume_id: int):
 # Download JSON
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/<int:resume_id>/download")
-@login_required
 def download_resume(resume_id: int):
     """
     Return the resume as a downloadable JSON file.
     Also records an ExportHistory entry.
     """
     resume = Resume.query.filter_by(
-        id=resume_id, user_id=current_user.id, is_deleted=False
+        id=resume_id, is_deleted=False
     ).first_or_404()
 
     # Log the export
     export = ExportHistory(
         resume_id=resume.id,
-        user_id=current_user.id,
         format="json",
     )
     db.session.add(export)
@@ -287,11 +280,10 @@ def download_resume(resume_id: int):
 # Delete Resume
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/<int:resume_id>/delete", methods=["POST"])
-@login_required
 def delete_resume(resume_id: int):
     """Soft-delete the resume so it disappears from the profile page."""
     resume = Resume.query.filter_by(
-        id=resume_id, user_id=current_user.id, is_deleted=False
+        id=resume_id, is_deleted=False
     ).first_or_404()
 
     resume.is_deleted = True
@@ -308,14 +300,13 @@ def delete_resume(resume_id: int):
 # Duplicate / Clone Resume with a Different Template
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/<int:resume_id>/duplicate", methods=["POST"])
-@login_required
 def duplicate_resume(resume_id: int):
     """
     Clone a resume with a new template (the "Switch Template / Clone" UI).
     Creates a brand-new Resume row with the same data but a different template.
     """
     source = Resume.query.filter_by(
-        id=resume_id, user_id=current_user.id, is_deleted=False
+        id=resume_id, is_deleted=False
     ).first_or_404()
 
     if request.is_json:
@@ -332,7 +323,6 @@ def duplicate_resume(resume_id: int):
 
     try:
         clone = Resume(
-            user_id   = current_user.id,
             template  = new_template,
             name      = source.name,
             title     = source.title,
@@ -393,7 +383,6 @@ def duplicate_resume(resume_id: int):
 # JSON Resume Parser  (upload → extract → display)
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/process-json", methods=["POST"])
-@login_required
 @limiter.limit("10 per hour")
 def process_json():
     """
@@ -456,11 +445,10 @@ def process_json():
 # Version History
 # ────────────────────────────────────────────────────────────────────────────
 @resume_bp.route("/resume/<int:resume_id>/versions")
-@login_required
 def version_history(resume_id: int):
     """Return JSON list of version snapshots for a resume."""
     resume = Resume.query.filter_by(
-        id=resume_id, user_id=current_user.id, is_deleted=False
+        id=resume_id, is_deleted=False
     ).first_or_404()
 
     versions = (

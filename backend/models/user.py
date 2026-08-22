@@ -1,43 +1,21 @@
 from datetime import datetime, timezone
-from flask_login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
 from backend.extensions import db
 
 def _utcnow():
     return datetime.now(timezone.utc)
 
-class User(UserMixin, db.Model):
+class User(db.Model):
     """
-    Registered user account.
+    User model (optional profile reference).
     """
     __tablename__ = "users"
 
     id            = db.Column(db.Integer, primary_key=True)
-    name          = db.Column(db.String(120), nullable=False)
-    email         = db.Column(db.String(254), unique=True, nullable=False, index=True)
-    password_hash = db.Column(db.String(256), nullable=False)
+    name          = db.Column(db.String(120), nullable=False, default="Guest User")
+    email         = db.Column(db.String(254), nullable=True)
     is_admin      = db.Column(db.Boolean, default=False, nullable=False)
-    is_active     = db.Column(db.Boolean, default=True, nullable=False)
     created_at    = db.Column(db.DateTime(timezone=True), default=_utcnow, nullable=False)
     updated_at    = db.Column(db.DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
-    last_login_at = db.Column(db.DateTime(timezone=True), nullable=True)
-
-    # ── Relationships ─────────────────────────────────────────────────────────
-    resumes      = db.relationship("Resume", backref="owner", lazy="dynamic",
-                                   cascade="all, delete-orphan")
-    ai_history   = db.relationship("AIHistory", backref="user", lazy="dynamic",
-                                   cascade="all, delete-orphan")
-    settings     = db.relationship("UserSettings", backref="user", uselist=False,
-                                   cascade="all, delete-orphan")
-
-    # ── Password helpers ──────────────────────────────────────────────────────
-    def set_password(self, raw_password: str):
-        """Hash and store a password. Never store plaintext."""
-        self.password_hash = generate_password_hash(raw_password)
-
-    def check_password(self, raw_password: str) -> bool:
-        """Return True if the raw password matches the stored hash."""
-        return check_password_hash(self.password_hash, raw_password)
 
     # ── Serialisation ─────────────────────────────────────────────────────────
     def to_dict(self) -> dict:

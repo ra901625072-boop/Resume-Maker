@@ -21,7 +21,7 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask
 
 from backend.config import get_config
-from backend.extensions import cors, csrf, db, limiter, login_manager
+from backend.extensions import cors, csrf, db, limiter
 
 
 def create_app(config_override=None) -> Flask:
@@ -52,10 +52,9 @@ def create_app(config_override=None) -> Flask:
 
     # ── Initialise extensions ─────────────────────────────────────────────────
     db.init_app(app)
-    login_manager.init_app(app)
     csrf.init_app(app)
     
-    # Enable credentials support on CORS for cross-origin authentication
+    # Enable credentials support on CORS
     cors.init_app(
         app,
         resources={
@@ -69,73 +68,18 @@ def create_app(config_override=None) -> Flask:
     )
     limiter.init_app(app)
 
-    # ── Custom unauthorized handler for Flask-Login (CORS APIs) ───────────────
-    @login_manager.unauthorized_handler
-    def unauthorized():
-        from flask import request, jsonify, redirect, url_for
-        if (
-            request.path.startswith("/api/") or
-            request.is_json or
-            request.headers.get("Accept") == "application/json" or
-            request.path.startswith("/generate") or
-            "/delete" in request.path or
-            "/duplicate" in request.path or
-            "/switch-template" in request.path
-        ):
-            return jsonify({"success": False, "error": "Unauthorized"}), 401
-        return redirect(url_for("auth.login"))
-
-    # ── User loaders for Flask-Login (Dual Auth: Session + Bearer Token) ─────
-    from backend.models import User
-    from backend.services.auth_token_service import verify_auth_token
-
-    @login_manager.user_loader
-    def load_user(user_id: str):
-        try:
-            return User.query.get(int(user_id))
-        except (ValueError, TypeError):
-            return None
-
-    @login_manager.request_loader
-    def load_user_from_request(req):
-        # 1. Check Authorization header: 'Bearer <token>'
-        auth_header = req.headers.get("Authorization")
-        if auth_header:
-            parts = auth_header.split(" ", 1)
-            if len(parts) == 2 and parts[0].lower() == "bearer":
-                token = parts[1].strip()
-                user_id = verify_auth_token(token)
-                if user_id:
-                    user = User.query.get(user_id)
-                    if user and user.is_active:
-                        return user
-
-        # 2. Check query parameter: ?auth_token=<token>
-        token_param = req.args.get("auth_token")
-        if token_param:
-            user_id = verify_auth_token(token_param)
-            if user_id:
-                user = User.query.get(user_id)
-                if user and user.is_active:
-                    return user
-
-        return None
-
     # ── Register Blueprints ───────────────────────────────────────────────────
-    from backend.routes.auth import auth_bp
     from backend.routes.main import main_bp
     from backend.routes.resume import resume_bp
     from backend.routes.ai import ai_bp
     from backend.routes.api import api_bp
 
-    app.register_blueprint(auth_bp)            # /login  /signup  /logout
     app.register_blueprint(main_bp)            # /  /dashboard  /profile  /chat  /json-features
     app.register_blueprint(resume_bp)          # /generate  /resume/<id>  /resume/<id>/edit  …
     app.register_blueprint(ai_bp)              # /api/generate-summary  /api/generate-experience  …
     app.register_blueprint(api_bp)             # /api/chat  /upload-photo  /api/resumes  …
 
-    # Exempt CORS API/auth blueprints from CSRF checks
-    csrf.exempt(auth_bp)
+    # Exempt CORS API blueprints from CSRF checks
     csrf.exempt(resume_bp)
     csrf.exempt(ai_bp)
     csrf.exempt(api_bp)
