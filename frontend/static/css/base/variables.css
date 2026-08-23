@@ -16,19 +16,32 @@
   --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* Symmetrical Fluid Modular Scale (1.25 Major Third) */
-  --text-3xs: 0.625rem;  /* 10px */
-  --text-2xs: 0.6875rem; /* 11px */
-  --text-xs:  0.75rem;   /* 12px */
-  --text-sm:  0.875rem;  /* 14px */
-  --text-base: 1rem;     /* 16px */
-  --text-md:   1.0625rem;/* 17px */
-  --text-lg:   1.1875rem;/* 19px */
-  --text-xl:   1.375rem; /* 22px */
-  --text-2xl:  1.625rem; /* 26px */
-  --text-3xl:  2rem;     /* 32px */
-  --text-4xl:  2.5rem;   /* 40px */
-  --text-5xl:  3.25rem;  /* 52px */
-  --text-6xl:  4rem;     /* 64px */
+  --text-3xs: 0.625rem;
+  /* 10px */
+  --text-2xs: 0.6875rem;
+  /* 11px */
+  --text-xs: 0.75rem;
+  /* 12px */
+  --text-sm: 0.875rem;
+  /* 14px */
+  --text-base: 1rem;
+  /* 16px */
+  --text-md: 1.0625rem;
+  /* 17px */
+  --text-lg: 1.1875rem;
+  /* 19px */
+  --text-xl: 1.375rem;
+  /* 22px */
+  --text-2xl: 1.625rem;
+  /* 26px */
+  --text-3xl: 2rem;
+  /* 32px */
+  --text-4xl: 2.5rem;
+  /* 40px */
+  --text-5xl: 3.25rem;
+  /* 52px */
+  --text-6xl: 4rem;
+  /* 64px */
 
   /* Line Heights */
   --leading-none: 1;
@@ -46,20 +59,20 @@
   --tracking-wider: 0.06em;
   --tracking-widest: 0.12em;
 
-  /* ===== 2. COLORS & SURFACES — DARK MODE (OLED Obsidian & Cyber Sapphire/Cyan) ===== */
-  --bg-base: #030712;
-  --bg-primary: #030712;
-  --bg-secondary: #0b0f19;
-  --bg-overlay: rgba(3, 7, 18, 0.75);
-  
-  /* Elevation Surfaces */
-  --surface-0: #030712;
-  --surface-1: rgba(15, 23, 42, 0.72);
-  --surface-2: rgba(30, 41, 59, 0.55);
-  --surface-3: rgba(15, 23, 42, 0.96);
-  --surface-paper: rgba(11, 15, 25, 0.90);
-  --surface-card: rgba(255, 255, 255, 0.04);
-  --surface-card-hover: rgba(255, 255, 255, 0.075);
+  /* ===== 2. COLORS & SURFACES — DARK MODE (OLED Obsidian Pure Black & Cosmic Depth) ===== */
+  --bg-base: #000000;
+  --bg-primary: #000000;
+  --bg-secondary: #000000;
+  --bg-overlay: rgba(0, 0, 0, 0.75);
+
+  /* Elevation Surfaces — 100% Transparent Neutral Glass */
+  --surface-0: #000000;
+  --surface-1: rgba(255, 255, 255, 0.03);
+  --surface-2: rgba(255, 255, 255, 0.05);
+  --surface-3: rgba(10, 10, 12, 0.95);
+  --surface-paper: rgba(5, 5, 5, 0.85);
+  --surface-card: rgba(255, 255, 255, 0.03);
+  --surface-card-hover: rgba(255, 255, 255, 0.065);
   --surface-border: rgba(255, 255, 255, 0.08);
   --surface-border-hover: rgba(14, 165, 233, 0.45);
 
@@ -74,34 +87,41 @@
   --border-focus: rgba(14, 165, 233, 0.75);
 
   /* Typography Hierarchy for Dark Mode (Slate High Contrast) */
-  --text-main: #f8fafc;        /* Slate 50 — 16.5:1 High Contrast */
-  --text-secondary: #cbd5e1;   /* Slate 300 */
-  --text-muted: #94a3b8;       /* Slate 400 */
-  --text-dim: #64748b;         /* Slate 500 */
-  --text-inverse: #030712;
+  --text-main: #f8fafc;
+  /* Slate 50 — 16.5:1 High Contrast */
+  --text-secondary: #cbd5e1;
+  /* Slate 300 */
+  --text-muted: #94a3b8;
+  /* Slate 400 */
+  --text-dim: #64748b;
+  /* Slate 500 */
+  --text-inverse: #000000;
 
   /* Brand Palette (Electric Sapphire Blue & Neon Cyan) */
   --primary: #0ea5e9;
   --primary-hover: #0284c7;
   --primary-active: #0369a1;
   --primary-light: rgba(14, 165, 233, 0.14);
-  --primary-glow: rgba(14, 165, 233, 0.45);
+  --primary-glow: rgba(0, 0, 0, 0.85);
+  /* Black Glow / Noir Lighting in Dark Mode */
 
   --accent: #06b6d4;
   --accent-hover: #0891b2;
   --accent-light: rgba(6, 182, 212, 0.14);
-  --accent-glow: rgba(6, 182, 212, 0.40);
+  --accent-glow: rgba(0, 0, 0, 0.75);
+  /* Noir Accent Glow */
   --accent-indigo: #0ea5e9;
   --accent-cyan: #06b6d4;
   --accent-cyan-light: rgba(6, 182, 212, 0.14);
   --accent-blue: #2563eb;
 
-  /* Gradients (Zero Purple — Electric Sapphire, Azure & Neon Cyan) */
+  /* Gradients */
   --gradient-brand: linear-gradient(135deg, #0ea5e9 0%, #2563eb 50%, #06b6d4 100%);
   --gradient-brand-subtle: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%);
   --gradient-accent: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
-  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
-  --gradient-glow: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, transparent 70%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+  --gradient-glow: radial-gradient(circle, rgba(0, 0, 0, 0.80) 0%, transparent 70%);
+  /* Black Ambient Backlight */
 
   /* Semantic Feedback */
   --success: #10b981;
@@ -139,24 +159,25 @@
   --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 16px 40px -8px rgba(0, 0, 0, 0.6);
   --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.45);
-  --shadow-hover: 0 20px 48px -6px rgba(0, 0, 0, 0.65);
-  --shadow-glow: 0 0 30px rgba(14, 165, 233, 0.35);
+  --shadow-hover: 0 20px 48px -6px rgba(0, 0, 0, 0.95), 0 0 24px rgba(0, 0, 0, 0.85);
+  --shadow-glow: 0 0 35px rgba(0, 0, 0, 0.90), 0 0 15px rgba(0, 0, 0, 0.95);
+  /* Black Glow Halo in Dark Mode */
 
   /* ===== GLOBAL BACKGROUND SYSTEM ===== */
-  --global-bg-overlay: rgba(3, 7, 18, 0.45);
-  --global-bg-overlay-mobile: rgba(3, 7, 18, 0.55);
+  --global-bg-overlay: transparent;
+  --global-bg-overlay-mobile: transparent;
   --global-bg-blur: 0px;
   --global-bg-blur-mobile: 0px;
-  --global-bg-gradient-1: rgba(255, 255, 255, 0.05);
-  --global-bg-gradient-2: rgba(255, 255, 255, 0.03);
-  --global-bg-gradient-3: rgba(255, 255, 255, 0.02);
+  --global-bg-gradient-1: rgba(255, 255, 255, 0.02);
+  --global-bg-gradient-2: rgba(255, 255, 255, 0.01);
+  --global-bg-gradient-3: transparent;
 
   /* ===== SHELL VARIABLES ===== */
-  --shell-overlay: var(--global-bg-overlay);
-  --shell-overlay-mobile: var(--global-bg-overlay-mobile);
-  --shell-blur: var(--global-bg-blur);
-  --shell-blur-mobile: var(--global-bg-blur-mobile);
-  --shell-surface: rgba(11, 15, 25, 0.88);
+  --shell-overlay: transparent;
+  --shell-overlay-mobile: transparent;
+  --shell-blur: 0px;
+  --shell-blur-mobile: 0px;
+  --shell-surface: rgba(10, 10, 12, 0.85);
   --shell-surface-border: rgba(255, 255, 255, 0.09);
   --shell-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
   --shell-radius: 20px;
@@ -216,12 +237,14 @@
 
   /* ===== TRANSITIONS & EASING (Physics-based Motion System) ===== */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --ease-spring-snappy: cubic-bezier(0.2, 0.8, 0.2, 1.2);
+  --ease-spring-soft: cubic-bezier(0.25, 1.1, 0.4, 1);
+  --ease-spring-snappy: cubic-bezier(0.2, 0.85, 0.25, 1.15);
   --ease-spring-bouncy: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --ease-out-smooth: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  
+  --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
   --duration-instant: 120ms;
   --duration-fast: 200ms;
   --duration-normal: 350ms;
@@ -231,7 +254,8 @@
   --transition-fast: 0.18s var(--ease-out-smooth);
   --transition: 0.3s var(--ease-out-smooth);
   --transition-slow: 0.5s var(--ease-out-smooth);
-  --transition-spring: 0.4s var(--ease-spring);
+  --transition-spring: 0.35s var(--ease-spring);
+  --transition-bounce: 0.45s var(--ease-spring-bouncy);
   --transition-theme:
     background-color 0.4s ease,
     background 0.4s ease,
@@ -239,13 +263,17 @@
     border-color 0.25s ease,
     box-shadow 0.35s ease;
 
+  /* Universal Scrollbar Variables */
+  --scrollbar-width: 8px;
+  --scrollbar-track: rgba(0, 0, 0, 0.2);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.16);
+  --scrollbar-thumb-hover: var(--primary);
+
   /* ===== SHIMMER & SKELETON TOKENS ===== */
-  --shimmer-bg: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.03) 0%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.03) 100%
-  );
+  --shimmer-bg: linear-gradient(90deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.12) 50%,
+      rgba(255, 255, 255, 0.03) 100%);
   --shimmer-size: 200% 100%;
 
   /* ===== INPUTS ===== */
@@ -274,8 +302,8 @@
   --mobile-bottom-space: 90px;
   --mobile-header-gap: 12px;
   --mobile-radius: 16px;
-  --mobile-bg: #07090e;
-  --mobile-glass: linear-gradient(180deg, rgba(13, 17, 28, 0.96), rgba(7, 9, 14, 0.92));
+  --mobile-bg: #000000;
+  --mobile-glass: linear-gradient(180deg, rgba(10, 10, 12, 0.96), rgba(0, 0, 0, 0.92));
   --mobile-border: 1px solid rgba(255, 255, 255, 0.08);
   --mobile-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
   --mobile-purple: #06b6d4;
@@ -312,60 +340,82 @@ html[data-theme="light"] {
   --bg-overlay: rgba(248, 250, 252, 0.75);
 
   /* Elevation Surfaces — Distinct Tonal Shades of White */
-  --surface-0: #f8fafc;                          /* Base Canvas (Soft Porcelain) */
-  --surface-1: rgba(255, 255, 255, 0.92);        /* Floating Glass / Header / Nav (Frosted Alabaster) */
-  --surface-2: #f1f5f9;                          /* Inset Areas / Section Dividers (Soft Pearl Slate) */
-  --surface-3: #ffffff;                          /* Modals / Menus / Popovers (Ultra Pure White) */
-  --surface-paper: #ffffff;                      /* Document & Resume Canvas (Pristine Pure White) */
-  --surface-card: #ffffff;                       /* Primary Cards / Bento Boxes (Crisp Pure White) */
-  --surface-card-hover: #ffffff;                 /* Card Hover State */
-  --surface-border: rgba(15, 23, 42, 0.08);      /* Subtle Crisp Element Separation */
+  --surface-0: #f8fafc;
+  /* Base Canvas (Soft Porcelain) */
+  --surface-1: rgba(255, 255, 255, 0.92);
+  /* Floating Glass / Header / Nav (Frosted Alabaster) */
+  --surface-2: #f1f5f9;
+  /* Inset Areas / Section Dividers (Soft Pearl Slate) */
+  --surface-3: #ffffff;
+  /* Modals / Menus / Popovers (Ultra Pure White) */
+  --surface-paper: #ffffff;
+  /* Document & Resume Canvas (Pristine Pure White) */
+  --surface-card: #ffffff;
+  /* Primary Cards / Bento Boxes (Crisp Pure White) */
+  --surface-card-hover: #ffffff;
+  /* Card Hover State */
+  --surface-border: rgba(15, 23, 42, 0.08);
+  /* Subtle Crisp Element Separation */
   --surface-border-hover: rgba(2, 132, 199, 0.45);
 
   --surface: var(--surface-1);
   --glass-bg: #ffffff;
 
   /* Borders & Component Outlines */
-  --border-subtle: rgba(15, 23, 42, 0.06);       /* Level 1 Sub-dividers */
-  --border-default: rgba(15, 23, 42, 0.10);      /* Standard Card & Element Boundaries */
-  --border-strong: rgba(15, 23, 42, 0.18);       /* Elevated Card / Header Boundaries */
-  --border-focus: rgba(2, 132, 199, 0.85);
+  --border-subtle: rgba(15, 23, 42, 0.06);
+  /* Level 1 Sub-dividers */
+  --border-default: rgba(15, 23, 42, 0.10);
+  /* Standard Card & Element Boundaries */
+  --border-strong: rgba(15, 23, 42, 0.18);
+  /* Elevated Card / Header Boundaries */
+  --border-focus: rgba(5, 150, 105, 0.85);
+  --surface-border-hover: rgba(5, 150, 105, 0.45);
 
   /* Typography Hierarchy for Light Mode (Deep High Contrast Slate) */
-  --text-main: #0f172a;                          /* High-contrast deep slate (15.5:1 ratio) */
-  --text-secondary: #334155;                    /* Subheaders & labels */
-  --text-muted: #64748b;                        /* Descriptions & secondary meta */
-  --text-dim: #94a3b8;                          /* Placeholders & disabled text */
+  --text-main: #0f172a;
+  /* High-contrast deep slate (15.5:1 ratio) */
+  --text-secondary: #334155;
+  /* Subheaders & labels */
+  --text-muted: #64748b;
+  /* Descriptions & secondary meta */
+  --text-dim: #94a3b8;
+  /* Placeholders & disabled text */
   --text-inverse: #ffffff;
 
-  /* Brand Palette (Deep rich azure blue for light contrast - No Purple) */
-  --primary: #0284c7;
-  --primary-hover: #0369a1;
-  --primary-active: #075985;
-  --primary-light: rgba(2, 132, 199, 0.10);
-  --primary-glow: rgba(2, 132, 199, 0.28);
+  /* Brand Palette (Deep Forest Green SaaS system) */
+  --primary: #047857;
+  /* Deep Forest Emerald 700 */
+  --primary-hover: #065f46;
+  /* Deep Emerald 800 */
+  --primary-active: #064e3b;
+  /* Deep Pine 900 */
+  --primary-light: rgba(4, 120, 87, 0.10);
+  --primary-glow: rgba(0, 0, 0, 0.22);
+  /* Black Glow / Noir Lighting in Light Mode */
 
-  --accent: #0891b2;
-  --accent-hover: #0e7490;
-  --accent-light: rgba(8, 145, 178, 0.10);
-  --accent-glow: rgba(8, 145, 178, 0.24);
-  --accent-indigo: #0284c7;
-  --accent-cyan: #0891b2;
-  --accent-cyan-light: rgba(8, 145, 178, 0.10);
-  --accent-blue: #2563eb;
+  --accent: #065f46;
+  --accent-hover: #064e3b;
+  --accent-light: rgba(6, 95, 70, 0.10);
+  --accent-glow: rgba(0, 0, 0, 0.16);
+  /* Black Accent Glow in Light Mode */
+  --accent-indigo: #047857;
+  --accent-cyan: #0f766e;
+  --accent-cyan-light: rgba(15, 118, 110, 0.10);
+  --accent-blue: #047857;
 
-  /* Gradients for Light Mode (Azure, Cobalt & Teal) */
-  --gradient-brand: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #0d9488 100%);
-  --gradient-brand-subtle: linear-gradient(135deg, rgba(2, 132, 199, 0.08) 0%, rgba(8, 145, 178, 0.08) 100%);
-  --gradient-accent: linear-gradient(135deg, #0891b2 0%, #059669 100%);
+  /* Gradients for Light Mode (Deep Forest & Pine Green) */
+  --gradient-brand: linear-gradient(135deg, #064e3b 0%, #047857 50%, #0f766e 100%);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(4, 120, 87, 0.10) 0%, rgba(15, 118, 110, 0.10) 100%);
+  --gradient-accent: linear-gradient(135deg, #047857 0%, #065f46 100%);
   --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.90) 100%);
-  --gradient-glow: radial-gradient(circle, rgba(2, 132, 199, 0.15) 0%, transparent 70%);
+  --gradient-glow: radial-gradient(circle, rgba(0, 0, 0, 0.08) 0%, transparent 70%);
+  /* Black Ambient Illumination */
 
   /* Semantic Feedback */
-  --success: #059669;
-  --success-hover: #047857;
-  --success-light: rgba(5, 150, 105, 0.10);
-  --secondary: #059669;
+  --success: #047857;
+  --success-hover: #065f46;
+  --success-light: rgba(4, 120, 87, 0.12);
+  --secondary: #047857;
 
   --warning: #d97706;
   --warning-hover: #b45309;
@@ -379,16 +429,16 @@ html[data-theme="light"] {
   --info-light: rgba(2, 132, 199, 0.10);
 
   /* ATS Scoring Tokens for Light Mode */
-  --ats-excellent: #059669;
-  --ats-good: #0284c7;
+  --ats-excellent: #047857;
+  --ats-good: #0f766e;
   --ats-warning: #d97706;
   --ats-danger: #e11d48;
-  --ats-excellent-bg: rgba(5, 150, 105, 0.10);
-  --ats-good-bg: rgba(2, 132, 199, 0.10);
+  --ats-excellent-bg: rgba(4, 120, 87, 0.12);
+  --ats-good-bg: rgba(15, 118, 110, 0.12);
   --ats-warning-bg: rgba(217, 119, 6, 0.10);
   --ats-danger-bg: rgba(225, 29, 72, 0.10);
 
-  /* Multi-Layered Natural Shadows (Identifies Elevation) */
+  /* Multi-Layered Natural Shadows with Black Glow Lighting */
   --glass-border: rgba(15, 23, 42, 0.08);
   --glass-blur: blur(16px);
   --glass-shadow: 0 12px 36px -4px rgba(15, 23, 42, 0.08);
@@ -397,8 +447,9 @@ html[data-theme="light"] {
   --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
   --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.10), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
   --shadow-soft: 0 8px 24px -2px rgba(15, 23, 42, 0.07);
-  --shadow-hover: 0 16px 40px -4px rgba(2, 132, 199, 0.14), 0 4px 14px rgba(15, 23, 42, 0.06);
-  --shadow-glow: 0 0 30px rgba(2, 132, 199, 0.18);
+  --shadow-hover: 0 16px 40px -4px rgba(0, 0, 0, 0.18), 0 4px 14px rgba(15, 23, 42, 0.08);
+  --shadow-glow: 0 0 35px rgba(0, 0, 0, 0.18), 0 0 12px rgba(0, 0, 0, 0.12);
+  /* Black Glow Halo in Light Mode */
 
   /* Background Overrides */
   --global-bg-overlay: rgba(248, 250, 252, 0.6);
@@ -410,16 +461,22 @@ html[data-theme="light"] {
   --global-bg-gradient-3: rgba(15, 23, 42, 0.01);
 
   /* Distinct Form Inputs */
-  --input-bg: #f8fafc;                           /* Light Alabaster input field */
-  --input-border: #cbd5e1;                       /* Clear boundary definition */
-  --input-focus-bg: #ffffff;                     /* Brightens to pure white on active focus */
-  --input-focus-border: #0284c7;
+  --input-bg: #f8fafc;
+  /* Light Alabaster input field */
+  --input-border: #cbd5e1;
+  /* Clear boundary definition */
+  --input-focus-bg: #ffffff;
+  /* Brightens to pure white on active focus */
+  --input-focus-border: #047857;
 
   /* Shimmer Token for Light Mode */
-  --shimmer-bg: linear-gradient(
-    90deg,
-    rgba(15, 23, 42, 0.03) 0%,
-    rgba(15, 23, 42, 0.08) 50%,
-    rgba(15, 23, 42, 0.03) 100%
-  );
+  --shimmer-bg: linear-gradient(90deg,
+      rgba(15, 23, 42, 0.03) 0%,
+      rgba(15, 23, 42, 0.08) 50%,
+      rgba(15, 23, 42, 0.03) 100%);
+
+  /* Scrollbar Tokens for Light Mode */
+  --scrollbar-track: rgba(15, 23, 42, 0.04);
+  --scrollbar-thumb: rgba(15, 23, 42, 0.18);
+  --scrollbar-thumb-hover: var(--primary);
 }

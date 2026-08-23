@@ -4,6 +4,34 @@
    staggered grids, shimmer states, and micro-interactions (2026).
    ========================================================== */
 
+/* ===== 0. UNIVERSAL SLEEK SCROLLBARS ===== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+::-webkit-scrollbar {
+  width: var(--scrollbar-width, 8px);
+  height: var(--scrollbar-width, 8px);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track, transparent);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb, rgba(255, 255, 255, 0.16));
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: content-box;
+  transition: background-color 0.25s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover, var(--primary));
+}
+
 /* ===== 1. CORE PAGE & VIEWPORT ENTRANCES ===== */
 .page-enter {
   animation: pageReveal 0.65s var(--ease-out-smooth) both;
@@ -17,6 +45,22 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -69,18 +113,22 @@
 }
 
 /* Stagger item delays */
-.stagger-1,  .stagger-grid.active > *:nth-child(1),  .stagger-group.active > *:nth-child(1)  { transition-delay: 0.04s; }
-.stagger-2,  .stagger-grid.active > *:nth-child(2),  .stagger-group.active > *:nth-child(2)  { transition-delay: 0.09s; }
-.stagger-3,  .stagger-grid.active > *:nth-child(3),  .stagger-group.active > *:nth-child(3)  { transition-delay: 0.14s; }
-.stagger-4,  .stagger-grid.active > *:nth-child(4),  .stagger-group.active > *:nth-child(4)  { transition-delay: 0.19s; }
-.stagger-5,  .stagger-grid.active > *:nth-child(5),  .stagger-group.active > *:nth-child(5)  { transition-delay: 0.24s; }
-.stagger-6,  .stagger-grid.active > *:nth-child(6),  .stagger-group.active > *:nth-child(6)  { transition-delay: 0.29s; }
-.stagger-7,  .stagger-grid.active > *:nth-child(7),  .stagger-group.active > *:nth-child(7)  { transition-delay: 0.34s; }
-.stagger-8,  .stagger-grid.active > *:nth-child(8),  .stagger-group.active > *:nth-child(8)  { transition-delay: 0.39s; }
-.stagger-9,  .stagger-grid.active > *:nth-child(9),  .stagger-group.active > *:nth-child(9)  { transition-delay: 0.44s; }
-.stagger-10, .stagger-grid.active > *:nth-child(10), .stagger-group.active > *:nth-child(10) { transition-delay: 0.49s; }
-.stagger-11, .stagger-grid.active > *:nth-child(11), .stagger-group.active > *:nth-child(11) { transition-delay: 0.54s; }
-.stagger-12, .stagger-grid.active > *:nth-child(12), .stagger-group.active > *:nth-child(12) { transition-delay: 0.59s; }
+.stagger-1,  .stagger-grid.active > *:nth-child(1),  .stagger-group.active > *:nth-child(1)  { transition-delay: 0.03s; }
+.stagger-2,  .stagger-grid.active > *:nth-child(2),  .stagger-group.active > *:nth-child(2)  { transition-delay: 0.07s; }
+.stagger-3,  .stagger-grid.active > *:nth-child(3),  .stagger-group.active > *:nth-child(3)  { transition-delay: 0.11s; }
+.stagger-4,  .stagger-grid.active > *:nth-child(4),  .stagger-group.active > *:nth-child(4)  { transition-delay: 0.15s; }
+.stagger-5,  .stagger-grid.active > *:nth-child(5),  .stagger-group.active > *:nth-child(5)  { transition-delay: 0.19s; }
+.stagger-6,  .stagger-grid.active > *:nth-child(6),  .stagger-group.active > *:nth-child(6)  { transition-delay: 0.23s; }
+.stagger-7,  .stagger-grid.active > *:nth-child(7),  .stagger-group.active > *:nth-child(7)  { transition-delay: 0.27s; }
+.stagger-8,  .stagger-grid.active > *:nth-child(8),  .stagger-group.active > *:nth-child(8)  { transition-delay: 0.31s; }
+.stagger-9,  .stagger-grid.active > *:nth-child(9),  .stagger-group.active > *:nth-child(9)  { transition-delay: 0.35s; }
+.stagger-10, .stagger-grid.active > *:nth-child(10), .stagger-group.active > *:nth-child(10) { transition-delay: 0.39s; }
+.stagger-11, .stagger-grid.active > *:nth-child(11), .stagger-group.active > *:nth-child(11) { transition-delay: 0.43s; }
+.stagger-12, .stagger-grid.active > *:nth-child(12), .stagger-group.active > *:nth-child(12) { transition-delay: 0.47s; }
+.stagger-13, .stagger-grid.active > *:nth-child(13), .stagger-group.active > *:nth-child(13) { transition-delay: 0.51s; }
+.stagger-14, .stagger-grid.active > *:nth-child(14), .stagger-group.active > *:nth-child(14) { transition-delay: 0.55s; }
+.stagger-15, .stagger-grid.active > *:nth-child(15), .stagger-group.active > *:nth-child(15) { transition-delay: 0.59s; }
+.stagger-16, .stagger-grid.active > *:nth-child(16), .stagger-group.active > *:nth-child(16) { transition-delay: 0.63s; }
 
 /* ===== 3. MODAL & DIALOG ANIMATIONS ===== */
 @keyframes backdropFadeIn {
@@ -109,17 +157,6 @@
   }
 }
 
-@keyframes modalIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.92) translateY(14px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
 @keyframes modalEnter {
   0% {
     opacity: 0;
@@ -128,17 +165,6 @@
   100% {
     opacity: 1;
     transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes modalOut {
-  0% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(0.94) translateY(10px);
   }
 }
 
@@ -162,48 +188,54 @@
 }
 
 /* ===== 4. MULTI-STEP WIZARD DIRECTIONAL TRANSITIONS ===== */
-@keyframes slideInRight {
-  from {
+@keyframes stepSlideNext {
+  0% {
     opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(36px) scale(0.98);
   }
-  to {
+  100% {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
   }
 }
 
-@keyframes slideInLeft {
-  from {
+@keyframes stepSlidePrev {
+  0% {
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateX(-36px) scale(0.98);
   }
-  to {
+  100% {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
   }
 }
 
-@keyframes slideOutLeft {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  to {
+@keyframes stepFadeIn {
+  0% {
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@keyframes slideOutRight {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(30px);
-  }
+.form-step {
+  display: none;
+}
+
+.form-step.active {
+  display: block;
+  animation: stepFadeIn 0.35s var(--ease-out-smooth) both;
+}
+
+.form-step.active.slide-next {
+  animation: stepSlideNext 0.38s var(--ease-spring-snappy) both;
+}
+
+.form-step.active.slide-prev {
+  animation: stepSlidePrev 0.38s var(--ease-spring-snappy) both;
 }
 
 /* ===== 5. AI GENERATION & SHIMMER SKELETON LOADERS ===== */
@@ -224,14 +256,19 @@
   position: relative;
 }
 
+@keyframes shimmerGleam {
+  0% { transform: translateX(-100%) skewX(-20deg); }
+  100% { transform: translateX(200%) skewX(-20deg); }
+}
+
 /* ===== 6. INTERACTIVE SKILL CHIPS ===== */
 @keyframes chipPopIn {
   0% {
     opacity: 0;
-    transform: scale(0.75) translateY(4px);
+    transform: scale(0.7) translateY(6px);
   }
-  70% {
-    transform: scale(1.06) translateY(-1px);
+  65% {
+    transform: scale(1.08) translateY(-2px);
   }
   100% {
     opacity: 1;
@@ -246,16 +283,17 @@
   }
   100% {
     opacity: 0;
-    transform: scale(0.6) translateY(4px);
+    transform: scale(0.5) translateY(6px);
   }
 }
 
-.chip-enter {
-  animation: chipPopIn 0.28s var(--ease-spring) both;
+.chip-enter,
+.skill-chip {
+  animation: chipPopIn 0.3s var(--ease-spring) both;
 }
 
 .chip-exit {
-  animation: chipPopOut 0.2s var(--ease-out-smooth) forwards;
+  animation: chipPopOut 0.22s var(--ease-out-smooth) forwards;
 }
 
 /* ===== 7. AMBIENT & PULSE GLOWS ===== */
@@ -267,8 +305,17 @@
   }
   50% {
     opacity: 0.55;
-    transform: scale(0.85);
+    transform: scale(0.88);
     box-shadow: 0 0 4px var(--secondary);
+  }
+}
+
+@keyframes pulseGlowSoft {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(14, 165, 233, 0);
   }
 }
 
@@ -277,7 +324,7 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
   }
 }
 
@@ -295,7 +342,7 @@
     box-shadow: 0 0 0 0 var(--primary-glow);
   }
   70% {
-    box-shadow: 0 0 0 10px rgba(14, 165, 233, 0);
+    box-shadow: 0 0 0 12px rgba(14, 165, 233, 0);
   }
   100% {
     box-shadow: 0 0 0 0 rgba(14, 165, 233, 0);
@@ -312,6 +359,17 @@
   animation: shakeError 0.4s ease-in-out;
 }
 
+@keyframes borderGlowBreath {
+  0%, 100% {
+    border-color: var(--primary);
+    box-shadow: 0 0 15px var(--primary-glow);
+  }
+  50% {
+    border-color: var(--accent);
+    box-shadow: 0 0 30px var(--primary-glow);
+  }
+}
+
 /* ===== 8. SPINNERS & ROTATIONS ===== */
 @keyframes spin {
   from { transform: rotate(0deg); }
@@ -325,44 +383,137 @@
 
 .spin-icon,
 .spinner {
-  animation: spin 0.9s linear infinite;
+  animation: spin 0.85s linear infinite;
 }
 
-/* ===== 9. GLASS CARD ===== */
-.classic-card,
-.adaptive-card {
-  background: var(--surface);
-  border: 1px solid var(--surface-border);
-  border-radius: 22px;
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transition: all 0.3s var(--ease-out-smooth);
-}
-
-@media (hover: hover) {
-  .classic-card:hover,
-  .adaptive-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
-    border-color: var(--surface-border-hover);
+/* ===== 9. CHAT MESSAGE BUBBLE ANIMATIONS ===== */
+@keyframes chatBubbleUserIn {
+  0% {
+    opacity: 0;
+    transform: translateX(20px) translateY(8px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scale(1);
   }
 }
 
-@media (max-width: 768px) {
-  .classic-card,
-  .adaptive-card {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+@keyframes chatBubbleAiIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px) translateY(8px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scale(1);
   }
 }
 
-/* ===== 10. TACTILE PRESS & HOVER FEEDBACK ===== */
+.chat-bubble-wrap.user {
+  animation: chatBubbleUserIn 0.35s var(--ease-spring) both;
+}
+
+.chat-bubble-wrap.assistant {
+  animation: chatBubbleAiIn 0.35s var(--ease-spring) both;
+}
+
+/* Typing indicator dots */
+@keyframes typingBounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
+
+.typing-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  animation: typingBounce 1.3s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ===== 10. ACCORDION EXPAND & COLLAPSE ===== */
+.accordion-card {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  background: var(--surface-card);
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s var(--ease-spring);
+}
+
+.accordion-card:hover {
+  border-color: var(--border-strong);
+}
+
+.accordion-card.is-open {
+  border-color: var(--primary);
+  box-shadow: 0 4px 20px var(--primary-glow);
+}
+
+.accordion-header {
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.accordion-header:hover {
+  background: var(--surface-card-hover);
+}
+
+.accordion-chevron {
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  transition: transform 0.3s var(--ease-spring), color 0.25s ease;
+  flex-shrink: 0;
+}
+
+.accordion-card.is-open .accordion-chevron {
+  transform: rotate(180deg);
+  color: var(--primary);
+}
+
+.accordion-body {
+  padding: 0 18px 18px;
+  animation: fadeIn 0.25s var(--ease-out-smooth) both;
+}
+
+/* ===== 11. ATS SCORE GAUGE ANIMATION ===== */
+@keyframes gaugeScoreFill {
+  from {
+    stroke-dashoffset: 280;
+  }
+}
+
+.ats-score-meter circle.progress {
+  transition: stroke-dashoffset 1.2s var(--ease-out-smooth);
+}
+
+/* ===== 12. TACTILE PRESS & HOVER FEEDBACK ===== */
 .press-down:active,
 .btn:active,
 .btn-primary:active,
 .btn-classic:active,
 .btn-adaptive:active,
+.btn-wizard:active,
 .cta-primary:active,
 .cta-secondary:active,
 .ai-btn:active,
@@ -373,7 +524,9 @@
 .nav-icon-btn:active,
 .user-dropdown-trigger:active,
 .template-thumb:active,
-.option:active {
+.option:active,
+.suggestion-pill:active,
+.action-btn:active {
   transform: scale(0.96) !important;
   transition: transform 0.1s var(--ease-out-smooth);
 }
@@ -389,7 +542,32 @@ textarea:focus-visible,
   outline-offset: 2px;
 }
 
-/* ===== 11. ACCESSIBILITY — PREFERS REDUCED MOTION ===== */
+/* Smooth Input Focus State */
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3.5px var(--primary-light) !important;
+}
+
+/* Click Ripple Wave */
+.button-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  animation: buttonRipple 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes buttonRipple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ===== 13. ACCESSIBILITY — PREFERS REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

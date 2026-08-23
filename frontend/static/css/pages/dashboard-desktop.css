@@ -166,7 +166,7 @@ select {
 }
 
 select option {
-  background: var(--bg-secondary, #0b0f19);
+  background: var(--bg-secondary, #000000);
   color: var(--text-main);
 }
 

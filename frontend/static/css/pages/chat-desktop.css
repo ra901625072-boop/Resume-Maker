@@ -386,7 +386,7 @@ html[data-theme="light"] .chat-bubble-wrap.assistant .chat-bubble {
 }
 
 .chat-bubble pre {
-    background: var(--bg-secondary, #0b0f19);
+    background: var(--bg-secondary, #000000);
     color: var(--text-main);
     padding: 1.15rem;
     border-radius: var(--radius-lg);

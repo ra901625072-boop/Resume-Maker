@@ -19,6 +19,7 @@
     <!-- 5. Components -->
     <link rel="stylesheet" href="/static/css/components/header.css">
     <link rel="stylesheet" href="/static/css/components/buttons.css">
+    <link rel="stylesheet" href="/static/css/components/cards.css">
     <link rel="stylesheet" href="/static/css/components/modals.css">
     <!-- 6. Page-specific -->
     <link rel="stylesheet" href="/static/css/pages/chat-desktop.css">
@@ -417,6 +418,7 @@
                 btn.innerHTML = '✅ Copied!';
                 btn.style.color = 'var(--secondary)';
                 btn.style.borderColor = 'var(--secondary)';
+                if (window.showToast) window.showToast('Copied to clipboard! 📋', 'success');
                 setTimeout(() => {
                     btn.innerHTML = originalContent;
                     btn.style.color = '';
@@ -435,6 +437,9 @@
             }
         });
     </script>
+    <script src="/static/js/core/header-scroll.js"></script>
+    <script src="/static/js/components/toast.js"></script>
+    <script src="/static/js/core/global-effects.js"></script>
 </body>
 
 </html>

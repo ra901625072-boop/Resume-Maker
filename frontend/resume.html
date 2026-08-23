@@ -34,13 +34,13 @@
             .header-inner,
             .dropdown-menu,
             .download-options {
-                background: rgba(10, 15, 25, 0.98) !important;
+                background: rgba(10, 10, 12, 0.98) !important;
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
                 border: 1px solid rgba(255, 255, 255, 0.12) !important;
             }
             body.template-shell {
-                background: #09090f;
+                background: #000000;
             }
         }
     </style>
@@ -955,16 +955,20 @@
                             a.click();
                             document.body.removeChild(a);
                             URL.revokeObjectURL(url);
+                            if (window.showToast) window.showToast('DOC export downloaded! 📄', 'success');
                         } else {
-                            alert('Failed to download DOC file.');
+                            if (window.showToast) window.showToast('Failed to download DOC file.', 'error');
                         }
                     } catch (err) {
                         console.error('DOC Download failed:', err);
-                        alert('DOC download failed. Please try again.');
+                        if (window.showToast) window.showToast('DOC download failed. Please try again.', 'error');
                     }
                 }
             }
         }).mount('#resumeApp');
     </script>
+    <script src="/static/js/core/header-scroll.js"></script>
+    <script src="/static/js/components/toast.js"></script>
+    <script src="/static/js/core/global-effects.js"></script>
 </body>
 </html>

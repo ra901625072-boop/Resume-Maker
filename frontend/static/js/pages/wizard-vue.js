@@ -4,6 +4,7 @@ createApp({
     data() {
         return {
             currentStep: 1,
+            stepDirection: 'next',
             totalSteps: 4,
             isSaving: false,
             isImporting: false,
@@ -132,6 +133,7 @@ createApp({
 
             const next = this.currentStep + n;
             if (next >= 1 && next <= this.totalSteps) {
+                this.stepDirection = n > 0 ? 'next' : 'prev';
                 this.currentStep = next;
                 this.scrollToTop();
 

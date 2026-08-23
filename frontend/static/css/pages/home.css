@@ -16,14 +16,37 @@ main#main-content {
 }
 
 /* ===== TEMPLATE BACKGROUND CLASSES ===== */
-.t1 { background-image: url('/static/images/templates/templateA.webp'); }
-.t2 { background-image: url('/static/images/templates/templateB.webp'); }
-.t3 { background-image: url('/static/images/templates/templateC.webp'); }
-.t4 { background-image: url('/static/images/templates/templateD.webp'); }
-.t5 { background-image: url('/static/images/templates/templateE.webp'); }
-.t6 { background-image: url('/static/images/templates/templateF.webp'); }
-.t7 { background-image: url('/static/images/templates/templateG.webp'); }
-.t8 { background-image: url('/static/images/templates/templateH.webp'); }
+.t1 {
+  background-image: url('/static/images/templates/templateA.webp');
+}
+
+.t2 {
+  background-image: url('/static/images/templates/templateB.webp');
+}
+
+.t3 {
+  background-image: url('/static/images/templates/templateC.webp');
+}
+
+.t4 {
+  background-image: url('/static/images/templates/templateD.webp');
+}
+
+.t5 {
+  background-image: url('/static/images/templates/templateE.webp');
+}
+
+.t6 {
+  background-image: url('/static/images/templates/templateF.webp');
+}
+
+.t7 {
+  background-image: url('/static/images/templates/templateG.webp');
+}
+
+.t8 {
+  background-image: url('/static/images/templates/templateH.webp');
+}
 
 /* ===== HERO SECTION ===== */
 .hero {
@@ -64,7 +87,7 @@ main#main-content {
   animation: pageReveal 0.65s var(--ease-out-smooth) 0.45s both;
 }
 
-/* Ambient Radial Glow Blobs */
+/* Ambient Radial Glow Blobs (Dark Mode: Black Glow / Noir Ambient) */
 .hero::before {
   content: '';
   position: absolute;
@@ -72,7 +95,7 @@ main#main-content {
   left: 20%;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.20) 0%, rgba(6, 182, 212, 0.10) 45%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.40) 45%, transparent 70%);
   z-index: 0;
   pointer-events: none;
   filter: blur(70px);
@@ -86,21 +109,40 @@ main#main-content {
   right: 20%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(16, 185, 129, 0.08) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.35) 50%, transparent 70%);
   z-index: 0;
   pointer-events: none;
   filter: blur(60px);
   animation: heroGlow2 26s ease-in-out infinite alternate;
 }
 
+/* Light Mode: Soft Black / Slate Shadow Glow */
+html[data-theme="light"] .hero::before {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.06) 0%, rgba(15, 23, 42, 0.02) 45%, transparent 70%);
+}
+
+html[data-theme="light"] .hero::after {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.05) 0%, rgba(15, 23, 42, 0.01) 50%, transparent 70%);
+}
+
 @keyframes heroGlow1 {
-  0%   { transform: translate(-4%, -4%) scale(0.95); }
-  100% { transform: translate(4%, 4%) scale(1.08); }
+  0% {
+    transform: translate(-4%, -4%) scale(0.95);
+  }
+
+  100% {
+    transform: translate(4%, 4%) scale(1.08);
+  }
 }
 
 @keyframes heroGlow2 {
-  0%   { transform: translate(4%, 4%) scale(1.08); }
-  100% { transform: translate(-4%, -4%) scale(0.95); }
+  0% {
+    transform: translate(4%, 4%) scale(1.08);
+  }
+
+  100% {
+    transform: translate(-4%, -4%) scale(0.95);
+  }
 }
 
 /* ===== HERO BADGE ===== */
@@ -249,9 +291,9 @@ html[data-theme="light"] .trust-badge {
 /* ===== TEMPLATE CAROUSEL SECTION ===== */
 .template-section {
   padding: 6rem 0;
-  background: var(--surface-1);
-  border-top: 1px solid var(--border-default);
-  border-bottom: 1px solid var(--border-default);
+  background: transparent;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
   position: relative;
 }
 
@@ -315,8 +357,13 @@ html[data-theme="light"] .template-section {
 }
 
 @keyframes cinematicScroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 /* ===== 2026 BENTO FEATURES SECTION ===== */

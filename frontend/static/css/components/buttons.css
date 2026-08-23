@@ -279,7 +279,7 @@ html[data-theme="light"] .cta-secondary:hover {
 html[data-theme="light"] .ai-btn,
 html[data-theme="light"] .ai-pill-btn {
   background: var(--primary-light);
-  border-color: rgba(2, 132, 199, 0.3);
+  border-color: rgba(4, 120, 87, 0.3);
   color: var(--primary);
 }
 
@@ -331,6 +331,97 @@ html[data-theme="light"] .ai-pill-btn:hover:not(:disabled) {
   color: #ffffff;
   transform: translateY(-1px) scale(1.02);
   box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+}
+
+/* ===== WIZARD NAVIGATION BUTTONS ===== */
+.btn-wizard {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-snug);
+  cursor: pointer;
+  border: 1px solid var(--border-default);
+  background: var(--surface-card);
+  color: var(--text-main);
+  transition:
+    transform 0.22s var(--ease-spring),
+    background 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-wizard:hover {
+  background: var(--surface-2);
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-wizard.btn-prev {
+  background: var(--surface-card);
+  color: var(--text-secondary);
+}
+
+.btn-wizard.btn-prev:hover {
+  background: var(--surface-2);
+  color: var(--text-main);
+  border-color: var(--border-strong);
+}
+
+.btn-wizard.btn-next,
+.btn-wizard.btn-primary {
+  background: var(--gradient-brand);
+  color: #ffffff !important;
+  border-color: transparent;
+  box-shadow: 0 4px 16px var(--primary-glow);
+  padding: 0.75rem 2.25rem;
+}
+
+.btn-wizard.btn-next::after,
+.btn-wizard.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+
+.btn-wizard.btn-next:hover::after,
+.btn-wizard.btn-primary:hover::after {
+  left: 160%;
+  transition: left 0.75s ease;
+}
+
+.btn-wizard.btn-next:hover,
+.btn-wizard.btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px var(--primary-glow);
+  filter: brightness(1.08);
+}
+
+html[data-theme="light"] .btn-wizard.btn-prev {
+  background: #ffffff;
+  border-color: var(--border-default);
+  color: var(--text-secondary);
+}
+
+html[data-theme="light"] .btn-wizard.btn-prev:hover {
+  background: #f1f5f9;
+  color: var(--text-main);
 }
 
 /* ===== DOWNLOAD BUTTON (Template shell / Resume viewer) ===== */

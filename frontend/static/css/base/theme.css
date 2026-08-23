@@ -29,7 +29,12 @@ body {
 }
 
 /* ===== GLOBAL TYPOGRAPHY HIERARCHY ===== */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   color: var(--text-main);
   font-weight: 700;
@@ -91,7 +96,10 @@ a:hover {
   color: var(--primary-hover);
 }
 
-code, kbd, samp, pre {
+code,
+kbd,
+samp,
+pre {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
 }
@@ -111,8 +119,8 @@ code {
 }
 
 html[data-theme="light"] ::selection {
-  background: rgba(2, 132, 199, 0.22);
-  color: #0f172a;
+  background: rgba(4, 120, 87, 0.20);
+  color: #022c22;
 }
 
 /* ===== GLOBAL SCROLLBARS ===== */
@@ -183,11 +191,21 @@ html[data-theme="light"] .theme-toggle:hover {
 }
 
 /* Theme Icon Visibility Switch */
-.theme-icon-sun  { display: none; }
-.theme-icon-moon { display: block; }
+.theme-icon-sun {
+  display: none;
+}
 
-html[data-theme="light"] .theme-icon-sun  { display: block; }
-html[data-theme="light"] .theme-icon-moon { display: none; }
+.theme-icon-moon {
+  display: block;
+}
+
+html[data-theme="light"] .theme-icon-sun {
+  display: block;
+}
+
+html[data-theme="light"] .theme-icon-moon {
+  display: none;
+}
 
 /* ===== TEMPLATE SHELL BODY (Resume Viewer) ===== */
 body.template-shell {

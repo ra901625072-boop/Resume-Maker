@@ -227,9 +227,9 @@ html[data-theme="light"] .bento-card:hover {
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(3, 7, 18, 0.95) 0%,
-    rgba(3, 7, 18, 0.45) 50%,
-    rgba(3, 7, 18, 0.05) 100%
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.45) 50%,
+    rgba(0, 0, 0, 0.05) 100%
   );
   z-index: 1;
   transition: opacity 0.3s ease;

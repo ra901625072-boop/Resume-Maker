@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="/static/css/components/header.css">
     <link rel="stylesheet" href="/static/css/components/footer.css">
     <link rel="stylesheet" href="/static/css/components/buttons.css">
+    <link rel="stylesheet" href="/static/css/components/cards.css">
     <link rel="stylesheet" href="/static/css/components/modals.css">
 
     <!-- 6. Page-specific dashboard CSS -->
@@ -149,7 +150,7 @@
 
         <form id="resumeForm" @submit.prevent="submitForm" novalidate>
             <!-- STEP 1: PERSONAL -->
-            <div class="form-step" :class="{active: currentStep === 1}" v-show="currentStep === 1">
+            <div :class="['form-step', { active: currentStep === 1, 'slide-next': stepDirection === 'next', 'slide-prev': stepDirection === 'prev' }]" v-show="currentStep === 1">
                 <div class="form-section">
                     <h3 class="form-section-title">Personal Information</h3>
                     <div class="input-group">
@@ -200,7 +201,7 @@
             </div>
 
             <!-- STEP 2: EXPERIENCE & EDUCATION -->
-            <div class="form-step" :class="{active: currentStep === 2}" v-show="currentStep === 2">
+            <div :class="['form-step', { active: currentStep === 2, 'slide-next': stepDirection === 'next', 'slide-prev': stepDirection === 'prev' }]" v-show="currentStep === 2">
                 <div class="form-section">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
                         <h3 class="form-section-title" style="margin: 0;">Work Experience</h3>
@@ -283,7 +284,7 @@
             </div>
 
             <!-- STEP 3: SUMMARY & SKILLS -->
-            <div class="form-step" :class="{active: currentStep === 3}" v-show="currentStep === 3">
+            <div :class="['form-step', { active: currentStep === 3, 'slide-next': stepDirection === 'next', 'slide-prev': stepDirection === 'prev' }]" v-show="currentStep === 3">
                 <div class="form-section">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 10px;">
                         <h3 class="form-section-title" style="margin: 0;">Professional Summary</h3>
@@ -345,7 +346,7 @@
             </div>
 
             <!-- STEP 4: TEMPLATE & ATS AUDIT -->
-            <div class="form-step" :class="{active: currentStep === 4}" v-show="currentStep === 4">
+            <div :class="['form-step', { active: currentStep === 4, 'slide-next': stepDirection === 'next', 'slide-prev': stepDirection === 'prev' }]" v-show="currentStep === 4">
                 
                 <!-- Real-time ATS Health Scorecard -->
                 <div class="ats-scorecard" v-if="atsResult.score !== null">
