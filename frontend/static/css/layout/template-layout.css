@@ -446,11 +446,11 @@
 .theme-toggle-btn.is-light .icon-moon { display: block; }
 
 .theme-toggle-btn:hover {
-  background: var(--primary, #6366f1);
-  border-color: var(--primary, #6366f1);
+  background: var(--primary);
+  border-color: var(--primary);
   color: #fff;
   transform: rotate(20deg) scale(1.08);
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 20px var(--primary-glow);
 }
 
 .theme-toggle-btn:active {
@@ -530,8 +530,8 @@ html[data-theme="light"] .download-options .option {
 }
 
 html[data-theme="light"] .download-options .option:hover {
-  background: rgba(99, 102, 241, 0.08);
-  color: var(--primary, #1e3a8a);
+  background: var(--primary-light);
+  color: var(--primary);
 }
 
 /* ── Theme toggle button in light mode ── */

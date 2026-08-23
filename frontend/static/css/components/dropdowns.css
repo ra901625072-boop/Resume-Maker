@@ -1,14 +1,12 @@
 /* ==========================================================
-   WISAXIS — DOWNLOAD MENU COMPONENT
+   WISAXIS — DOWNLOAD MENU COMPONENT (2026 SaaS Design System)
    Popup download-options menu (PDF / DOCX selection).
-   Sources: template-background-desktop.css,
-            template-background-mobile.css
    ========================================================== */
 
 /* ===== DOWNLOAD MENU WRAPPER ===== */
 .download-menu {
   position: relative;
-  width: 100%; /* Mobile default: full width */
+  width: 100%;
 }
 
 /* ===== OPTIONS POPUP ===== */
@@ -23,12 +21,12 @@
   gap: 10px;
   padding: 12px;
 
-  border-radius: 22px;
-  background: rgba(15, 23, 42, 0.94);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-xl);
+  background: var(--surface-3);
+  border: 1px solid var(--border-strong);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 20px 46px rgba(0, 0, 0, 0.34);
+  box-shadow: var(--shadow-lg);
 
   /* Hidden state */
   opacity: 0;
@@ -60,16 +58,17 @@
   justify-content: center;
 
   border: none;
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   text-decoration: none;
 
-  font-size: 0.95rem;
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
   font-weight: 700;
   cursor: pointer;
-  color: #fff;
+  color: var(--text-main);
 
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -84,6 +83,7 @@
 .download-options .option:hover {
   background: var(--primary);
   border-color: var(--primary);
+  color: #ffffff;
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 4px 14px var(--primary-glow);
 }
@@ -103,13 +103,13 @@
     left: auto;
     right: 0;
     padding: 12px;
-    border-radius: 22px;
+    border-radius: var(--radius-xl);
   }
 
   .download-options .option {
     height: 52px;
-    font-size: 0.95rem;
-    border-radius: 16px;
+    font-size: var(--text-sm);
+    border-radius: var(--radius-md);
   }
 }
 
@@ -123,12 +123,12 @@
     max-width: 100vw;
     bottom: calc(100% + 14px);
     padding: 14px;
-    border-radius: 24px;
+    border-radius: var(--radius-2xl);
   }
 
   .download-options .option {
     height: 56px;
-    font-size: 15px;
-    border-radius: 18px;
+    font-size: var(--text-base);
+    border-radius: var(--radius-lg);
   }
 }

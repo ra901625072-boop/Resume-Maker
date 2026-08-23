@@ -1,31 +1,34 @@
 /* ==========================================================
-   WISAXIS RESUME MAKER — CSS DESIGN SYSTEM & DESIGN TOKENS
-   Single source of truth for all design tokens (2026 SaaS Standard).
+   WISAXIS RESUME MAKER — 2026 SAAS DESIGN SYSTEM TOKENS
+   Single source of truth for all Typography, Color Palettes,
+   Surfaces, Glassmorphism, Radii, Shadows, and Motion.
    Load this FIRST before any other stylesheet.
    ========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap');
 
 :root {
 
-  /* ===== TYPOGRAPHY ===== */
-  --font-heading: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-body: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  /* ===== 1. TYPOGRAPHY SYSTEM ===== */
+  --font-heading: 'Plus Jakarta Sans', 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Symmetrical Fluid Type Scale */
+  /* Symmetrical Fluid Modular Scale (1.25 Major Third) */
+  --text-3xs: 0.625rem;  /* 10px */
   --text-2xs: 0.6875rem; /* 11px */
   --text-xs:  0.75rem;   /* 12px */
   --text-sm:  0.875rem;  /* 14px */
   --text-base: 1rem;     /* 16px */
-  --text-md:   1rem;     /* 16px */
-  --text-lg:   1.125rem; /* 18px */
-  --text-xl:   1.25rem;  /* 20px */
-  --text-2xl:  1.5rem;   /* 24px */
-  --text-3xl:  1.875rem; /* 30px */
-  --text-4xl:  2.25rem;  /* 36px */
-  --text-5xl:  3rem;     /* 48px */
-  --text-6xl:  3.75rem;  /* 60px */
+  --text-md:   1.0625rem;/* 17px */
+  --text-lg:   1.1875rem;/* 19px */
+  --text-xl:   1.375rem; /* 22px */
+  --text-2xl:  1.625rem; /* 26px */
+  --text-3xl:  2rem;     /* 32px */
+  --text-4xl:  2.5rem;   /* 40px */
+  --text-5xl:  3.25rem;  /* 52px */
+  --text-6xl:  4rem;     /* 64px */
 
   /* Line Heights */
   --leading-none: 1;
@@ -34,21 +37,31 @@
   --leading-normal: 1.6;
   --leading-relaxed: 1.75;
 
-  /* ===== COLORS — Dark Mode (Pure Pitch Black Space) ===== */
-  --bg-base: #000000;
-  --bg-primary: #000000;
-  --bg-overlay: rgba(0, 0, 0, 0.65);
+  /* Optical Letter Spacing */
+  --tracking-tighter: -0.04em;
+  --tracking-tight: -0.025em;
+  --tracking-snug: -0.015em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.06em;
+  --tracking-widest: 0.12em;
+
+  /* ===== 2. COLORS & SURFACES — DARK MODE (OLED Obsidian & Cyber Sapphire/Cyan) ===== */
+  --bg-base: #030712;
+  --bg-primary: #030712;
+  --bg-secondary: #0b0f19;
+  --bg-overlay: rgba(3, 7, 18, 0.75);
   
   /* Elevation Surfaces */
-  --surface-0: #000000;
-  --surface-1: rgba(12, 12, 16, 0.75);
-  --surface-2: rgba(18, 18, 24, 0.7);
-  --surface-3: rgba(26, 26, 34, 0.78);
-  --surface-paper: rgba(8, 8, 12, 0.88);
+  --surface-0: #030712;
+  --surface-1: rgba(15, 23, 42, 0.72);
+  --surface-2: rgba(30, 41, 59, 0.55);
+  --surface-3: rgba(15, 23, 42, 0.96);
+  --surface-paper: rgba(11, 15, 25, 0.90);
   --surface-card: rgba(255, 255, 255, 0.04);
-  --surface-card-hover: rgba(255, 255, 255, 0.07);
+  --surface-card-hover: rgba(255, 255, 255, 0.075);
   --surface-border: rgba(255, 255, 255, 0.08);
-  --surface-border-hover: rgba(99, 102, 241, 0.35);
+  --surface-border-hover: rgba(14, 165, 233, 0.45);
 
   /* Legacy surface aliases */
   --surface: var(--surface-1);
@@ -56,70 +69,82 @@
 
   /* Borders & Dividers */
   --border-subtle: rgba(255, 255, 255, 0.05);
-  --border-default: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.15);
-  --border-focus: rgba(99, 102, 241, 0.7);
+  --border-default: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --border-focus: rgba(14, 165, 233, 0.75);
 
-  /* Text & Content */
-  --text-main: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-dim: #475569;
-  --text-inverse: #07090e;
+  /* Typography Hierarchy for Dark Mode (Slate High Contrast) */
+  --text-main: #f8fafc;        /* Slate 50 — 16.5:1 High Contrast */
+  --text-secondary: #cbd5e1;   /* Slate 300 */
+  --text-muted: #94a3b8;       /* Slate 400 */
+  --text-dim: #64748b;         /* Slate 500 */
+  --text-inverse: #030712;
 
-  /* Brand Palette (Electric Indigo & Violet) */
-  --primary: #6366f1;
-  --primary-hover: #4f46e5;
-  --primary-active: #4338ca;
-  --primary-light: rgba(99, 102, 241, 0.12);
-  --primary-glow: rgba(99, 102, 241, 0.38);
+  /* Brand Palette (Electric Sapphire Blue & Neon Cyan) */
+  --primary: #0ea5e9;
+  --primary-hover: #0284c7;
+  --primary-active: #0369a1;
+  --primary-light: rgba(14, 165, 233, 0.14);
+  --primary-glow: rgba(14, 165, 233, 0.45);
 
-  --accent: #8b5cf6;
-  --accent-hover: #7c3aed;
-  --accent-light: rgba(139, 92, 246, 0.12);
-  --accent-glow: rgba(139, 92, 246, 0.35);
-  --accent-indigo: #6366f1;
+  --accent: #06b6d4;
+  --accent-hover: #0891b2;
+  --accent-light: rgba(6, 182, 212, 0.14);
+  --accent-glow: rgba(6, 182, 212, 0.40);
+  --accent-indigo: #0ea5e9;
+  --accent-cyan: #06b6d4;
+  --accent-cyan-light: rgba(6, 182, 212, 0.14);
+  --accent-blue: #2563eb;
+
+  /* Gradients (Zero Purple — Electric Sapphire, Azure & Neon Cyan) */
+  --gradient-brand: linear-gradient(135deg, #0ea5e9 0%, #2563eb 50%, #06b6d4 100%);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%);
+  --gradient-accent: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
+  --gradient-glow: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, transparent 70%);
 
   /* Semantic Feedback */
   --success: #10b981;
   --success-hover: #059669;
-  --success-light: rgba(16, 185, 129, 0.12);
+  --success-light: rgba(16, 185, 129, 0.14);
   --secondary: #10b981;
 
   --warning: #f59e0b;
   --warning-hover: #d97706;
-  --warning-light: rgba(245, 158, 11, 0.12);
+  --warning-light: rgba(245, 158, 11, 0.14);
 
   --danger: #f43f5e;
   --danger-hover: #e11d48;
-  --danger-light: rgba(244, 63, 94, 0.12);
+  --danger-light: rgba(244, 63, 94, 0.14);
 
   --info: #0ea5e9;
-  --info-light: rgba(14, 165, 233, 0.12);
+  --info-light: rgba(14, 165, 233, 0.14);
 
-  /* ATS Scoring Tokens */
+  /* ATS Scoring Tokens (Optimized contrast) */
   --ats-excellent: #10b981;
-  --ats-good: #3b82f6;
+  --ats-good: #0ea5e9;
   --ats-warning: #f59e0b;
   --ats-danger: #f43f5e;
-  --ats-excellent-bg: rgba(16, 185, 129, 0.12);
-  --ats-good-bg: rgba(59, 130, 246, 0.12);
-  --ats-warning-bg: rgba(245, 158, 11, 0.12);
-  --ats-danger-bg: rgba(244, 63, 94, 0.12);
+  --ats-excellent-bg: rgba(16, 185, 129, 0.14);
+  --ats-good-bg: rgba(14, 165, 233, 0.14);
+  --ats-warning-bg: rgba(245, 158, 11, 0.14);
+  --ats-danger-bg: rgba(244, 63, 94, 0.14);
 
-  /* Glassmorphism & Shadows */
-  --glass-border: rgba(255, 255, 255, 0.08);
+  /* Glassmorphism & Precise Multi-layer Shadows */
+  --glass-border: rgba(255, 255, 255, 0.09);
   --glass-blur: blur(16px);
-  --glass-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.55);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 16px 40px -8px rgba(0, 0, 0, 0.45);
-  --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.32);
-  --shadow-hover: 0 20px 48px -6px rgba(0, 0, 0, 0.52);
+  --glass-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.65);
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 40px -8px rgba(0, 0, 0, 0.6);
+  --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --shadow-hover: 0 20px 48px -6px rgba(0, 0, 0, 0.65);
+  --shadow-glow: 0 0 30px rgba(14, 165, 233, 0.35);
 
   /* ===== GLOBAL BACKGROUND SYSTEM ===== */
-  --global-bg-overlay: rgba(0, 0, 0, 0.4);
-  --global-bg-overlay-mobile: rgba(0, 0, 0, 0.5);
+  --global-bg-overlay: rgba(3, 7, 18, 0.45);
+  --global-bg-overlay-mobile: rgba(3, 7, 18, 0.55);
   --global-bg-blur: 0px;
   --global-bg-blur-mobile: 0px;
   --global-bg-gradient-1: rgba(255, 255, 255, 0.05);
@@ -131,17 +156,17 @@
   --shell-overlay-mobile: var(--global-bg-overlay-mobile);
   --shell-blur: var(--global-bg-blur);
   --shell-blur-mobile: var(--global-bg-blur-mobile);
-  --shell-surface: rgba(13, 17, 28, 0.82);
-  --shell-surface-border: rgba(255, 255, 255, 0.08);
-  --shell-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+  --shell-surface: rgba(11, 15, 25, 0.88);
+  --shell-surface-border: rgba(255, 255, 255, 0.09);
+  --shell-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
   --shell-radius: 20px;
   --shell-transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   --shell-green: #10b981;
   --shell-green-dark: #059669;
-  --shell-purple: #8b5cf6;
-  --shell-purple-dark: #6366f1;
+  --shell-purple: #06b6d4;
+  --shell-purple-dark: #0ea5e9;
   --shell-text: #ffffff;
-  --shell-muted: rgba(255, 255, 255, 0.65);
+  --shell-muted: rgba(255, 255, 255, 0.70);
 
   /* ===== SPACING — 8pt Grid System ===== */
   --space-1: 4px;
@@ -224,10 +249,10 @@
   --shimmer-size: 200% 100%;
 
   /* ===== INPUTS ===== */
-  --input-bg: rgba(255, 255, 255, 0.03);
+  --input-bg: rgba(255, 255, 255, 0.035);
   --input-border: rgba(255, 255, 255, 0.09);
-  --input-focus-bg: rgba(255, 255, 255, 0.05);
-  --input-focus-border: #6366f1;
+  --input-focus-bg: rgba(255, 255, 255, 0.06);
+  --input-focus-border: #0ea5e9;
 
   /* ===== TOUCH TARGETS & MOBILE ERGONOMICS ===== */
   --touch-target-min: 44px;
@@ -238,7 +263,7 @@
   --safe-right: max(0px, env(safe-area-inset-right, 0px));
 
   /* ===== LAYOUT ===== */
-  --section-padding: 4rem;
+  --section-padding: 4.5rem;
   --container-max-width: 1240px;
 
   /* ===== TEMPLATE LAYOUT DIMENSIONS ===== */
@@ -253,8 +278,8 @@
   --mobile-glass: linear-gradient(180deg, rgba(13, 17, 28, 0.96), rgba(7, 9, 14, 0.92));
   --mobile-border: 1px solid rgba(255, 255, 255, 0.08);
   --mobile-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
-  --mobile-purple: #8b5cf6;
-  --mobile-purple-2: #6366f1;
+  --mobile-purple: #06b6d4;
+  --mobile-purple-2: #0ea5e9;
   --mobile-muted: rgba(255, 255, 255, 0.65);
   --mobile-download-bg: transparent;
 
@@ -270,7 +295,7 @@
     --card-radius: 16px;
     --input-radius: 12px;
     --btn-radius: 12px;
-    --section-padding: 1.5rem;
+    --section-padding: 1.75rem;
     --space-5: 16px;
     --space-6: 24px;
     --space-7: 32px;
@@ -278,89 +303,102 @@
   }
 }
 
-/* ===== LIGHT MODE (Multi-Tonal White Hierarchy & Inverted Constellation Standard) ===== */
+/* ===== 3. LIGHT MODE SYSTEM (Porcelain & Architectural Slate with Electric Azure & Cyan) ===== */
 html[data-theme="light"] {
   /* Canvas Background: Crisp Porcelain Canvas (Level 0) */
   --bg-base: #f8fafc;
   --bg-primary: #f8fafc;
-  --bg-overlay: rgba(248, 250, 252, 0.65);
+  --bg-secondary: #f1f5f9;
+  --bg-overlay: rgba(248, 250, 252, 0.75);
 
   /* Elevation Surfaces — Distinct Tonal Shades of White */
   --surface-0: #f8fafc;                          /* Base Canvas (Soft Porcelain) */
-  --surface-1: rgba(255, 255, 255, 0.90);        /* Floating Glass / Header / Nav (Frosted Alabaster) */
-  --surface-2: #f1f5f9;                          /* Inset Areas / Section Dividers (Soft Pearl White) */
+  --surface-1: rgba(255, 255, 255, 0.92);        /* Floating Glass / Header / Nav (Frosted Alabaster) */
+  --surface-2: #f1f5f9;                          /* Inset Areas / Section Dividers (Soft Pearl Slate) */
   --surface-3: #ffffff;                          /* Modals / Menus / Popovers (Ultra Pure White) */
   --surface-paper: #ffffff;                      /* Document & Resume Canvas (Pristine Pure White) */
   --surface-card: #ffffff;                       /* Primary Cards / Bento Boxes (Crisp Pure White) */
   --surface-card-hover: #ffffff;                 /* Card Hover State */
   --surface-border: rgba(15, 23, 42, 0.08);      /* Subtle Crisp Element Separation */
-  --surface-border-hover: rgba(79, 70, 229, 0.4);
+  --surface-border-hover: rgba(2, 132, 199, 0.45);
 
   --surface: var(--surface-1);
   --glass-bg: #ffffff;
 
   /* Borders & Component Outlines */
-  --border-subtle: rgba(15, 23, 42, 0.05);       /* Level 1 Sub-dividers */
+  --border-subtle: rgba(15, 23, 42, 0.06);       /* Level 1 Sub-dividers */
   --border-default: rgba(15, 23, 42, 0.10);      /* Standard Card & Element Boundaries */
   --border-strong: rgba(15, 23, 42, 0.18);       /* Elevated Card / Header Boundaries */
-  --border-focus: rgba(79, 70, 229, 0.85);
+  --border-focus: rgba(2, 132, 199, 0.85);
 
-  /* Typography Hierarchy for Light Mode */
-  --text-main: #0f172a;                          /* High-contrast deep slate for primary reading */
+  /* Typography Hierarchy for Light Mode (Deep High Contrast Slate) */
+  --text-main: #0f172a;                          /* High-contrast deep slate (15.5:1 ratio) */
   --text-secondary: #334155;                    /* Subheaders & labels */
   --text-muted: #64748b;                        /* Descriptions & secondary meta */
   --text-dim: #94a3b8;                          /* Placeholders & disabled text */
   --text-inverse: #ffffff;
 
-  /* Brand Palette (Deep rich indigo for light contrast) */
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --primary-active: #3730a3;
-  --primary-light: rgba(79, 70, 229, 0.08);
-  --primary-glow: rgba(79, 70, 229, 0.25);
+  /* Brand Palette (Deep rich azure blue for light contrast - No Purple) */
+  --primary: #0284c7;
+  --primary-hover: #0369a1;
+  --primary-active: #075985;
+  --primary-light: rgba(2, 132, 199, 0.10);
+  --primary-glow: rgba(2, 132, 199, 0.28);
 
-  --accent: #7c3aed;
-  --accent-hover: #6d28d9;
-  --accent-light: rgba(124, 58, 237, 0.08);
-  --accent-glow: rgba(124, 58, 237, 0.22);
-  --accent-indigo: #4f46e5;
+  --accent: #0891b2;
+  --accent-hover: #0e7490;
+  --accent-light: rgba(8, 145, 178, 0.10);
+  --accent-glow: rgba(8, 145, 178, 0.24);
+  --accent-indigo: #0284c7;
+  --accent-cyan: #0891b2;
+  --accent-cyan-light: rgba(8, 145, 178, 0.10);
+  --accent-blue: #2563eb;
+
+  /* Gradients for Light Mode (Azure, Cobalt & Teal) */
+  --gradient-brand: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #0d9488 100%);
+  --gradient-brand-subtle: linear-gradient(135deg, rgba(2, 132, 199, 0.08) 0%, rgba(8, 145, 178, 0.08) 100%);
+  --gradient-accent: linear-gradient(135deg, #0891b2 0%, #059669 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.90) 100%);
+  --gradient-glow: radial-gradient(circle, rgba(2, 132, 199, 0.15) 0%, transparent 70%);
 
   /* Semantic Feedback */
   --success: #059669;
   --success-hover: #047857;
-  --success-light: rgba(5, 150, 105, 0.08);
+  --success-light: rgba(5, 150, 105, 0.10);
   --secondary: #059669;
 
   --warning: #d97706;
   --warning-hover: #b45309;
-  --warning-light: rgba(217, 119, 6, 0.08);
+  --warning-light: rgba(217, 119, 6, 0.10);
 
   --danger: #e11d48;
   --danger-hover: #be123c;
-  --danger-light: rgba(225, 29, 72, 0.08);
+  --danger-light: rgba(225, 29, 72, 0.10);
 
   --info: #0284c7;
-  --info-light: rgba(2, 132, 199, 0.08);
+  --info-light: rgba(2, 132, 199, 0.10);
 
   /* ATS Scoring Tokens for Light Mode */
   --ats-excellent: #059669;
-  --ats-good: #2563eb;
+  --ats-good: #0284c7;
   --ats-warning: #d97706;
   --ats-danger: #e11d48;
-  --ats-excellent-bg: rgba(5, 150, 105, 0.08);
-  --ats-good-bg: rgba(37, 99, 235, 0.08);
-  --ats-warning-bg: rgba(217, 119, 6, 0.08);
-  --ats-danger-bg: rgba(225, 29, 72, 0.08);
+  --ats-excellent-bg: rgba(5, 150, 105, 0.10);
+  --ats-good-bg: rgba(2, 132, 199, 0.10);
+  --ats-warning-bg: rgba(217, 119, 6, 0.10);
+  --ats-danger-bg: rgba(225, 29, 72, 0.10);
 
   /* Multi-Layered Natural Shadows (Identifies Elevation) */
   --glass-border: rgba(15, 23, 42, 0.08);
   --glass-blur: blur(16px);
   --glass-shadow: 0 12px 36px -4px rgba(15, 23, 42, 0.08);
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
   --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.10), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
   --shadow-soft: 0 8px 24px -2px rgba(15, 23, 42, 0.07);
-  --shadow-hover: 0 16px 40px -4px rgba(79, 70, 229, 0.14), 0 4px 14px rgba(15, 23, 42, 0.06);
+  --shadow-hover: 0 16px 40px -4px rgba(2, 132, 199, 0.14), 0 4px 14px rgba(15, 23, 42, 0.06);
+  --shadow-glow: 0 0 30px rgba(2, 132, 199, 0.18);
 
   /* Background Overrides */
   --global-bg-overlay: rgba(248, 250, 252, 0.6);
@@ -375,7 +413,7 @@ html[data-theme="light"] {
   --input-bg: #f8fafc;                           /* Light Alabaster input field */
   --input-border: #cbd5e1;                       /* Clear boundary definition */
   --input-focus-bg: #ffffff;                     /* Brightens to pure white on active focus */
-  --input-focus-border: #4f46e5;
+  --input-focus-border: #0284c7;
 
   /* Shimmer Token for Light Mode */
   --shimmer-bg: linear-gradient(

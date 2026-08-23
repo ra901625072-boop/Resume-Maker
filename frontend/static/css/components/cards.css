@@ -1,5 +1,7 @@
 /* ==========================================================
-   WISAXIS — CARD & BENTO COMPONENTS (2026 SaaS Standard)
+   WISAXIS — CARD & BENTO COMPONENTS (2026 SaaS Design System)
+   Bento grids, elevated glass cards, template showcase tiles,
+   and interactive hover transitions.
    ========================================================== */
 
 /* ===== ADAPTIVE GLASS CARD ===== */
@@ -30,13 +32,13 @@ html[data-theme="light"] .adaptive-card,
 html[data-theme="light"] .glass-card {
   background: #ffffff;
   border-color: var(--border-default);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-xs);
 }
 
 html[data-theme="light"] .adaptive-card:hover,
 html[data-theme="light"] .glass-card:hover {
   border-color: var(--surface-border-hover);
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--shadow-md);
 }
 
 /* ===== 2026 BENTO GRID SYSTEM ===== */
@@ -58,6 +60,7 @@ html[data-theme="light"] .glass-card:hover {
   justify-content: space-between;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-sm);
   transition:
     transform 0.35s var(--ease-spring),
     box-shadow 0.35s var(--ease-out-smooth),
@@ -73,7 +76,7 @@ html[data-theme="light"] .glass-card:hover {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  background: var(--gradient-brand);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -91,6 +94,11 @@ html[data-theme="light"] .glass-card:hover {
 html[data-theme="light"] .bento-card {
   background: #ffffff;
   border-color: var(--border-default);
+  box-shadow: var(--shadow-xs);
+}
+
+html[data-theme="light"] .bento-card:hover {
+  box-shadow: var(--shadow-lg);
 }
 
 .bento-col-8 {
@@ -114,7 +122,7 @@ html[data-theme="light"] .bento-card {
   height: 52px;
   border-radius: var(--radius-lg);
   background: var(--primary-light);
-  border: 1px solid rgba(99, 102, 241, 0.25);
+  border: 1px solid rgba(14, 165, 233, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,14 +133,15 @@ html[data-theme="light"] .bento-card {
 
 .bento-title {
   font-family: var(--font-heading);
-  font-size: 1.35rem;
+  font-size: var(--text-xl);
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-tight);
   color: var(--text-main);
   margin: 0 0 0.75rem;
 }
 
 .bento-desc {
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   color: var(--text-secondary);
   line-height: var(--leading-relaxed);
@@ -172,7 +181,7 @@ html[data-theme="light"] .bento-card {
   }
 
   .bento-title {
-    font-size: 1.2rem;
+    font-size: var(--text-lg);
   }
 }
 
@@ -218,9 +227,9 @@ html[data-theme="light"] .bento-card {
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(7, 9, 14, 0.94) 0%,
-    rgba(7, 9, 14, 0.4) 50%,
-    rgba(7, 9, 14, 0.05) 100%
+    rgba(3, 7, 18, 0.95) 0%,
+    rgba(3, 7, 18, 0.45) 50%,
+    rgba(3, 7, 18, 0.05) 100%
   );
   z-index: 1;
   transition: opacity 0.3s ease;
@@ -259,7 +268,7 @@ html[data-theme="light"] .bento-card {
 
 .template-card:hover {
   transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.65), 0 0 20px var(--primary-glow);
+  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.65), 0 0 24px var(--primary-glow);
   border-color: var(--primary);
 }
 
@@ -270,6 +279,7 @@ html[data-theme="light"] .bento-card {
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 1.1rem;
+  letter-spacing: var(--tracking-tight);
   color: #ffffff;
   display: block;
   margin-bottom: 6px;
@@ -281,12 +291,13 @@ html[data-theme="light"] .bento-card {
   z-index: 2;
   display: inline-flex;
   align-items: center;
+  font-family: var(--font-body);
   font-size: var(--text-2xs);
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #c7d2fe;
-  background: rgba(99, 102, 241, 0.45);
+  letter-spacing: var(--tracking-wider);
+  color: #bae6fd;
+  background: rgba(14, 165, 233, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 3px 10px;
   border-radius: var(--radius-full);

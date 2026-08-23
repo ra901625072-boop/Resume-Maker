@@ -658,27 +658,27 @@
                 const isPassed = atsVal >= 75;
 
                 html += `
-                <div class="visual-card" style="background: linear-gradient(135deg, rgba(99,102,241,0.09), rgba(16,185,129,0.09)); border-color: rgba(99,102,241,0.35);">
+                <div class="visual-card" style="background: linear-gradient(135deg, rgba(14,165,233,0.09), rgba(16,185,129,0.09)); border-color: rgba(14,165,233,0.35);">
                     <div class="visual-card-header">
                         <span class="visual-card-title">🎯 AI Quality & ATS Intelligence Evaluation</span>
-                        <span class="file-type-badge" style="background:${isPassed ? '#10b981' : '#f59e0b'}; color:#fff; font-weight:800;">
+                        <span class="file-type-badge" style="background:${isPassed ? 'var(--ats-excellent)' : 'var(--ats-warning)'}; color:#fff; font-weight:800;">
                             ${isPassed ? '✓ ATS Optimized' : '⚠ Review Needed'}
                         </span>
                     </div>
                     <div class="visual-grid" style="grid-template-columns: repeat(3, 1fr); gap: 14px;">
                         <div class="visual-item" style="text-align:center; padding: 14px;">
                             <div class="visual-item-label">ATS Score</div>
-                            <div style="font-size:2rem; font-weight:900; color:var(--accent-indigo); line-height:1.2;">${atsVal}<span style="font-size:1.1rem; color:var(--text-muted); font-weight:600;">/100</span></div>
+                            <div style="font-size:2rem; font-weight:900; color:var(--primary); line-height:1.2;">${atsVal}<span style="font-size:1.1rem; color:var(--text-muted); font-weight:600;">/100</span></div>
                             <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Standard Keyword Match</div>
                         </div>
                         <div class="visual-item" style="text-align:center; padding: 14px;">
                             <div class="visual-item-label">Executive Quality</div>
-                            <div style="font-size:2rem; font-weight:900; color:#10b981; line-height:1.2;">${qualVal}<span style="font-size:1.1rem; color:var(--text-muted); font-weight:600;">/100</span></div>
+                            <div style="font-size:2rem; font-weight:900; color:var(--ats-excellent); line-height:1.2;">${qualVal}<span style="font-size:1.1rem; color:var(--text-muted); font-weight:600;">/100</span></div>
                             <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Formatting & Readability</div>
                         </div>
                         <div class="visual-item" style="text-align:center; padding: 14px;">
                             <div class="visual-item-label">Completeness</div>
-                            <div style="font-size:2rem; font-weight:900; color:#a78bfa; line-height:1.2;">${compVal}<span style="font-size:1.1rem; color:var(--text-muted); font-weight:600;">%</span></div>
+                            <div style="font-size:2rem; font-weight:900; color:var(--accent); line-height:1.2;">${compVal}<span style="font-size:1.1rem; color:var(--text-muted); font-weight:600;">%</span></div>
                             <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">All Sections Populated</div>
                         </div>
                     </div>
@@ -860,7 +860,7 @@
                             <div class="timeline-item">
                                 <div class="timeline-title">
                                     <span>${esc(title)}</span>
-                                    ${exp.is_current ? '<span class="file-type-badge" style="font-size:10px; padding:2px 8px; background:#10b981; color:#fff;">Current</span>' : ''}
+                                    ${exp.is_current ? '<span class="file-type-badge" style="font-size:10px; padding:2px 8px; background:var(--ats-excellent); color:#fff;">Current</span>' : ''}
                                 </div>
                                 <div class="timeline-sub">${esc(comp)} ${dates ? '· ' + esc(dates) : ''} ${exp.location ? '· ' + esc(exp.location) : ''}</div>
                                 ${exp.description ? `<div class="timeline-desc">${esc(exp.description)}</div>` : ''}

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   WISAXIS AI RESUME ASSISTANT CHAT (2026 SaaS Redesign - Desktop)
+   WISAXIS AI RESUME ASSISTANT CHAT (2026 SaaS Design System - Desktop)
    ========================================================================== */
 
 /* Page-specific scroll lock for native-app experience */
@@ -43,19 +43,19 @@ body.chat-page {
 html[data-theme="light"] .chat-sidebar {
     background: #ffffff;
     border-color: var(--border-default);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
 }
 
 .sidebar-title {
     font-family: var(--font-heading);
-    font-size: 1.25rem;
+    font-size: var(--text-xl);
     font-weight: 800;
     margin: 0 0 0.5rem;
     color: var(--text-main);
     display: flex;
     align-items: center;
     gap: 10px;
-    letter-spacing: -0.03em;
+    letter-spacing: var(--tracking-tight);
 }
 
 .sidebar-title svg {
@@ -70,10 +70,11 @@ html[data-theme="light"] .chat-sidebar {
 }
 
 .sidebar-section h4 {
+    font-family: var(--font-body);
     font-size: var(--text-2xs);
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--tracking-wider);
     color: var(--text-muted);
     margin: 0 0 4px;
 }
@@ -83,6 +84,7 @@ html[data-theme="light"] .chat-sidebar {
     border: 1px solid var(--border-default);
     border-radius: var(--radius-lg);
     padding: 0.85rem 1rem;
+    font-family: var(--font-body);
     font-size: var(--text-xs);
     font-weight: 600;
     color: var(--text-main);
@@ -111,6 +113,7 @@ html[data-theme="light"] .suggestion-pill {
     border: 1px solid var(--border-default);
     border-radius: var(--radius-xl);
     padding: 1.1rem;
+    font-family: var(--font-body);
     font-size: var(--text-xs);
     color: var(--text-secondary);
     line-height: var(--leading-relaxed);
@@ -137,7 +140,7 @@ html[data-theme="light"] .suggestion-pill {
 html[data-theme="light"] .chat-window {
     background: #ffffff;
     border-color: var(--border-default);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
 }
 
 .chat-header {
@@ -146,7 +149,7 @@ html[data-theme="light"] .chat-window {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: var(--surface-header);
+    background: var(--surface-1);
     z-index: 10;
 }
 
@@ -159,7 +162,7 @@ html[data-theme="light"] .chat-window {
 .assistant-avatar {
     width: 44px;
     height: 44px;
-    background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
+    background: var(--gradient-brand);
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
@@ -175,10 +178,11 @@ html[data-theme="light"] .chat-window {
     font-weight: 800;
     margin: 0;
     color: var(--text-main);
-    letter-spacing: -0.02em;
+    letter-spacing: var(--tracking-snug);
 }
 
 .assistant-status {
+    font-family: var(--font-body);
     font-size: var(--text-xs);
     color: var(--success);
     font-weight: 700;
@@ -202,6 +206,7 @@ html[data-theme="light"] .chat-window {
     border: 1px solid rgba(244, 63, 94, 0.25);
     border-radius: var(--radius-md);
     padding: 8px 16px;
+    font-family: var(--font-body);
     font-size: var(--text-xs);
     font-weight: 700;
     cursor: pointer;
@@ -279,12 +284,13 @@ html[data-theme="light"] .chat-window {
 .chat-bubble-wrap.assistant .bubble-icon {
     background: var(--primary-light);
     color: var(--primary);
-    border: 1px solid rgba(99, 102, 241, 0.25);
+    border: 1px solid rgba(14, 165, 233, 0.25);
 }
 
 .chat-bubble {
     padding: 1.15rem 1.45rem;
     border-radius: var(--radius-xl);
+    font-family: var(--font-body);
     font-size: var(--text-sm);
     line-height: var(--leading-relaxed);
     color: var(--text-main);
@@ -293,7 +299,7 @@ html[data-theme="light"] .chat-window {
 }
 
 .chat-bubble-wrap.user .chat-bubble {
-    background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
+    background: var(--gradient-brand);
     color: #ffffff;
     border-bottom-right-radius: 4px;
     box-shadow: 0 4px 16px var(--primary-glow);
@@ -306,8 +312,9 @@ html[data-theme="light"] .chat-window {
 }
 
 html[data-theme="light"] .chat-bubble-wrap.assistant .chat-bubble {
-    background: #f8fafc;
+    background: #ffffff;
     border-color: var(--border-default);
+    box-shadow: var(--shadow-xs);
 }
 
 /* AI Action Tooltips */
@@ -334,6 +341,7 @@ html[data-theme="light"] .chat-bubble-wrap.assistant .chat-bubble {
     color: var(--text-muted);
     border-radius: var(--radius-sm);
     padding: 3px 9px;
+    font-family: var(--font-body);
     font-size: var(--text-2xs);
     font-weight: 700;
     cursor: pointer;
@@ -378,8 +386,8 @@ html[data-theme="light"] .chat-bubble-wrap.assistant .chat-bubble {
 }
 
 .chat-bubble pre {
-    background: #0f172a;
-    color: #f8fafc;
+    background: var(--bg-secondary, #0b0f19);
+    color: var(--text-main);
     padding: 1.15rem;
     border-radius: var(--radius-lg);
     overflow-x: auto;
@@ -398,7 +406,7 @@ html[data-theme="light"] .chat-bubble-wrap.assistant .chat-bubble {
    ========================================================================== */
 .chat-input-area {
     padding: 1.25rem 2rem 1.5rem;
-    background: var(--surface-header);
+    background: var(--surface-1);
     border-top: 1px solid var(--border-default);
     display: flex;
     flex-direction: column;
@@ -414,8 +422,8 @@ html[data-theme="light"] .chat-bubble-wrap.assistant .chat-bubble {
 
 .chat-textarea {
     flex: 1;
-    background: var(--surface-card);
-    border: 1px solid var(--border-default);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
     border-radius: var(--radius-xl);
     padding: 0.85rem 1.25rem;
     font-family: var(--font-body);
@@ -436,16 +444,16 @@ html[data-theme="light"] .chat-bubble-wrap.assistant .chat-bubble {
 }
 
 html[data-theme="light"] .chat-textarea {
-    background: #f8fafc;
-    border-color: var(--border-default);
-    color: #0f172a;
+    background: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-main);
 }
 
 .chat-submit-btn {
     width: 48px;
     height: 48px;
     border-radius: var(--radius-full);
-    background: linear-gradient(135deg, var(--primary), #4f46e5);
+    background: var(--gradient-brand);
     color: #ffffff;
     border: none;
     cursor: pointer;

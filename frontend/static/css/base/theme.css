@@ -1,6 +1,6 @@
 /* ==========================================================
-   WISAXIS RESUME MAKER — GLOBAL BODY & THEME
-   Sets base body appearance, typography smoothing, transitions,
+   WISAXIS RESUME MAKER — GLOBAL BODY, TYPOGRAPHY & THEME
+   Sets base body appearance, typography smoothing, heading hierarchy,
    scrollbars, text selection, and dark/light theme switching.
    ========================================================== */
 
@@ -13,6 +13,8 @@ html {
 
 body {
   font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 400;
   color: var(--text-main);
   line-height: var(--leading-normal);
   background: var(--bg-primary);
@@ -26,21 +28,97 @@ body {
   transition: var(--transition-theme);
 }
 
+/* ===== GLOBAL TYPOGRAPHY HIERARCHY ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--text-main);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  margin: 0 0 0.5rem;
+}
+
+h1 {
+  font-size: var(--text-4xl);
+  letter-spacing: var(--tracking-tighter);
+  font-weight: 800;
+}
+
+h2 {
+  font-size: var(--text-3xl);
+  letter-spacing: var(--tracking-tight);
+  font-weight: 700;
+}
+
+h3 {
+  font-size: var(--text-2xl);
+  letter-spacing: var(--tracking-snug);
+  font-weight: 700;
+}
+
+h4 {
+  font-size: var(--text-xl);
+  letter-spacing: var(--tracking-snug);
+  font-weight: 600;
+}
+
+h5 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+h6 {
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 1rem;
+  color: var(--text-secondary);
+  line-height: var(--leading-normal);
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color var(--duration-fast) ease;
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+code {
+  background: var(--surface-2);
+  color: var(--primary);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+}
+
 /* Text Selection Color */
 ::selection {
-  background: rgba(99, 102, 241, 0.35);
+  background: rgba(14, 165, 233, 0.35);
   color: var(--text-main);
 }
 
 html[data-theme="light"] ::selection {
-  background: rgba(79, 70, 229, 0.25);
+  background: rgba(2, 132, 199, 0.22);
   color: #0f172a;
 }
 
 /* ===== GLOBAL SCROLLBARS ===== */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
@@ -77,13 +155,14 @@ html[data-theme="light"] ::selection {
   padding: 0;
   transition: var(--transition);
   position: relative;
+  backdrop-filter: blur(10px);
 }
 
 #theme-toggle:hover,
 .theme-toggle:hover {
   background: var(--primary);
   border-color: var(--primary);
-  color: #fff;
+  color: #ffffff;
   transform: rotate(18deg) scale(1.06);
   box-shadow: 0 0 20px var(--primary-glow);
 }
@@ -93,13 +172,14 @@ html[data-theme="light"] .theme-toggle {
   background: var(--surface-3);
   border-color: var(--border-default);
   color: var(--text-main);
+  box-shadow: var(--shadow-xs);
 }
 
 html[data-theme="light"] #theme-toggle:hover,
 html[data-theme="light"] .theme-toggle:hover {
   background: var(--primary);
   border-color: var(--primary);
-  color: #fff;
+  color: #ffffff;
 }
 
 /* Theme Icon Visibility Switch */
@@ -119,6 +199,6 @@ body.template-shell {
 }
 
 html[data-theme="light"] body.template-shell {
-  background: #eef2f8;
+  background: #f1f5f9;
   color: var(--text-main);
 }

@@ -1,6 +1,7 @@
 /* ==========================================================
-   WISAXIS — APP HEADER COMPONENT
-   Glassmorphic sticky/fixed navigation bar (2026 Calm SaaS Standard).
+   WISAXIS — APP HEADER COMPONENT (2026 SaaS Design System)
+   Glassmorphic sticky navigation bar, brand typography,
+   active indicator tabs, user avatar, and responsive drawer.
    ========================================================== */
 
 /* ===== HEADER BASE (Mobile-first) ===== */
@@ -30,13 +31,13 @@ html[data-theme="light"] .app-header {
 }
 
 .app-header.scrolled {
-  background: rgba(7, 9, 14, 0.94);
+  background: var(--bg-overlay);
   box-shadow: var(--shadow-md);
   border-bottom-color: var(--border-strong);
 }
 
 html[data-theme="light"] .app-header.scrolled {
-  background: rgba(255, 255, 255, 0.98);
+  background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
 }
 
@@ -74,39 +75,32 @@ html[data-theme="light"] .app-header.scrolled {
   height: 34px;
   object-fit: contain;
   border-radius: var(--radius-md);
-  filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.45));
+  filter: drop-shadow(0 0 10px var(--primary-glow));
   transition: transform 0.35s var(--ease-spring), filter 0.35s ease;
   flex-shrink: 0;
 }
 
 .brand:hover .brand-logo {
   transform: scale(1.12) rotate(6deg);
-  filter: drop-shadow(0 0 18px rgba(99, 102, 241, 0.75));
+  filter: drop-shadow(0 0 18px var(--primary-glow));
 }
 
 .brand-text {
   font-family: var(--font-heading);
   font-size: 1.05rem;
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: var(--tracking-tighter);
   color: var(--text-main);
   white-space: nowrap;
 }
 
 .brand-text span {
-  background: linear-gradient(135deg, #818cf8, #a855f7);
+  background: var(--gradient-brand);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-weight: 700;
   margin-left: 4px;
-}
-
-html[data-theme="light"] .brand-text span {
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 /* ===== HEADER ACTIONS CLUSTER ===== */
@@ -131,11 +125,13 @@ html[data-theme="light"] .brand-text span {
 
 .desktop-nav a {
   text-decoration: none;
+  font-family: var(--font-body);
   color: var(--text-secondary);
   padding: 8px 14px;
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: var(--text-sm);
+  letter-spacing: var(--tracking-normal);
   transition: all 0.2s var(--ease-out-smooth);
   display: inline-flex;
   align-items: center;
@@ -145,7 +141,7 @@ html[data-theme="light"] .brand-text span {
 
 .desktop-nav a:hover {
   color: var(--text-main);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-card-hover);
 }
 
 html[data-theme="light"] .desktop-nav a:hover {
@@ -162,8 +158,8 @@ html[data-theme="light"] .desktop-nav a:hover {
 }
 
 .desktop-nav a.btn-primary {
-  background: linear-gradient(135deg, var(--primary), #4f46e5);
-  color: #fff !important;
+  background: var(--gradient-brand);
+  color: #ffffff !important;
   font-weight: 700;
   padding: 8px 18px;
   border-radius: var(--radius-md);
@@ -193,6 +189,7 @@ html[data-theme="light"] .desktop-nav a:hover {
 .mobile-nav-login {
   text-decoration: none;
   color: var(--text-secondary);
+  font-family: var(--font-body);
   font-size: var(--text-xs);
   font-weight: 700;
   min-height: 38px;
@@ -216,8 +213,9 @@ html[data-theme="light"] .desktop-nav a:hover {
 
 .mobile-nav-signup {
   text-decoration: none;
-  background: linear-gradient(135deg, var(--primary), #4f46e5);
-  color: #fff !important;
+  background: var(--gradient-brand);
+  color: #ffffff !important;
+  font-family: var(--font-body);
   font-size: var(--text-xs);
   font-weight: 800;
   min-height: 38px;
@@ -267,7 +265,7 @@ html[data-theme="light"] .desktop-nav a:hover {
 #theme-toggle:hover {
   background: var(--primary);
   border-color: var(--primary);
-  color: #fff;
+  color: #ffffff;
   transform: rotate(180deg) scale(1.1);
   box-shadow: 0 0 20px var(--primary-glow);
 }
@@ -317,6 +315,7 @@ html[data-theme="light"] .desktop-nav a:hover {
 }
 
 .user-name {
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--text-main);
@@ -353,11 +352,11 @@ html[data-theme="light"] .desktop-nav a:hover {
   flex-direction: column;
   gap: 3px;
   border-radius: var(--radius-lg);
-  background: var(--surface-paper);
+  background: var(--surface-3);
   border: 1px solid var(--border-strong);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  box-shadow: var(--glass-shadow);
+  box-shadow: var(--shadow-lg);
   z-index: var(--z-header-dropdown, 1300);
   transform-origin: top right;
 
@@ -388,6 +387,7 @@ html[data-theme="light"] .desktop-nav a:hover {
   padding: 0 14px;
   border-radius: var(--radius-md);
   text-decoration: none;
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--text-secondary);
@@ -510,7 +510,7 @@ html[data-theme="light"] .desktop-nav a:hover {
     height: 12px;
   }
 
-  /* Perfectly anchored floating mobile dropdown */
+  /* Anchored floating mobile dropdown */
   .dropdown-menu {
     position: absolute;
     top: calc(100% + 10px);
@@ -521,9 +521,9 @@ html[data-theme="light"] .desktop-nav a:hover {
     max-width: calc(100vw - 20px);
     border-radius: var(--radius-xl);
     padding: 8px;
-    background: var(--surface-1);
+    background: var(--surface-3);
     border: 1px solid var(--border-strong);
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    box-shadow: var(--shadow-lg);
     transform-origin: top right;
     transform: translateY(-8px) scale(0.95);
     opacity: 0;

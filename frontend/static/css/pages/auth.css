@@ -1,6 +1,6 @@
 /* ==========================================================
    WISAXIS — AUTHENTICATION PAGES CSS (Login & Signup)
-   2026 Calm SaaS Standard.
+   2026 SaaS Design System Standard.
    ========================================================== */
 
 .auth-page {
@@ -27,7 +27,7 @@
   padding: 2.75rem 2.25rem;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  box-shadow: var(--glass-shadow);
+  box-shadow: var(--shadow-lg);
   position: relative;
   overflow: hidden;
   animation: modalEnter 0.45s var(--ease-spring) both;
@@ -41,7 +41,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--primary), var(--accent), #f43f5e);
+  background: var(--gradient-brand);
 }
 
 html[data-theme="light"] .auth-card {
@@ -62,12 +62,13 @@ html[data-theme="light"] .auth-card {
   padding: 4px 14px;
   border-radius: var(--radius-full);
   background: var(--primary-light);
-  border: 1px solid rgba(99, 102, 241, 0.25);
+  border: 1px solid rgba(14, 165, 233, 0.25);
   color: var(--primary);
+  font-family: var(--font-body);
   font-size: var(--text-xs);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-wider);
   margin-bottom: 1rem;
   animation: badgeFloat 4s ease-in-out infinite;
 }
@@ -78,11 +79,12 @@ html[data-theme="light"] .auth-card {
   font-weight: 800;
   color: var(--text-main);
   margin-bottom: 0.5rem;
-  letter-spacing: -0.03em;
+  letter-spacing: var(--tracking-tight);
 }
 
 .auth-subtitle {
   color: var(--text-secondary);
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
 }
@@ -101,11 +103,12 @@ html[data-theme="light"] .auth-card {
 }
 
 .form-label {
+  font-family: var(--font-body);
   font-size: var(--text-xs);
   font-weight: 700;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--tracking-wide);
 }
 
 .input-wrap {
@@ -134,8 +137,8 @@ html[data-theme="light"] .auth-card {
 .form-input {
   width: 100%;
   padding: 0.85rem 1rem 0.85rem 2.75rem;
-  background: var(--surface-card);
-  border: 1px solid var(--border-default);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
   border-radius: var(--radius-md);
   color: var(--text-main);
   font-family: var(--font-body);
@@ -146,9 +149,9 @@ html[data-theme="light"] .auth-card {
 }
 
 html[data-theme="light"] .form-input {
-  background: #f8fafc;
-  border-color: var(--border-default);
-  color: #0f172a;
+  background: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--text-main);
 }
 
 .form-input:focus {
@@ -185,13 +188,14 @@ html[data-theme="light"] .form-input:focus {
   width: 100%;
   padding: 0.95rem;
   margin-top: 0.5rem;
-  background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
+  background: var(--gradient-brand);
   color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-md);
   font-family: var(--font-heading);
   font-size: var(--text-md);
   font-weight: 700;
+  letter-spacing: var(--tracking-tight);
   cursor: pointer;
   transition: all 0.25s var(--ease-spring);
   box-shadow: 0 4px 16px var(--primary-glow);
@@ -210,7 +214,7 @@ html[data-theme="light"] .form-input:focus {
   left: -100%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
   transform: skewX(-20deg);
   transition: none;
   pointer-events: none;
@@ -236,6 +240,7 @@ html[data-theme="light"] .form-input:focus {
 .auth-footer {
   text-align: center;
   margin-top: 1.5rem;
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   color: var(--text-secondary);
 }
@@ -256,6 +261,7 @@ html[data-theme="light"] .form-input:focus {
 .auth-alert {
   padding: 0.75rem 1rem;
   border-radius: var(--radius-md);
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   margin-bottom: 1rem;
   display: none;
@@ -295,7 +301,7 @@ html[data-theme="light"] .form-input:focus {
   }
 
   .form-input {
-    font-size: 16px !important; /* Prevents iOS auto-zoom */
+    font-size: 16px !important;
     padding: 0.85rem 1rem 0.85rem 2.6rem;
     min-height: var(--touch-target-large, 48px);
   }
@@ -308,7 +314,7 @@ html[data-theme="light"] .form-input:focus {
 
   .btn-auth-submit {
     min-height: 50px;
-    font-size: 1rem;
+    font-size: var(--text-base);
     -webkit-tap-highlight-color: transparent;
   }
 }

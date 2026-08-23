@@ -1,13 +1,13 @@
 /* ==========================================================
-   WISAXIS — MODAL & NOTIFICATION COMPONENTS
-   Toast notifications, alerts, modal dialogs, overlays.
+   WISAXIS — MODAL & NOTIFICATION COMPONENTS (2026 SaaS Design System)
+   Toast notifications, alerts, modal dialogs, and overlays.
    ========================================================== */
 
 /* ===== MODAL BACKDROP & CARD ===== */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.72);
+  background: rgba(3, 7, 18, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: var(--z-modal, 9000);
@@ -19,13 +19,13 @@
 }
 
 .modal-card {
-  background: var(--surface-paper);
-  border: 1px solid var(--surface-border);
+  background: var(--surface-3);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-2xl);
   width: 100%;
   max-width: 480px;
   max-height: calc(100vh - 48px);
-  box-shadow: var(--glass-shadow);
+  box-shadow: var(--shadow-lg);
   overflow-y: auto;
   position: relative;
   animation: modalEnter 0.35s var(--ease-spring) both;
@@ -66,7 +66,7 @@ html[data-theme="light"] .modal-card {
 
 .modal-header {
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--surface-border);
+  border-bottom: 1px solid var(--border-default);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -74,11 +74,11 @@ html[data-theme="light"] .modal-card {
 
 .modal-title {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   font-weight: 800;
   font-family: var(--font-heading);
   color: var(--text-main);
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-tight);
 }
 
 .modal-close-btn {
@@ -109,13 +109,14 @@ html[data-theme="light"] .modal-card {
 .modal-body {
   padding: 1.5rem;
   color: var(--text-secondary);
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
 }
 
 .modal-footer {
   padding: 1rem 1.5rem;
-  border-top: 1px solid var(--surface-border);
+  border-top: 1px solid var(--border-default);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -143,16 +144,16 @@ html[data-theme="light"] .modal-card {
   padding: 1rem 1.25rem;
   border-radius: var(--radius-lg);
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   font-weight: 600;
-  color: #fff;
+  color: #ffffff;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-md);
   display: flex;
   align-items: center;
   gap: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border-strong);
   position: relative;
   overflow: hidden;
   animation: toastIn 0.35s var(--ease-spring) both;
@@ -191,29 +192,29 @@ html[data-theme="light"] .modal-card {
 
 /* ===== TOAST VARIANTS ===== */
 .toast-success {
-  background: rgba(16, 185, 129, 0.22);
-  border-color: rgba(16, 185, 129, 0.45);
+  background: rgba(16, 185, 129, 0.25);
+  border-color: rgba(16, 185, 129, 0.5);
   color: #34d399;
 }
 
 .toast-error {
-  background: rgba(239, 68, 68, 0.22);
-  border-color: rgba(239, 68, 68, 0.45);
-  color: #fca5a5;
+  background: rgba(244, 63, 94, 0.25);
+  border-color: rgba(244, 63, 94, 0.5);
+  color: #fda4af;
 }
 
 html[data-theme="light"] .toast-success {
   background: #ffffff;
   border-color: rgba(16, 185, 129, 0.4);
   color: #059669;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+  box-shadow: var(--shadow-md);
 }
 
 html[data-theme="light"] .toast-error {
   background: #ffffff;
-  border-color: rgba(239, 68, 68, 0.4);
-  color: #dc2626;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+  border-color: rgba(244, 63, 94, 0.4);
+  color: #e11d48;
+  box-shadow: var(--shadow-md);
 }
 
 /* ===== TOAST ANIMATIONS ===== */
@@ -250,7 +251,7 @@ html[data-theme="light"] .toast-error {
   }
 
   .toast {
-    font-size: 0.85rem;
+    font-size: var(--text-xs);
     padding: 0.85rem 1rem;
     border-radius: var(--radius-md);
   }
