@@ -4,10 +4,14 @@
  * Handles scroll blur effects and global mobile/desktop dropdown menu interactions.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  // 1. Header scroll effect
-  const header = document.querySelector('.app-header');
-  if (header) {
+(function () {
+  'use strict';
+
+  // 1. Header Scroll Blur Controller
+  const initHeaderScroll = () => {
+    const header = document.querySelector('.app-header');
+    if (!header) return;
+
     const handleScroll = () => {
       if (window.scrollY > 30) {
         header.classList.add('scrolled');
@@ -15,51 +19,72 @@ document.addEventListener('DOMContentLoaded', () => {
         header.classList.remove('scrolled');
       }
     };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-  }
+  };
 
-  // 2. Global Dropdown Menu Controller
-  const dropdownTrigger = document.getElementById('userDropdownBtn') || document.querySelector('.user-dropdown-trigger');
-  const dropdownContainer = document.querySelector('.user-dropdown');
-
-  if (dropdownTrigger && dropdownContainer) {
-    const toggleMenu = (e) => {
-      e.stopPropagation();
-      const isActive = dropdownContainer.classList.toggle('active');
-      dropdownTrigger.setAttribute('aria-expanded', isActive ? 'true' : 'false');
-    };
-
-    const closeMenu = () => {
-      if (dropdownContainer.classList.contains('active')) {
-        dropdownContainer.classList.remove('active');
-        dropdownTrigger.setAttribute('aria-expanded', 'false');
-      }
-    };
-
-    // Toggle on trigger click
-    dropdownTrigger.addEventListener('click', toggleMenu);
-
-    // Close on click outside
+  // 2. Universal Delegated Dropdown Controller
+  const initDropdown = () => {
+    // Click / Tap Handler with Event Delegation
     document.addEventListener('click', (e) => {
-      if (!dropdownContainer.contains(e.target)) {
-        closeMenu();
+      const trigger = e.target.closest('#userDropdownBtn, .user-dropdown-trigger');
+
+      if (trigger) {
+        e.stopPropagation();
+        e.preventDefault();
+        const container = trigger.closest('.user-dropdown');
+        if (!container) return;
+
+        const isActive = container.classList.toggle('active');
+        trigger.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+        return;
+      }
+
+      // Close menu if a dropdown item link is clicked
+      if (e.target.closest('.dropdown-menu a, .dropdown-menu button')) {
+        setTimeout(() => {
+          document.querySelectorAll('.user-dropdown.active').forEach(d => {
+            d.classList.remove('active');
+            const btn = d.querySelector('.user-dropdown-trigger, #userDropdownBtn');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          });
+        }, 150);
+        return;
+      }
+
+      // Click outside -> close all active dropdowns
+      if (!e.target.closest('.user-dropdown')) {
+        document.querySelectorAll('.user-dropdown.active').forEach(d => {
+          d.classList.remove('active');
+          const btn = d.querySelector('.user-dropdown-trigger, #userDropdownBtn');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+        });
       }
     });
 
-    // Close on escape key
+    // Keyboard Escape Key Handler
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        closeMenu();
+        document.querySelectorAll('.user-dropdown.active').forEach(d => {
+          d.classList.remove('active');
+          const btn = d.querySelector('.user-dropdown-trigger, #userDropdownBtn');
+          if (btn) {
+            btn.setAttribute('aria-expanded', 'false');
+            btn.focus();
+          }
+        });
       }
     });
+  };
 
-    // Close on clicking any link inside dropdown
-    dropdownContainer.querySelectorAll('a, button').forEach(item => {
-      item.addEventListener('click', () => {
-        // Small delay to allow navigation
-        setTimeout(closeMenu, 150);
-      });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initHeaderScroll();
+      initDropdown();
     });
+  } else {
+    initHeaderScroll();
+    initDropdown();
   }
-});
+})();

@@ -171,27 +171,7 @@
     <script src="/static/js/core/header-scroll.js"></script>
     <script src="/static/js/core/global-effects.js"></script>
     <script>
-        // Dropdown Toggle — with aria-expanded + Escape
-        const dropdownTrigger = document.getElementById('userDropdownBtn');
-        const dropdownContainer = document.querySelector('.user-dropdown');
-        if (dropdownTrigger && dropdownContainer) {
-            dropdownTrigger.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const isActive = dropdownContainer.classList.toggle('active');
-                dropdownTrigger.setAttribute('aria-expanded', isActive ? 'true' : 'false');
-            });
-            document.addEventListener('click', () => {
-                dropdownContainer.classList.remove('active');
-                dropdownTrigger.setAttribute('aria-expanded', 'false');
-            });
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && dropdownContainer.classList.contains('active')) {
-                    dropdownContainer.classList.remove('active');
-                    dropdownTrigger.setAttribute('aria-expanded', 'false');
-                    dropdownTrigger.focus();
-                }
-            });
-        }
+        // Markdown parsing helper
 
         // Chat History Array
         let chatHistory = [];

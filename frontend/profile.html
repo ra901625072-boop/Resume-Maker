@@ -505,21 +505,6 @@
                 }
             }
         }).mount('#profileApp');
-
-        // Dropdown toggle
-        const dropdownTrigger = document.getElementById('userDropdownBtn');
-        const dropdownContainer = document.querySelector('.user-dropdown');
-        if (dropdownTrigger && dropdownContainer) {
-            dropdownTrigger.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const isActive = dropdownContainer.classList.toggle('active');
-                dropdownTrigger.setAttribute('aria-expanded', isActive ? 'true' : 'false');
-            });
-            document.addEventListener('click', () => {
-                dropdownContainer.classList.remove('active');
-                dropdownTrigger.setAttribute('aria-expanded', 'false');
-            });
-        }
     </script>
 </body>
 </html>

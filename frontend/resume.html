@@ -965,30 +965,6 @@
                 }
             }
         }).mount('#resumeApp');
-
-        // Dropdown menu toggle
-        (function() {
-            const btn = document.getElementById("userDropdownBtn");
-            const dropdown = document.querySelector(".user-dropdown");
-            if (btn && dropdown) {
-                btn.addEventListener("click", function(e) {
-                    e.stopPropagation();
-                    const isActive = dropdown.classList.toggle("active");
-                    btn.setAttribute("aria-expanded", isActive ? "true" : "false");
-                });
-                document.addEventListener("click", function() {
-                    dropdown.classList.remove("active");
-                    btn.setAttribute("aria-expanded", "false");
-                });
-                document.addEventListener("keydown", function(e) {
-                    if (e.key === "Escape" && dropdown.classList.contains("active")) {
-                        dropdown.classList.remove("active");
-                        btn.setAttribute("aria-expanded", "false");
-                        btn.focus();
-                    }
-                });
-            }
-        })();
     </script>
 </body>
 </html>
