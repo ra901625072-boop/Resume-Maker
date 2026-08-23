@@ -418,4 +418,125 @@ html[data-theme="light"] .template-section {
     font-size: 11px;
     padding: 4px 14px;
   }
+
+  .hero-title {
+    font-size: clamp(1.75rem, 7.5vw, 2.5rem);
+  }
+
+  .hero-lead {
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .hero-actions {
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-actions .cta-primary {
+    padding: 0.85rem 1.5rem;
+    font-size: 0.95rem;
+    min-height: 48px;
+  }
+
+  .hero-actions .cta-secondary {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.88rem;
+    min-height: 44px;
+  }
+
+  .trust-badges {
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .trust-badge {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+
+  /* Bento grid on narrow phones */
+  .bento-card {
+    padding: 1.25rem;
+  }
+
+  .bento-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.15rem;
+    margin-bottom: 0.85rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .bento-title {
+    font-size: 1.1rem;
+  }
+
+  .bento-desc {
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .bento-pill {
+    font-size: 10px;
+    padding: 3px 10px;
+  }
+
+  .features-section {
+    padding: 2.5rem var(--space-3);
+  }
+
+  /* Template carousel cards */
+  .template-card {
+    width: 170px;
+    height: 240px;
+    padding: 12px;
+    border-radius: var(--radius-lg);
+  }
+
+  .template-name {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+
+  .template-tag {
+    font-size: 9px;
+    padding: 2px 8px;
+  }
+}
+
+/* ===== ULTRA-NARROW PHONES (≤360px) ===== */
+@media (max-width: 360px) {
+  .hero {
+    padding: 1.5rem var(--space-2) 1.25rem;
+  }
+
+  .hero-title {
+    font-size: 1.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-lead {
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+  }
+
+  .section-desc {
+    font-size: 0.8rem;
+  }
+
+  .template-card {
+    width: 150px;
+    height: 210px;
+    padding: 10px;
+  }
+
+  .trust-badge {
+    font-size: 9px;
+    padding: 3px 8px;
+  }
 }

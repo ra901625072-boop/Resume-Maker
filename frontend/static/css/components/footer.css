@@ -179,3 +179,53 @@ html[data-theme="light"] .footer-brand h4 span {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== FOOTER MOBILE POLISH (≤480px) ===== */
+@media (max-width: 480px) {
+  .app-footer {
+    padding: 2rem var(--space-3) calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .footer-brand {
+    max-width: 100%;
+  }
+
+  .footer-brand h4 {
+    font-size: 1.1rem;
+  }
+
+  .footer-brand p {
+    font-size: var(--text-xs);
+    line-height: 1.5;
+  }
+
+  .footer-col a {
+    padding: 8px 0;
+    font-size: var(--text-sm);
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .footer-col h5 {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .footer-bottom {
+    padding: 1rem 0 max(12px, env(safe-area-inset-bottom, 12px));
+    font-size: 11px;
+  }
+
+  .footer-bottom-links {
+    gap: 0.75rem;
+  }
+
+  .footer-bottom-links a {
+    padding: 6px 6px;
+    font-size: 11px;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+  }
+}

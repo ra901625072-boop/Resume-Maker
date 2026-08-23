@@ -449,3 +449,144 @@ html[data-theme="light"] .desktop-nav a:hover {
     font-size: 1.15rem;
   }
 }
+
+/* ===== MOBILE HEADER REFINEMENTS (≤500px) ===== */
+@media (max-width: 500px) {
+  .app-header {
+    height: var(--mobile-navbar-height, 64px);
+  }
+
+  .header-inner {
+    padding: 0 var(--space-3);
+    gap: 8px;
+  }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .brand-logo {
+    width: 30px;
+    height: 30px;
+  }
+
+  .brand-text {
+    font-size: clamp(0.88rem, 3.8vw, 1.05rem);
+  }
+
+  .header-actions-wrap {
+    gap: 6px;
+  }
+
+  .nav-icon-btn,
+  #theme-toggle {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .nav-icon-btn svg,
+  #theme-toggle svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .user-dropdown-trigger {
+    height: 36px;
+    min-height: 36px;
+    padding: 0 10px 0 8px;
+    gap: 5px;
+    font-size: var(--text-xs);
+  }
+
+  .user-name {
+    font-size: var(--text-xs);
+    max-width: 56px;
+  }
+
+  .dropdown-chevron {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* Full-width mobile dropdown menu */
+  .dropdown-menu {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-width: 100%;
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 16px));
+    transform-origin: bottom center;
+    transform: translateY(100%);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .user-dropdown.active .dropdown-menu {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .dropdown-menu a,
+  .dropdown-menu button {
+    height: 48px;
+    min-height: 48px;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    justify-content: center;
+    padding: 0 16px;
+  }
+
+  /* Mobile nav pills adjustments */
+  .mobile-nav-pills {
+    gap: 5px;
+  }
+
+  .mobile-nav-login {
+    font-size: 11px;
+    min-height: 34px;
+    padding: 0 10px;
+    border-radius: var(--radius-sm);
+  }
+
+  .mobile-nav-signup {
+    font-size: 11px;
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* ===== ULTRA-COMPACT HEADER (≤380px) ===== */
+@media (max-width: 380px) {
+  .brand-text span {
+    display: none;
+  }
+
+  .brand-text {
+    font-size: 0.95rem;
+  }
+
+  .user-name {
+    display: none;
+  }
+
+  .user-dropdown-trigger {
+    padding: 0 8px;
+    gap: 4px;
+  }
+
+  .mobile-nav-login,
+  .mobile-nav-signup {
+    font-size: 10px;
+    padding: 0 8px;
+    min-height: 32px;
+  }
+}

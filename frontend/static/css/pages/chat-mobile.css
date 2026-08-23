@@ -203,3 +203,86 @@ body.chat-page {
 .chat-submit-btn:active {
     transform: scale(0.94);
 }
+
+/* ===== SCROLL SNAP ON PROMPT PILLS ===== */
+.chat-sidebar {
+    scroll-snap-type: x mandatory !important;
+    -ms-overflow-style: none;
+}
+
+.suggestion-pill {
+    scroll-snap-align: start;
+    flex-shrink: 0 !important;
+}
+
+/* ===== CODE BLOCKS INSIDE MESSAGES ===== */
+.chat-bubble pre {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    max-width: calc(100vw - 100px);
+}
+
+.chat-bubble pre code {
+    font-size: 0.75rem;
+    white-space: pre;
+}
+
+/* ===== USER BUBBLE ALIGNMENT ===== */
+.chat-bubble-wrap.user {
+    max-width: 85%;
+}
+
+.chat-bubble-wrap.user .chat-bubble {
+    border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg);
+}
+
+.chat-bubble-wrap.assistant .chat-bubble {
+    border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) var(--radius-sm);
+}
+
+/* ===== ULTRA-NARROW CHAT (≤380px) ===== */
+@media (max-width: 380px) {
+    .chat-container {
+        padding: calc(var(--mobile-navbar-height, 64px) + 4px) 4px calc(4px + env(safe-area-inset-bottom, 0px));
+        gap: 4px;
+    }
+
+    .suggestion-pill {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.7rem;
+        min-height: 30px;
+    }
+
+    .chat-bubble {
+        padding: 0.7rem 0.85rem;
+        font-size: 0.82rem;
+    }
+
+    .bubble-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 0.7rem;
+    }
+
+    .chat-input {
+        height: 42px;
+        padding: 8px 12px;
+    }
+
+    .chat-submit-btn {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        min-height: 42px;
+    }
+
+    .assistant-name {
+        font-size: 0.85rem;
+    }
+
+    .btn-clear-chat {
+        font-size: 0.7rem;
+        padding: 5px 10px;
+        min-height: 30px;
+    }
+}

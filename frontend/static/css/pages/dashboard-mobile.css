@@ -312,3 +312,157 @@ html[data-theme="light"] .bottom-bar {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
+
+.btn-item-delete:active {
+  transform: scale(0.92);
+}
+
+/* ===== AI ENHANCE & SUGGEST BUTTONS ===== */
+.ai-pill-btn {
+  min-height: 36px !important;
+  padding: 6px 14px !important;
+  font-size: 12px !important;
+  border-radius: var(--radius-full) !important;
+  -webkit-tap-highlight-color: transparent !important;
+  white-space: nowrap !important;
+}
+
+.ai-pill-btn:active {
+  transform: scale(0.95) !important;
+}
+
+.ai-inline-toolbar {
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+}
+
+/* ===== PHOTO UPLOAD MOBILE POLISH ===== */
+.photo-upload-actions {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btn-file-upload span,
+.btn-remove-photo {
+  font-size: 12px !important;
+}
+
+.photo-upload-hint {
+  font-size: 10px !important;
+  display: block !important;
+  width: 100% !important;
+}
+
+/* ===== FORM SECTION TITLE WITH BUTTON ROW ===== */
+.form-section > div:first-child {
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+.add-btn {
+  min-height: 36px !important;
+  padding: 6px 14px !important;
+  font-size: 12px !important;
+  border-radius: var(--radius-md) !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.add-btn:active {
+  transform: scale(0.95) !important;
+}
+
+/* ===== MOBILE SUBMIT CTA (Step 4) ===== */
+.form-step .btn-wizard.btn-next[type="submit"] {
+  min-height: 52px !important;
+  font-size: 1rem !important;
+  border-radius: var(--radius-md) !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* ===== ULTRA-NARROW PHONE (≤380px) ===== */
+@media (max-width: 380px) {
+  .form-page {
+    padding-left: var(--space-2) !important;
+    padding-right: var(--space-2) !important;
+  }
+
+  .wizard-track {
+    padding: 0 !important;
+  }
+
+  .step-num {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  .wizard-connector {
+    margin: 0 1px 14px;
+  }
+
+  .form-section {
+    padding: 1rem var(--space-2);
+  }
+
+  .form-section-title {
+    font-size: 1rem;
+  }
+
+  .accordion-header {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .accordion-body {
+    padding: 0.85rem;
+  }
+
+  .template-visual-grid {
+    gap: 8px !important;
+  }
+
+  .tvc-thumb {
+    height: 100px !important;
+  }
+
+  .tvc-name {
+    font-size: 11px !important;
+  }
+
+  .ats-scorecard {
+    padding: 1rem 0.85rem;
+  }
+
+  .ats-score-badge {
+    font-size: 12px !important;
+  }
+}
+
+/* ===== ULTRA-NARROW (≤360px) ===== */
+@media (max-width: 360px) {
+  .step-num {
+    width: 26px;
+    height: 26px;
+    font-size: 10px;
+  }
+
+  .step-label {
+    font-size: 9px;
+    max-width: 54px;
+  }
+
+  .template-visual-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  .tvc-thumb {
+    height: 88px !important;
+  }
+
+  .btn-wizard {
+    min-height: 44px !important;
+    font-size: 13px !important;
+  }
+}
+

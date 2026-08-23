@@ -172,3 +172,117 @@
   font-size: var(--text-sm) !important;
 }
 
+/* ===== MODAL MOBILE BOTTOM SHEET ===== */
+.modal-overlay {
+  padding: 0 !important;
+  align-items: flex-end !important;
+}
+
+.modal-card {
+  max-width: 100% !important;
+  border-radius: 20px 20px 0 0 !important;
+  max-height: 88vh !important;
+  padding-bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
+}
+
+.modal-header {
+  padding: 1.25rem 1.25rem !important;
+}
+
+.modal-body {
+  padding: 1.25rem !important;
+}
+
+.modal-body input,
+.modal-body textarea {
+  font-size: 16px !important; /* iOS zoom prevention */
+  min-height: 48px !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.modal-footer {
+  padding: 1rem 1.25rem !important;
+  gap: 8px !important;
+}
+
+.modal-footer button,
+.modal-footer .btn {
+  min-height: 46px !important;
+  flex: 1 !important;
+  font-size: var(--text-sm) !important;
+  border-radius: var(--radius-md) !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.modal-footer button:active,
+.modal-footer .btn:active {
+  transform: scale(0.96) !important;
+}
+
+/* ===== ULTRA-NARROW PROFILE (≤380px) ===== */
+@media (max-width: 380px) {
+  .profile-container {
+    padding-left: var(--space-2) !important;
+    padding-right: var(--space-2) !important;
+  }
+
+  .profile-hero {
+    padding: 1.25rem 1rem !important;
+  }
+
+  .profile-avatar {
+    width: 60px !important;
+    height: 60px !important;
+    min-width: 60px !important;
+    font-size: 1.5rem !important;
+  }
+
+  .profile-name {
+    font-size: 1.3rem !important;
+  }
+
+  .profile-hero-stats {
+    gap: 6px !important;
+  }
+
+  .profile-stat-item {
+    padding: 0.5rem 0.4rem !important;
+  }
+
+  .profile-stat-num {
+    font-size: 1.1rem !important;
+  }
+
+  .profile-stat-lbl {
+    font-size: 9px !important;
+  }
+
+  .resume-card {
+    padding: 1rem !important;
+  }
+
+  .resume-title {
+    font-size: 1.05rem !important;
+  }
+
+  .btn-action {
+    padding: 0.55rem 0.6rem !important;
+    font-size: 11px !important;
+  }
+
+  .btn-action svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  .section-header h2 {
+    font-size: 1.2rem !important;
+  }
+
+  .btn-profile-pill {
+    font-size: 11px !important;
+    padding: 0 12px !important;
+  }
+}
+

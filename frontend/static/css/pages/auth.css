@@ -323,3 +323,55 @@ html[data-theme="light"] .form-input:focus {
   color: var(--text-muted);
   font-size: var(--text-xs);
 }
+
+/* ===== AUTH SUBMIT BUTTON TACTILE FEEDBACK ===== */
+.btn-auth-submit:active {
+  transform: scale(0.97);
+}
+
+/* ===== ULTRA-NARROW AUTH (≤380px) ===== */
+@media (max-width: 380px) {
+  .auth-wrapper {
+    padding: calc(var(--mobile-navbar-height, 64px) + 0.75rem) var(--space-2) calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .auth-card {
+    padding: 1.5rem 1rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .auth-title {
+    font-size: 1.35rem;
+  }
+
+  .auth-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .auth-badge {
+    font-size: 10px;
+    padding: 3px 10px;
+  }
+
+  .form-label {
+    font-size: 10px;
+  }
+
+  .form-input {
+    padding: 0.75rem 0.85rem 0.75rem 2.4rem;
+    font-size: 16px !important;
+  }
+
+  .auth-form {
+    gap: 1rem;
+  }
+
+  .auth-footer {
+    font-size: 0.8rem;
+  }
+
+  .btn-auth-submit {
+    min-height: 48px;
+    font-size: 0.95rem;
+  }
+}

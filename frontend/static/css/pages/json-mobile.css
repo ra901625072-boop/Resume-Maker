@@ -296,3 +296,95 @@
     font-size: 11px !important;
     border-radius: var(--radius-md) !important;
 }
+
+/* ===== JSON MOBILE CODE HORIZONTAL SCROLL ===== */
+.json-code-block,
+.code-block {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    white-space: pre !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+}
+
+/* ===== UPLOAD ZONE TOUCH FEEDBACK ===== */
+.upload-zone:active {
+    transform: scale(0.98) !important;
+    border-color: var(--primary) !important;
+}
+
+/* ===== ULTRA-NARROW JSON (≤380px) ===== */
+@media (max-width: 380px) {
+    .json-features-container {
+        padding: var(--space-2) var(--space-2) calc(2rem + env(safe-area-inset-bottom, 16px)) !important;
+    }
+
+    .page-title {
+        font-size: 1.4rem !important;
+    }
+
+    .page-subtitle {
+        font-size: 11px !important;
+    }
+
+    .ai-upload-card {
+        padding: 1rem !important;
+    }
+
+    .upload-zone {
+        padding: 22px 12px !important;
+    }
+
+    .upload-icon-wrap {
+        width: 44px !important;
+        height: 44px !important;
+    }
+
+    .upload-text {
+        font-size: 0.85rem !important;
+    }
+
+    .file-type-badges {
+        gap: 4px !important;
+    }
+
+    .file-type-badge {
+        font-size: 9px !important;
+        padding: 2px 6px !important;
+    }
+
+    .editor-body {
+        max-height: 320px !important;
+    }
+
+    .rawtext-body {
+        max-height: 320px !important;
+    }
+
+    .result-header-actions button,
+    .result-header-actions a {
+        font-size: 10px !important;
+        padding: 5px 8px !important;
+        min-height: 38px !important;
+    }
+
+    .view-tab {
+        padding: 8px 6px !important;
+        font-size: 10px !important;
+        min-height: 36px !important;
+    }
+
+    .json-code-block {
+        font-size: 11px !important;
+        padding: 10px !important;
+    }
+
+    .schema-card {
+        padding: 12px 10px !important;
+    }
+
+    .code-block {
+        font-size: 10px !important;
+        padding: 10px !important;
+    }
+}
