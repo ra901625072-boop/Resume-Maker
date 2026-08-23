@@ -1003,18 +1003,10 @@
             <div class="page-header">
                 <div class="ai-model-badge">
                     <span class="pulse-dot"></span>
-                    <span>Multimodal AI Model: Google Gemma / NVIDIA Nemotron / Gemini</span>
+                    <span>AI JSON Parser</span>
                 </div>
-                <h1 class="page-title">Universal AI JSON Extractor</h1>
-                <p class="page-subtitle">Upload any resume, document, or scanned image. Multimodal AI parses all sections, tables, and credentials into clean 4-tier structured JSON with real-time ATS intelligence.</p>
-                
-                <div class="header-feature-pills">
-                    <span class="header-pill">⚡ Multimodal OCR</span>
-                    <span class="header-pill">🎯 ATS Scoring</span>
-                    <span class="header-pill">📄 PDF / Word / TXT / Images</span>
-                    <span class="header-pill">🧱 4-Tier Schema</span>
-                    <span class="header-pill">🔒 Zero Data Retention</span>
-                </div>
+                <h1 class="page-title">AI Document Parser</h1>
+                <p class="page-subtitle">Upload any resume or document to instantly convert it into structured JSON with real-time formatting.</p>
             </div>
 
             <!-- ── AI Upload Card ── -->
@@ -1022,13 +1014,13 @@
                 <div class="upload-controls-row">
                     <div>
                         <h2 style="font-family:var(--font-heading); font-size:var(--text-md); font-weight:800; color:var(--text-main);">Upload Document or Image</h2>
-                        <p style="color:var(--text-muted); font-size:var(--text-xs); margin-top:2px;">PDFs, Word DOCX/DOC, Google Docs, TXT, and Images supported.</p>
+                        <p style="color:var(--text-muted); font-size:var(--text-xs); margin-top:2px;">PDF, Word DOCX, TXT, and Images supported.</p>
                     </div>
                     <div class="mode-selector-wrap">
-                        <span class="mode-label">Extraction Schema:</span>
+                        <span class="mode-label">Schema:</span>
                         <select id="extract-mode-select" class="mode-select" aria-label="Extraction Mode">
-                            <option value="auto">🌟 4-Tier Production Resume (ATS Compatible)</option>
-                            <option value="universal">📄 Universal Document JSON</option>
+                            <option value="auto">Resume Schema (ATS Standard)</option>
+                            <option value="universal">Universal Document JSON</option>
                         </select>
                     </div>
                 </div>
@@ -1044,17 +1036,17 @@
                         </svg>
                     </div>
                     <span class="upload-text" id="file-name-display">Drag & drop your document here, or click to browse</span>
-                    <span class="upload-hint">High-accuracy OCR • Multi-column layouts • Table parsing • Zero manual entry</span>
+                    <span class="upload-hint">Automatic text extraction and structured parsing</span>
                     
                     <div class="file-type-badges">
-                        <span class="file-type-badge">📕 PDF (Digital & Scanned)</span>
-                        <span class="file-type-badge">📘 Word DOCX / DOC</span>
-                        <span class="file-type-badge">📝 TXT / RTF / Markdown</span>
-                        <span class="file-type-badge">🖼️ Images (JPG, PNG, WebP)</span>
+                        <span class="file-type-badge">PDF</span>
+                        <span class="file-type-badge">DOCX / DOC</span>
+                        <span class="file-type-badge">TXT / Markdown</span>
+                        <span class="file-type-badge">Images (PNG, JPG)</span>
                     </div>
 
                     <div class="paste-tip">
-                        <span>💡 Tip: You can also press <span class="kbd-shortcut">Ctrl+V</span> to paste a screenshot or text directly!</span>
+                        <span>Press <span class="kbd-shortcut">Ctrl+V</span> to paste text or screenshots</span>
                     </div>
                 </div>
 

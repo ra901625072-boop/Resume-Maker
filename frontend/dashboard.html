@@ -87,15 +87,15 @@
     </header>
 
     <div id="vueApp" class="form-container form-page adaptive-card fade-up">
-        <h2>{{ isEditing ? 'Edit Resume' : 'Create Resume' }}</h2>
-
-        <div class="form-section" style="margin-bottom: 2rem; padding: 1.5rem; text-align: center; border: 1px dashed var(--border-strong);">
-            <p style="margin-bottom: 1rem; color: var(--text-secondary); font-size: var(--text-sm);">Already have your data in JSON format? Import it here.</p>
-            <button type="button" class="add-btn" @click="$refs.jsonFile.click()" :disabled="isImporting">
-                <span v-if="isImporting">Importing...</span>
-                <span v-else>Import from JSON</span>
-            </button>
-            <input type="file" ref="jsonFile" accept=".json" style="display: none;" @change="handleJsonImport">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 12px;">
+            <h2 style="margin: 0;">{{ isEditing ? 'Edit Resume' : 'Create Resume' }}</h2>
+            <div>
+                <button type="button" class="btn-profile-pill" style="padding: 6px 14px; font-size: var(--text-xs); font-weight: 700; border-radius: var(--radius-full); background: var(--surface-2); border: 1px solid var(--border-strong); color: var(--text-main); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" @click="$refs.jsonFile.click()" :disabled="isImporting">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span>{{ isImporting ? 'Importing...' : 'Import JSON' }}</span>
+                </button>
+                <input type="file" ref="jsonFile" accept=".json" style="display: none;" @change="handleJsonImport">
+            </div>
         </div>
 
         <!-- Sticky Progress -->
@@ -207,10 +207,10 @@
                                         <label style="font-size: var(--text-xs); font-weight: 600; color: var(--text-secondary); margin: 0;">Key Achievements & Responsibilities</label>
                                         <button type="button" class="ai-pill-btn" @click="generateExperience(index)" :disabled="exp.isGenerating">
                                             <span v-if="exp.isGenerating" class="spinner" style="width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;"></span>
-                                            <span v-else>✨ AI Polish (CAR)</span>
+                                            <span v-else>✨ AI Enhance</span>
                                         </button>
                                     </div>
-                                    <textarea v-model="exp.description" :class="{'skeleton-loader': exp.isGenerating}" :readonly="exp.isGenerating" :aria-busy="exp.isGenerating" placeholder="• Led cross-functional team of 6 engineers...&#10;• Boosted checkout completion by 24%..."></textarea>
+                                    <textarea v-model="exp.description" :class="{'skeleton-loader': exp.isGenerating}" :readonly="exp.isGenerating" :aria-busy="exp.isGenerating" placeholder="• Spearheaded product redesign increasing retention by 18%...&#10;• Orchestrated sprint workflows across 5 engineers..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -257,11 +257,11 @@
                         <h3 class="form-section-title" style="margin: 0;">Professional Summary</h3>
                         <button type="button" class="ai-pill-btn" @click="generateSummary" :disabled="isGeneratingSummary">
                             <span v-if="isGeneratingSummary" class="spinner" style="width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle;"></span>
-                            <span v-else>✨ AI Auto-Generate</span>
+                            <span v-else>✨ AI Write</span>
                         </button>
                     </div>
                     <div class="input-group">
-                        <textarea v-model="formData.summary" :class="{'skeleton-loader': isGeneratingSummary}" :readonly="isGeneratingSummary" :aria-busy="isGeneratingSummary" placeholder="Concise 3-4 sentence elevator pitch highlighting your key domain expertise, leadership, and top measurable impact..."></textarea>
+                        <textarea v-model="formData.summary" :class="{'skeleton-loader': isGeneratingSummary}" :readonly="isGeneratingSummary" :aria-busy="isGeneratingSummary" placeholder="Results-driven professional with expertise in building scalable applications, leading high-performance teams, and delivering measurable business impact."></textarea>
                     </div>
                 </div>
 
@@ -270,7 +270,7 @@
                         <h3 class="form-section-title" style="margin: 0;">Core Skills</h3>
                         <button type="button" class="ai-pill-btn" @click="fetchAiSkillSuggestions" :disabled="isSuggestingSkills">
                             <span v-if="isSuggestingSkills" class="spinner" style="width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle;"></span>
-                            <span v-else>💡 AI Suggest Skills</span>
+                            <span v-else>💡 Suggest Skills</span>
                         </button>
                     </div>
 
@@ -281,12 +281,12 @@
                                 <span>{{ skill }}</span>
                                 <button type="button" class="skill-chip-remove" aria-label="Remove skill" @click="removeSkill(index)">×</button>
                             </div>
-                            <input class="skill-tag-input" v-model="skillInputText" @keydown="handleSkillKeydown" placeholder="Type skill and press Enter or comma...">
+                            <input class="skill-tag-input" v-model="skillInputText" @keydown="handleSkillKeydown" placeholder="Add a skill and press Enter...">
                         </div>
 
                         <!-- Quick Suggestions -->
                         <div class="skill-suggestions-section" v-if="suggestedSkills.length > 0">
-                            <div class="skill-suggestions-label">Quick Add:</div>
+                            <div class="skill-suggestions-label">Suggestions:</div>
                             <div class="skill-suggestions-pills">
                                 <button type="button" class="skill-suggestion-pill" v-for="s in suggestedSkills" :key="s" @click="addSkill(s)">
                                     + {{ s }}
@@ -300,7 +300,7 @@
                     <h3 class="form-section-title">Languages</h3>
                     <div class="grid-2-col">
                         <div v-for="(lang, index) in formData.languages" :key="index" style="position: relative;">
-                            <input v-model="lang.value" placeholder="e.g. English (Native), French (B2)">
+                            <input v-model="lang.value" placeholder="e.g. English (Native), Spanish (Fluent)">
                             <button v-if="index > 0" type="button" class="remove-btn" style="position: absolute; right: 0; top: 0;" @click="removeLanguage(index)">×</button>
                         </div>
                     </div>
@@ -322,7 +322,7 @@
                         </div>
                         <button type="button" class="ai-pill-btn" @click="calculateAtsScore" :disabled="atsResult.isCalculating">
                             <span v-if="atsResult.isCalculating" class="spinner" style="width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;"></span>
-                            <span v-else>🔄 Refresh Score</span>
+                            <span v-else>Refresh Score</span>
                         </button>
                     </div>
 
@@ -334,7 +334,7 @@
                             </ul>
                         </div>
                         <div class="ats-insight-box improvements" v-if="atsResult.improvements.length > 0">
-                            <div class="ats-insight-title">⚡ Recommended Improvements</div>
+                            <div class="ats-insight-title">⚡ Improvements</div>
                             <ul class="ats-insight-list">
                                 <li v-for="(imp, idx) in atsResult.improvements" :key="idx">{{ imp }}</li>
                             </ul>
@@ -390,13 +390,13 @@
                                 <span class="tvc-name">Compact</span>
                             </label>
                         </div>
-                        <div class="error-msg" v-show="errors.template" aria-live="polite">Please select a premium template.</div>
+                        <div class="error-msg" v-show="errors.template" aria-live="polite">Please select a template.</div>
                     </fieldset>
                 </div>
 
-                <button type="submit" class="btn-wizard btn-next" style="width: 100%; min-height: 52px; font-size: 1.1rem; border-radius: 12px; margin-top: 1.5rem;" :disabled="isSaving">
+                <button type="submit" class="btn-wizard btn-next" style="width: 100%; min-height: 52px; font-size: 1.05rem; border-radius: 12px; margin-top: 1.5rem;" :disabled="isSaving">
                     <span v-if="isSaving">Saving...</span>
-                    <span v-else>{{ isEditing ? '💾 Update Resume' : '🚀 Generate Resume' }}</span>
+                    <span v-else>{{ isEditing ? 'Save Changes' : 'Create Resume' }}</span>
                 </button>
             </div>
 
