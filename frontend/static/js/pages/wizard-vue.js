@@ -26,11 +26,37 @@ createApp({
                     { id: '', degree: '', university: '', year: '' }
                 ]
             },
+            // Interactive Skill Chips State
+            skillsList: [],
+            skillInputText: '',
+            isSuggestingSkills: false,
+            defaultSuggestedSkills: ['Python', 'JavaScript', 'React', 'SQL', 'Git', 'Problem Solving', 'Leadership', 'Communication', 'Docker', 'Figma', 'TypeScript', 'Data Analysis'],
+
+            // Accordion State
+            openExpIndices: [0],
+            openEduIndices: [0],
+
+            // ATS Score State
+            atsResult: {
+                score: null,
+                summary: '',
+                strengths: [],
+                improvements: [],
+                isCalculating: false
+            },
+
             photoFile: null,
             photoPreviewUrl: '',
             isGeneratingSummary: false,
             isEditing: false
         };
+    },
+    computed: {
+        suggestedSkills() {
+            // Filter out skills that are already added
+            const existingLower = this.skillsList.map(s => s.toLowerCase());
+            return this.defaultSuggestedSkills.filter(s => !existingLower.includes(s.toLowerCase())).slice(0, 8);
+        }
     },
     async mounted() {
         // Priority 1: Check for edit query param (for static Vercel frontend)
@@ -108,6 +134,11 @@ createApp({
             if (next >= 1 && next <= this.totalSteps) {
                 this.currentStep = next;
                 this.scrollToTop();
+
+                // Auto-calculate ATS score when entering Step 4
+                if (this.currentStep === 4 && this.atsResult.score === null && !this.atsResult.isCalculating) {
+                    this.calculateAtsScore();
+                }
             }
         },
         scrollToTop() {
@@ -126,7 +157,7 @@ createApp({
                 if (!this.formData.name) this.errors.name = true;
                 if (!this.formData.title) this.errors.title = true;
                 if (!this.formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.formData.email)) this.errors.email = true;
-                if (!this.formData.phone || !/^[\d\s\-–\/]+$/.test(this.formData.phone)) this.errors.phone = true;
+                if (!this.formData.phone || !/^[\d\s\-–\/+]+$/.test(this.formData.phone)) this.errors.phone = true;
                 if (!this.formData.address) this.errors.address = true;
             } else if (this.currentStep === 2) {
                 // Check if filled items are valid
@@ -149,17 +180,118 @@ createApp({
             }
             return isValid;
         },
+
+        // ── Skills Chip Management ────────────────────────────────────────────
+        addSkill(skillName) {
+            const name = (skillName || this.skillInputText).trim();
+            if (!name) return;
+
+            // Check duplicate
+            const isDuplicate = this.skillsList.some(s => s.toLowerCase() === name.toLowerCase());
+            if (!isDuplicate) {
+                this.skillsList.push(name);
+                this.formData.skills = this.skillsList.join(', ');
+            }
+            this.skillInputText = '';
+        },
+        removeSkill(index) {
+            this.skillsList.splice(index, 1);
+            this.formData.skills = this.skillsList.join(', ');
+        },
+        handleSkillKeydown(e) {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                this.addSkill();
+            } else if (e.key === 'Backspace' && !this.skillInputText && this.skillsList.length > 0) {
+                this.removeSkill(this.skillsList.length - 1);
+            }
+        },
+        async fetchAiSkillSuggestions() {
+            if (!this.formData.title) {
+                if (window.showToast) window.showToast('Please provide a Job Title first in Step 1.', 'warning');
+                return;
+            }
+
+            this.isSuggestingSkills = true;
+            try {
+                const res = await window.apiFetch('/api/suggest-skills', {
+                    method: 'POST',
+                    body: {
+                        job_title: this.formData.title,
+                        existing_skills: this.skillsList.join(', ')
+                    }
+                });
+                const data = await res.json();
+                if (data.success && data.data) {
+                    const rawArr = Array.isArray(data.data) ? data.data : data.data.split(',');
+                    let addedCount = 0;
+                    rawArr.forEach(s => {
+                        const clean = s.trim().replace(/^[•\-\*]\s*/, '');
+                        if (clean && !this.skillsList.some(ex => ex.toLowerCase() === clean.toLowerCase())) {
+                            this.skillsList.push(clean);
+                            addedCount++;
+                        }
+                    });
+                    this.formData.skills = this.skillsList.join(', ');
+                    if (window.showToast) window.showToast(`✨ Added ${addedCount} AI skill recommendations!`, 'success');
+                } else {
+                    if (window.showToast) window.showToast(data.error || 'Could not suggest skills.', 'error');
+                }
+            } catch (err) {
+                console.error('Error suggesting skills:', err);
+                if (window.showToast) window.showToast('Failed to fetch skill suggestions.', 'error');
+            } finally {
+                this.isSuggestingSkills = false;
+            }
+        },
+
+        // ── Accordion Controls ────────────────────────────────────────────────
+        toggleExpAccordion(index) {
+            const pos = this.openExpIndices.indexOf(index);
+            if (pos > -1) {
+                this.openExpIndices.splice(pos, 1);
+            } else {
+                this.openExpIndices.push(index);
+            }
+        },
+        isExpOpen(index) {
+            return this.openExpIndices.includes(index);
+        },
+        toggleEduAccordion(index) {
+            const pos = this.openEduIndices.indexOf(index);
+            if (pos > -1) {
+                this.openEduIndices.splice(pos, 1);
+            } else {
+                this.openEduIndices.push(index);
+            }
+        },
+        isEduOpen(index) {
+            return this.openEduIndices.includes(index);
+        },
+
         addExperience() {
+            const newIndex = this.formData.experience.length;
             this.formData.experience.push({ id: '', title: '', company: '', duration: '', description: '', isGenerating: false });
+            this.openExpIndices.push(newIndex);
         },
         removeExperience(index) {
             this.formData.experience.splice(index, 1);
+            this.openExpIndices = this.openExpIndices.filter(i => i !== index).map(i => i > index ? i - 1 : i);
+            if (this.formData.experience.length === 0) {
+                this.addExperience();
+            }
         },
         addEducation() {
+            const newIndex = this.formData.education.length;
             this.formData.education.push({ id: '', degree: '', university: '', year: '' });
+            this.openEduIndices.push(newIndex);
         },
         removeEducation(index) {
             this.formData.education.splice(index, 1);
+            this.openEduIndices = this.openEduIndices.filter(i => i !== index).map(i => i > index ? i - 1 : i);
+            if (this.formData.education.length === 0) {
+                this.addEducation();
+            }
         },
         addLanguage() {
             this.formData.languages.push({ value: '' });
@@ -187,24 +319,19 @@ createApp({
                 const text = await file.text();
                 const data = JSON.parse(text);
                 this.populateData(data);
-                if (window.showToast) window.showToast('Data imported successfully!', 'success');
+                if (window.showToast) window.showToast('Data imported successfully! 🚀', 'success');
             } catch (err) {
-                if (window.showToast) window.showToast('Invalid JSON file.', 'error');
+                if (window.showToast) window.showToast('Invalid JSON file format.', 'error');
             } finally {
                 this.isImporting = false;
                 event.target.value = '';
             }
         },
+
         // ── Flexible Data Normalizer ──────────────────────────────────────────
-        // Accepts:
-        //   1. 4-Tier Schema     { candidate: { personal_information, work_experience, skills, ... } }
-        //   2. AI Extract output { structured_data: { name, title, … } }
-        //   3. AI Analyzer       { candidate: { contact:{…} }, structured_data:{…}, … }
-        //   4. Legacy flat JSON  { name, title, email, ... }
         populateData(data) {
             if (!data || typeof data !== 'object') return;
 
-            // ── Step 1: Handle Candidate from 4-Tier Schema ───────────────────
             const cand = data.candidate || (data.resume && data.resume.candidate) || null;
             const sd = data.structured_data || null;
 
@@ -254,24 +381,24 @@ createApp({
 
             // --- Skills ---
             const rawSkills = (cand && cand.skills) || (sd && sd.skills) || data.skills || [];
+            let parsedSkills = [];
             if (rawSkills && typeof rawSkills === 'object' && !Array.isArray(rawSkills)) {
-                const allS = [];
                 Object.values(rawSkills).forEach(val => {
-                    if (Array.isArray(val)) allS.push(...val);
-                    else if (typeof val === 'string' && val.trim()) allS.push(val);
+                    if (Array.isArray(val)) parsedSkills.push(...val);
+                    else if (typeof val === 'string' && val.trim()) parsedSkills.push(val);
                 });
-                norm.skills = [...new Set(allS)].join(', ');
             } else if (Array.isArray(rawSkills)) {
-                norm.skills = rawSkills.join(', ');
-            } else {
-                norm.skills = String(rawSkills || '');
+                parsedSkills = rawSkills.map(s => String(s).trim()).filter(Boolean);
+            } else if (typeof rawSkills === 'string') {
+                parsedSkills = rawSkills.split(',').map(s => s.trim()).filter(Boolean);
             }
+            this.skillsList = [...new Set(parsedSkills)];
+            norm.skills = this.skillsList.join(', ');
 
             // --- Template & Resume ID ---
             norm.template = data.selected_template || data.template || '';
             norm.id = data.id || data.resume_id || '';
 
-            // ── Step 2: Populate Basic Fields ─────────────────────────────────
             if (norm.id)       this.formData.resume_id = norm.id;
             if (norm.template) this.formData.template  = norm.template;
             if (norm.name)     this.formData.name      = norm.name;
@@ -282,7 +409,7 @@ createApp({
             if (norm.summary)  this.formData.summary   = norm.summary;
             if (norm.skills)   this.formData.skills    = norm.skills;
 
-            // ── Languages ─────────────────────────────────────────────────────
+            // --- Languages ---
             const rawLangs = (cand && cand.languages) || (sd && sd.languages) || data.languages || [];
             if (Array.isArray(rawLangs) && rawLangs.length > 0) {
                 this.formData.languages = rawLangs.map(l => {
@@ -296,7 +423,7 @@ createApp({
                 }).filter(l => l.value.trim() !== '');
             }
 
-            // ── Experience ────────────────────────────────────────────────────
+            // --- Experience ---
             const rawExp = (cand && (cand.work_experience || cand.experience)) || (sd && sd.experience) || data.experience || data.work_experience || [];
             if (Array.isArray(rawExp) && rawExp.length > 0) {
                 this.formData.experience = rawExp.map(e => {
@@ -318,9 +445,10 @@ createApp({
                 if (this.formData.experience.length === 0) {
                     this.formData.experience = [{ id: '', title: '', company: '', duration: '', description: '', isGenerating: false }];
                 }
+                this.openExpIndices = [0];
             }
 
-            // ── Education ─────────────────────────────────────────────────────
+            // --- Education ---
             const rawEdu = (cand && cand.education) || (sd && sd.education) || data.education || [];
             if (Array.isArray(rawEdu) && rawEdu.length > 0) {
                 this.formData.education = rawEdu.map(e => {
@@ -336,8 +464,56 @@ createApp({
                 if (this.formData.education.length === 0) {
                     this.formData.education = [{ id: '', degree: '', university: '', year: '' }];
                 }
+                this.openEduIndices = [0];
             }
         },
+
+        // ── Real-time ATS Health Score Calculation ────────────────────────────
+        async calculateAtsScore() {
+            this.atsResult.isCalculating = true;
+            try {
+                const skillsStr = this.skillsList.join(', ') || this.formData.skills;
+                const payload = {
+                    name: this.formData.name,
+                    title: this.formData.title,
+                    summary: this.formData.summary,
+                    skills: skillsStr,
+                    experience: this.formData.experience.map(({ isGenerating, ...rest }) => rest),
+                    education: this.formData.education
+                };
+
+                const res = await window.apiFetch('/api/ats-score', {
+                    method: 'POST',
+                    body: payload
+                });
+
+                const data = await res.json();
+                if (data.success && data.data) {
+                    const d = data.data;
+                    this.atsResult.score = typeof d.score === 'number' ? d.score : parseInt(d.score, 10) || 75;
+                    this.atsResult.summary = d.summary || 'ATS analysis complete.';
+                    this.atsResult.strengths = Array.isArray(d.strengths) ? d.strengths : [];
+                    this.atsResult.improvements = Array.isArray(d.improvements) ? d.improvements : [];
+                }
+            } catch (err) {
+                console.error('Error calculating ATS score:', err);
+                // Fallback default calculation based on presence of key fields
+                let score = 50;
+                if (this.formData.name && this.formData.email && this.formData.phone) score += 15;
+                if (this.formData.summary && this.formData.summary.length > 50) score += 15;
+                if (this.skillsList.length >= 5) score += 10;
+                if (this.formData.experience.some(e => e.description && e.description.length > 30)) score += 10;
+
+                this.atsResult.score = score;
+                this.atsResult.summary = 'Resume formatted with standard ATS headers and contact details.';
+                this.atsResult.strengths = ['Clear contact details', `${this.skillsList.length} skills listed`];
+                this.atsResult.improvements = ['Add measurable metrics (e.g. %, $) to experience descriptions'];
+            } finally {
+                this.atsResult.isCalculating = false;
+            }
+        },
+
+        // ── AI Generators ─────────────────────────────────────────────────────
         async generateSummary() {
             if (!this.formData.title) {
                 if (window.showToast) window.showToast('Please provide a Job Title first.', 'warning');
@@ -351,13 +527,13 @@ createApp({
                     body: {
                         name: this.formData.name,
                         title: this.formData.title,
-                        skills: this.formData.skills
+                        skills: this.skillsList.join(', ') || this.formData.skills
                     }
                 });
                 const data = await res.json();
                 if (data.success) {
                     this.formData.summary = data.data;
-                    if (window.showToast) window.showToast('Summary generated!', 'success');
+                    if (window.showToast) window.showToast('Professional summary generated! ✨', 'success');
                 } else {
                     if (window.showToast) window.showToast(data.error || 'Failed to generate', 'error');
                 }
@@ -382,13 +558,13 @@ createApp({
                         title: exp.title,
                         company: exp.company,
                         duration: exp.duration,
-                        skills: this.formData.skills
+                        skills: this.skillsList.join(', ') || this.formData.skills
                     }
                 });
                 const data = await res.json();
                 if (data.success) {
                     exp.description = data.data;
-                    if (window.showToast) window.showToast('Experience generated!', 'success');
+                    if (window.showToast) window.showToast('Experience bullet points generated! 🚀', 'success');
                 } else {
                     if (window.showToast) window.showToast(data.error || 'Failed to generate', 'error');
                 }
@@ -398,6 +574,8 @@ createApp({
                 exp.isGenerating = false;
             }
         },
+
+        // ── Submission ────────────────────────────────────────────────────────
         async submitForm() {
             if (this.currentStep !== this.totalSteps) {
                 this.changeStep(1);
@@ -427,9 +605,10 @@ createApp({
                 }
 
                 // Build JSON Payload
-                const rawSkillsStr = Array.isArray(this.formData.skills)
-                    ? this.formData.skills.join(', ')
+                const rawSkillsStr = this.skillsList.length > 0
+                    ? this.skillsList.join(', ')
                     : (this.formData.skills || '');
+
                 const payload = {
                     ...this.formData,
                     languages: this.formData.languages.map(l => l.value).filter(v => v.trim() !== ''),

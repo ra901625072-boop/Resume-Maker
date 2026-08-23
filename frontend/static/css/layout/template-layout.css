@@ -473,43 +473,7 @@
 
 /* ── Body ── */
 html[data-theme="light"] body.template-shell {
-  background: #e8ecf4;
-}
-
-/* ── Background overlay layers (lighter, airy) ── */
-html[data-theme="light"] .bg-layer-base {
-  filter: brightness(1.15) saturate(0.8);
-  opacity: 0.35;
-}
-
-html[data-theme="light"] .bg-layer-overlay {
-  background: linear-gradient(
-    180deg,
-    rgba(220, 228, 244, 0.82),
-    rgba(200, 212, 236, 0.92)
-  );
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-}
-
-html[data-theme="light"] .bg-layer-gradient {
-  background:
-    radial-gradient(circle at top left, rgba(99, 102, 241, 0.10), transparent 36%),
-    radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.08), transparent 38%),
-    radial-gradient(circle at center, rgba(16, 185, 129, 0.06), transparent 44%);
-}
-
-html[data-theme="light"] .bg-layer-noise {
-  opacity: 0.03;
-}
-
-html[data-theme="light"] .bg-layer-particles {
-  opacity: 0.12;
-  background-image:
-    radial-gradient(circle at 12% 18%, rgba(99, 102, 241, .14) 0 2px, transparent 2px),
-    radial-gradient(circle at 84% 26%, rgba(56, 189, 248, .12) 0 1.5px, transparent 1.5px),
-    radial-gradient(circle at 32% 76%, rgba(16, 185, 129, .10) 0 2px, transparent 2px),
-    radial-gradient(circle at 72% 66%, rgba(99, 102, 241, .10) 0 1.5px, transparent 1.5px);
+  background: var(--bg-base, #ffffff);
 }
 
 /* ── Template scroll strip ── */

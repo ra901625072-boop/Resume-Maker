@@ -170,51 +170,82 @@
             <!-- STEP 2: EXPERIENCE & EDUCATION -->
             <div class="form-step" :class="{active: currentStep === 2}" v-show="currentStep === 2">
                 <div class="form-section">
-                    <h3 class="form-section-title">Work Experience</h3>
-                    <div>
-                        <div class="exp-item" v-for="(exp, index) in formData.experience" :key="index" :style="index > 0 ? 'margin-top: 2rem; border-top: 1px solid var(--border-subtle); padding-top: 2rem;' : ''">
-                            <div class="grid-2-col" style="margin-bottom: 1rem;">
-                                <div>
-                                    <input v-model="exp.title" placeholder="Job Title" :class="{invalid: errors['exp_' + index + '_title']}" :aria-invalid="errors['exp_' + index + '_title'] ? 'true' : 'false'">
-                                    <div class="error-msg" v-show="errors['exp_' + index + '_title']" aria-live="polite">Job Title is required.</div>
-                                </div>
-                                <div>
-                                    <input v-model="exp.company" placeholder="Company Name" :class="{invalid: errors['exp_' + index + '_company']}" :aria-invalid="errors['exp_' + index + '_company'] ? 'true' : 'false'">
-                                    <div class="error-msg" v-show="errors['exp_' + index + '_company']" aria-live="polite">Company Name is required.</div>
-                                </div>
-                            </div>
-                            <input v-model="exp.duration" placeholder="Duration (e.g. Jan 2020 - Present)" style="margin-bottom: 1rem;">
-                            <div class="input-group">
-                                <textarea v-model="exp.description" :class="{'skeleton-loader': exp.isGenerating}" :readonly="exp.isGenerating" :aria-busy="exp.isGenerating" placeholder="Describe your responsibilities and achievements..."></textarea>
-                                <div class="ai-btn-wrapper">
-                                    <button type="button" class="ai-btn" @click="generateExperience(index)" :disabled="exp.isGenerating">
-                                        <span v-if="exp.isGenerating" class="spinner" style="width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;"></span>
-                                        <span v-else>AI Generate</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <button type="button" v-if="index > 0" class="remove-btn" @click="removeExperience(index)">Remove Experience</button>
-                        </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                        <h3 class="form-section-title" style="margin: 0;">Work Experience</h3>
+                        <button type="button" class="add-btn" style="padding: 6px 14px; font-size: var(--text-xs);" @click="addExperience">+ Add Role</button>
                     </div>
-                    <div class="section-actions">
-                        <button type="button" class="add-btn" @click="addExperience">Add Experience</button>
+
+                    <div class="accordion-list">
+                        <div class="accordion-card" v-for="(exp, index) in formData.experience" :key="index" :class="{'is-open': isExpOpen(index)}">
+                            <div class="accordion-header" @click="toggleExpAccordion(index)">
+                                <div class="accordion-title-wrap">
+                                    <span class="accordion-badge">{{ index + 1 }}</span>
+                                    <div>
+                                        <div class="accordion-title">{{ exp.title || 'Untitled Role' }}</div>
+                                        <div class="accordion-subtitle">{{ exp.company || 'Company Name' }} <span v-if="exp.duration">· {{ exp.duration }}</span></div>
+                                    </div>
+                                </div>
+                                <div class="accordion-actions">
+                                    <button type="button" v-if="formData.experience.length > 1" class="remove-btn" style="padding: 2px 8px; font-size: 11px;" @click.stop="removeExperience(index)">Delete</button>
+                                    <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                                </div>
+                            </div>
+                            <div class="accordion-body" v-show="isExpOpen(index)">
+                                <div class="grid-2-col" style="margin-bottom: 1rem;">
+                                    <div>
+                                        <input v-model="exp.title" placeholder="Job Title (e.g. Senior Product Designer)" :class="{invalid: errors['exp_' + index + '_title']}" :aria-invalid="errors['exp_' + index + '_title'] ? 'true' : 'false'">
+                                        <div class="error-msg" v-show="errors['exp_' + index + '_title']" aria-live="polite">Job Title is required.</div>
+                                    </div>
+                                    <div>
+                                        <input v-model="exp.company" placeholder="Company / Organization" :class="{invalid: errors['exp_' + index + '_company']}" :aria-invalid="errors['exp_' + index + '_company'] ? 'true' : 'false'">
+                                        <div class="error-msg" v-show="errors['exp_' + index + '_company']" aria-live="polite">Company Name is required.</div>
+                                    </div>
+                                </div>
+                                <input v-model="exp.duration" placeholder="Duration (e.g. 2022 – Present)" style="margin-bottom: 1rem;">
+                                <div class="input-group">
+                                    <div class="ai-inline-toolbar">
+                                        <label style="font-size: var(--text-xs); font-weight: 600; color: var(--text-secondary); margin: 0;">Key Achievements & Responsibilities</label>
+                                        <button type="button" class="ai-pill-btn" @click="generateExperience(index)" :disabled="exp.isGenerating">
+                                            <span v-if="exp.isGenerating" class="spinner" style="width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;"></span>
+                                            <span v-else>✨ AI Polish (CAR)</span>
+                                        </button>
+                                    </div>
+                                    <textarea v-model="exp.description" :class="{'skeleton-loader': exp.isGenerating}" :readonly="exp.isGenerating" :aria-busy="exp.isGenerating" placeholder="• Led cross-functional team of 6 engineers...&#10;• Boosted checkout completion by 24%..."></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-section">
-                    <h3 class="form-section-title">Education</h3>
-                    <div>
-                        <div class="edu-item" v-for="(edu, index) in formData.education" :key="index" :style="index > 0 ? 'margin-top: 2rem; border-top: 1px solid var(--border-subtle); padding-top: 2rem;' : ''">
-                            <div class="grid-2-col" style="margin-bottom: 1rem;">
-                                <input v-model="edu.degree" placeholder="Degree / Certification">
-                                <input v-model="edu.university" placeholder="Institution / University">
-                            </div>
-                            <input v-model="edu.year" placeholder="Year of Completion">
-                            <button type="button" v-if="index > 0" class="remove-btn" @click="removeEducation(index)">Remove Education</button>
-                        </div>
+                <div class="form-section" style="margin-top: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                        <h3 class="form-section-title" style="margin: 0;">Education</h3>
+                        <button type="button" class="add-btn" style="padding: 6px 14px; font-size: var(--text-xs);" @click="addEducation">+ Add Degree</button>
                     </div>
-                    <div class="section-actions">
-                        <button type="button" class="add-btn" @click="addEducation">Add Education</button>
+
+                    <div class="accordion-list">
+                        <div class="accordion-card" v-for="(edu, index) in formData.education" :key="index" :class="{'is-open': isEduOpen(index)}">
+                            <div class="accordion-header" @click="toggleEduAccordion(index)">
+                                <div class="accordion-title-wrap">
+                                    <span class="accordion-badge">{{ index + 1 }}</span>
+                                    <div>
+                                        <div class="accordion-title">{{ edu.degree || 'Degree / Major' }}</div>
+                                        <div class="accordion-subtitle">{{ edu.university || 'University / Institution' }} <span v-if="edu.year">· {{ edu.year }}</span></div>
+                                    </div>
+                                </div>
+                                <div class="accordion-actions">
+                                    <button type="button" v-if="formData.education.length > 1" class="remove-btn" style="padding: 2px 8px; font-size: 11px;" @click.stop="removeEducation(index)">Delete</button>
+                                    <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                                </div>
+                            </div>
+                            <div class="accordion-body" v-show="isEduOpen(index)">
+                                <div class="grid-2-col" style="margin-bottom: 1rem;">
+                                    <input v-model="edu.degree" placeholder="Degree / Certification (e.g. B.S. Computer Science)">
+                                    <input v-model="edu.university" placeholder="Institution / University (e.g. Stanford)">
+                                </div>
+                                <input v-model="edu.year" placeholder="Year of Completion (e.g. 2019 – 2023)">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -222,23 +253,46 @@
             <!-- STEP 3: SUMMARY & SKILLS -->
             <div class="form-step" :class="{active: currentStep === 3}" v-show="currentStep === 3">
                 <div class="form-section">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 10px;">
                         <h3 class="form-section-title" style="margin: 0;">Professional Summary</h3>
-                        <button type="button" class="ai-btn" @click="generateSummary" :disabled="isGeneratingSummary">
-                            <span v-if="isGeneratingSummary" class="spinner" style="width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle;margin-right:5px;"></span>
-                            <span v-else>Auto Generate</span>
+                        <button type="button" class="ai-pill-btn" @click="generateSummary" :disabled="isGeneratingSummary">
+                            <span v-if="isGeneratingSummary" class="spinner" style="width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle;"></span>
+                            <span v-else>✨ AI Auto-Generate</span>
                         </button>
                     </div>
                     <div class="input-group">
-                        <textarea v-model="formData.summary" :class="{'skeleton-loader': isGeneratingSummary}" :readonly="isGeneratingSummary" :aria-busy="isGeneratingSummary" placeholder="Briefly describe your professional background and key achievements..."></textarea>
+                        <textarea v-model="formData.summary" :class="{'skeleton-loader': isGeneratingSummary}" :readonly="isGeneratingSummary" :aria-busy="isGeneratingSummary" placeholder="Concise 3-4 sentence elevator pitch highlighting your key domain expertise, leadership, and top measurable impact..."></textarea>
                     </div>
                 </div>
 
                 <div class="form-section">
-                    <h3 class="form-section-title">Core Skills</h3>
-                    <div class="input-group">
-                        <label for="skills">Skills (Comma separated)</label>
-                        <input id="skills" v-model="formData.skills" placeholder="Python, Flask, JavaScript, SQL, DevOps...">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;">
+                        <h3 class="form-section-title" style="margin: 0;">Core Skills</h3>
+                        <button type="button" class="ai-pill-btn" @click="fetchAiSkillSuggestions" :disabled="isSuggestingSkills">
+                            <span v-if="isSuggestingSkills" class="spinner" style="width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle;"></span>
+                            <span v-else>💡 AI Suggest Skills</span>
+                        </button>
+                    </div>
+
+                    <!-- Interactive Skills Chips Input -->
+                    <div class="skills-input-container">
+                        <div class="skills-chips-wrapper">
+                            <div class="skill-chip" v-for="(skill, index) in skillsList" :key="index">
+                                <span>{{ skill }}</span>
+                                <button type="button" class="skill-chip-remove" aria-label="Remove skill" @click="removeSkill(index)">×</button>
+                            </div>
+                            <input class="skill-tag-input" v-model="skillInputText" @keydown="handleSkillKeydown" placeholder="Type skill and press Enter or comma...">
+                        </div>
+
+                        <!-- Quick Suggestions -->
+                        <div class="skill-suggestions-section" v-if="suggestedSkills.length > 0">
+                            <div class="skill-suggestions-label">Quick Add:</div>
+                            <div class="skill-suggestions-pills">
+                                <button type="button" class="skill-suggestion-pill" v-for="s in suggestedSkills" :key="s" @click="addSkill(s)">
+                                    + {{ s }}
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -246,16 +300,48 @@
                     <h3 class="form-section-title">Languages</h3>
                     <div class="grid-2-col">
                         <div v-for="(lang, index) in formData.languages" :key="index" style="position: relative;">
-                            <input v-model="lang.value" placeholder="e.g. English (Native)">
-                            <button v-if="index > 0" type="button" class="remove-btn" style="position: absolute; right: 0; top: 0;" @click="removeLanguage(index)">X</button>
+                            <input v-model="lang.value" placeholder="e.g. English (Native), French (B2)">
+                            <button v-if="index > 0" type="button" class="remove-btn" style="position: absolute; right: 0; top: 0;" @click="removeLanguage(index)">×</button>
                         </div>
                     </div>
-                    <button type="button" class="add-btn" style="margin-top: 1.5rem;" @click="addLanguage">Add Language</button>
+                    <button type="button" class="add-btn" style="margin-top: 1.5rem;" @click="addLanguage">+ Add Language</button>
                 </div>
             </div>
 
-            <!-- STEP 4: TEMPLATE -->
+            <!-- STEP 4: TEMPLATE & ATS AUDIT -->
             <div class="form-step" :class="{active: currentStep === 4}" v-show="currentStep === 4">
+                
+                <!-- Real-time ATS Health Scorecard -->
+                <div class="ats-scorecard" v-if="atsResult.score !== null">
+                    <div class="ats-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="ats-score-badge" :class="atsResult.score >= 85 ? 'excellent' : (atsResult.score >= 70 ? 'good' : (atsResult.score >= 50 ? 'warning' : 'danger'))">
+                                🎯 ATS Score: {{ atsResult.score }}/100
+                            </span>
+                            <span style="font-size: var(--text-xs); color: var(--text-secondary); font-weight: 500;">{{ atsResult.summary }}</span>
+                        </div>
+                        <button type="button" class="ai-pill-btn" @click="calculateAtsScore" :disabled="atsResult.isCalculating">
+                            <span v-if="atsResult.isCalculating" class="spinner" style="width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;display:inline-block;"></span>
+                            <span v-else>🔄 Refresh Score</span>
+                        </button>
+                    </div>
+
+                    <div class="ats-insights-grid" v-if="atsResult.strengths.length > 0 || atsResult.improvements.length > 0">
+                        <div class="ats-insight-box strengths" v-if="atsResult.strengths.length > 0">
+                            <div class="ats-insight-title">✓ Strengths</div>
+                            <ul class="ats-insight-list">
+                                <li v-for="(str, idx) in atsResult.strengths" :key="idx">{{ str }}</li>
+                            </ul>
+                        </div>
+                        <div class="ats-insight-box improvements" v-if="atsResult.improvements.length > 0">
+                            <div class="ats-insight-title">⚡ Recommended Improvements</div>
+                            <ul class="ats-insight-list">
+                                <li v-for="(imp, idx) in atsResult.improvements" :key="idx">{{ imp }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-section">
                     <fieldset style="border: none; padding: 0; margin: 0;">
                         <legend class="form-section-title" style="display:flex; align-items:center; gap:8px; margin-bottom:var(--space-4); width:100%;">
