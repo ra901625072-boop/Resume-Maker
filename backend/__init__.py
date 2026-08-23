@@ -86,6 +86,7 @@ def create_app(config_override=None) -> Flask:
     app.register_blueprint(auth_bp)            # /api/auth/signup  /api/auth/login  …
 
     # Exempt CORS API blueprints from CSRF checks
+    csrf.exempt(main_bp)
     csrf.exempt(resume_bp)
     csrf.exempt(ai_bp)
     csrf.exempt(api_bp)

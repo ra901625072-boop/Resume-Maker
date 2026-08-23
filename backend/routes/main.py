@@ -8,6 +8,8 @@ or redirect to the configured frontend.
 
 from flask import Blueprint, jsonify, redirect, request, current_app
 
+from backend.extensions import limiter
+
 main_bp = Blueprint("main", __name__)
 
 
@@ -21,14 +23,16 @@ def _get_frontend_redirect(fallback="/"):
     return fallback
 
 
-@main_bp.route("/")
+@main_bp.route("/", methods=["GET", "HEAD"])
+@main_bp.route("/health", methods=["GET", "HEAD"])
+@limiter.exempt
 def home():
     """Return API server health and status notice."""
     return jsonify({
         "status": "online",
         "service": "WISAXIS Resume Maker API Server",
         "message": "Please access the application via the decoupled frontend."
-    })
+    }), 200
 
 
 @main_bp.route("/login")

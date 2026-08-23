@@ -29,22 +29,24 @@ api_bp = Blueprint("api", __name__)
 # ────────────────────────────────────────────────────────────────────────────
 # Health Check  (used by Render / Docker / uptime monitors)
 # ────────────────────────────────────────────────────────────────────────────
-@api_bp.route("/api/health")
+@api_bp.route("/api/health", methods=["GET", "HEAD"])
+@api_bp.route("/health", methods=["GET", "HEAD"])
+@limiter.exempt
 def health_check():
     """Returns 200 OK — no authentication required."""
     from backend.extensions import db
+    db_status = "ok"
     try:
         db.session.execute(db.text("SELECT 1"))
-        db_status = "ok"
-    except Exception:
-        db_status = "error"
+    except Exception as e:
+        db_status = f"warning: {e}"
 
     return jsonify({
         "status":   "ok",
         "db":       db_status,
         "app":      current_app.config.get("APP_NAME", "WISAXIS"),
         "version":  current_app.config.get("APP_VERSION", "2.0.0"),
-    })
+    }), 200
 
 
 # ────────────────────────────────────────────────────────────────────────────
