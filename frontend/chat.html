@@ -380,10 +380,11 @@
         function clearChat() {
             if (chatHistory.length === 0) return;
             const confirmToast = document.createElement('div');
-            confirmToast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(10,14,25,0.95);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;padding:12px 20px;border-radius:12px;font-size:0.875rem;font-weight:600;z-index:9999;display:flex;gap:12px;align-items:center;box-shadow:0 8px 24px rgba(0,0,0,0.4);backdrop-filter:blur(12px);';
-            confirmToast.innerHTML = `<span>Clear all chat history?</span><button onclick="doClearChat();this.closest('div').remove();" style="background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);color:#ef4444;padding:4px 12px;border-radius:8px;cursor:pointer;font-weight:700;">Yes, Clear</button><button onclick="this.closest('div').remove();" style="background:transparent;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:1rem;">&times;</button>`;
+            confirmToast.className = 'modal-card fade-up';
+            confirmToast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--surface-paper);border:1px solid var(--border-strong);color:var(--text-main);padding:14px 22px;border-radius:14px;font-size:var(--text-sm);font-weight:600;z-index:9999;display:flex;gap:14px;align-items:center;box-shadow:var(--glass-shadow);backdrop-filter:blur(16px);';
+            confirmToast.innerHTML = `<span>Clear all chat history?</span><button type="button" onclick="doClearChat();this.closest('div').remove();" class="remove-btn" style="padding:6px 14px;font-size:var(--text-xs);border-radius:var(--radius-sm);">Clear</button><button type="button" onclick="this.closest('div').remove();" class="modal-close-btn" style="font-size:1.2rem;line-height:1;">&times;</button>`;
             document.body.appendChild(confirmToast);
-            setTimeout(() => confirmToast.remove(), 5000);
+            setTimeout(() => { if (confirmToast.parentNode) confirmToast.remove(); }, 6000);
         }
 
         function doClearChat() {
@@ -395,8 +396,7 @@
                     <div class="chat-bubble-wrap assistant">
                         <div class="bubble-icon">🤖</div>
                         <div class="chat-bubble">
-                            <p>Hello! I am your <strong>Wisaxis AI Resume Assistant</strong>. I am here to help you craft an outstanding, ATS-optimized resume.</p>
-                            <p>How can I help you elevate your career materials today?</p>
+                            <p>Hi there! I'm your AI Resume Assistant. Ask me to draft a summary, rewrite bullet points with quantifiable impact, or optimize your resume for ATS screening.</p>
                         </div>
                     </div>`;
         }

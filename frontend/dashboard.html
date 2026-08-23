@@ -156,12 +156,20 @@
                         <div class="error-msg" v-show="errors.address" aria-live="polite">Please enter your address.</div>
                     </div>
                     <div class="input-group">
-                        <label for="photo">Photo <span style="font-size:0.75rem; font-weight:400; color:var(--text-muted); margin-left:4px;">(optional)</span></label>
+                        <label>Photo <span style="font-size:0.75rem; font-weight:400; color:var(--text-muted); margin-left:4px;">(optional)</span></label>
                         <div class="photo-upload-wrap">
                             <div class="photo-preview" :class="{'has-photo': photoPreviewUrl}" :style="photoPreviewUrl ? {backgroundImage: 'url(' + photoPreviewUrl + ')', backgroundSize: 'cover', backgroundPosition: 'center'} : {}">
                                 <svg v-if="!photoPreviewUrl" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                             </div>
-                            <input type="file" id="photo" accept=".jpg,.jpeg,.png" @change="handlePhotoUpload">
+                            <div class="photo-upload-actions">
+                                <label for="photo" class="btn-file-upload">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                    <span>{{ photoPreviewUrl ? 'Change Image' : 'Upload Image' }}</span>
+                                </label>
+                                <input type="file" id="photo" accept=".jpg,.jpeg,.png,.webp" @change="handlePhotoUpload" style="display:none;">
+                                <button v-if="photoPreviewUrl" type="button" class="btn-remove-photo" @click="photoPreviewUrl = ''; photoFile = null;">Remove Photo</button>
+                                <span class="photo-upload-hint">PNG, JPG or WebP</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -297,14 +305,18 @@
                 </div>
 
                 <div class="form-section">
-                    <h3 class="form-section-title">Languages</h3>
-                    <div class="grid-2-col">
-                        <div v-for="(lang, index) in formData.languages" :key="index" style="position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                        <h3 class="form-section-title" style="margin: 0;">Languages</h3>
+                        <button type="button" class="add-btn" style="padding: 6px 14px; font-size: var(--text-xs);" @click="addLanguage">+ Add Language</button>
+                    </div>
+                    <div class="languages-grid">
+                        <div v-for="(lang, index) in formData.languages" :key="index" class="language-item">
                             <input v-model="lang.value" placeholder="e.g. English (Native), Spanish (Fluent)">
-                            <button v-if="index > 0" type="button" class="remove-btn" style="position: absolute; right: 0; top: 0;" @click="removeLanguage(index)">×</button>
+                            <button v-if="formData.languages.length > 1" type="button" class="btn-item-delete" aria-label="Remove language" @click="removeLanguage(index)">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
                         </div>
                     </div>
-                    <button type="button" class="add-btn" style="margin-top: 1.5rem;" @click="addLanguage">+ Add Language</button>
                 </div>
             </div>
 
@@ -343,8 +355,8 @@
                 </div>
 
                 <div class="form-section">
-                    <fieldset style="border: none; padding: 0; margin: 0;">
-                        <legend class="form-section-title" style="display:flex; align-items:center; gap:8px; margin-bottom:var(--space-4); width:100%;">
+                    <fieldset class="template-fieldset">
+                        <legend class="form-section-title template-legend">
                             Select Your Design Template <span style="color: var(--danger); margin-left:2px;">*</span>
                         </legend>
 
