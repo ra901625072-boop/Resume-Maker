@@ -30,7 +30,8 @@
   box-shadow: var(--glass-shadow);
   position: relative;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: modalEnter 0.45s var(--ease-spring) both;
+  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s ease;
 }
 
 .auth-card::before {
@@ -68,6 +69,7 @@ html[data-theme="light"] .auth-card {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: 1rem;
+  animation: badgeFloat 4s ease-in-out infinite;
 }
 
 .auth-title {
@@ -120,6 +122,13 @@ html[data-theme="light"] .auth-card {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: color 0.2s ease, transform 0.2s var(--ease-spring);
+}
+
+.form-input:focus + .input-icon,
+.input-wrap:focus-within .input-icon {
+  color: var(--primary);
+  transform: scale(1.1);
 }
 
 .form-input {
@@ -131,7 +140,7 @@ html[data-theme="light"] .auth-card {
   color: var(--text-main);
   font-family: var(--font-body);
   font-size: var(--text-sm);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s var(--ease-out-smooth);
   outline: none;
   box-sizing: border-box;
 }
@@ -164,11 +173,12 @@ html[data-theme="light"] .form-input:focus {
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-sm);
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s var(--ease-spring);
 }
 
 .pw-toggle-btn:hover {
   color: var(--text-main);
+  transform: scale(1.1);
 }
 
 .btn-auth-submit {
@@ -177,29 +187,50 @@ html[data-theme="light"] .form-input:focus {
   margin-top: 0.5rem;
   background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
   color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-md);
   font-family: var(--font-heading);
   font-size: var(--text-md);
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s var(--ease-spring);
   box-shadow: 0 4px 16px var(--primary-glow);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-auth-submit::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  transform: skewX(-20deg);
+  transition: none;
+  pointer-events: none;
+}
+
+.btn-auth-submit:hover::after {
+  left: 160%;
+  transition: left 0.75s ease;
 }
 
 .btn-auth-submit:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px var(--primary-glow);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 26px var(--primary-glow);
   filter: brightness(1.08);
 }
 
 .btn-auth-submit:disabled {
   opacity: 0.65;
   cursor: not-allowed;
+  transform: none !important;
 }
 
 .auth-footer {
@@ -237,6 +268,7 @@ html[data-theme="light"] .form-input:focus {
   background: var(--danger-light);
   border: 1px solid rgba(244, 63, 94, 0.25);
   color: var(--danger);
+  animation: shakeError 0.4s ease-in-out;
 }
 
 .auth-alert.success {
@@ -244,6 +276,7 @@ html[data-theme="light"] .form-input:focus {
   background: var(--success-light);
   border: 1px solid rgba(16, 185, 129, 0.25);
   color: var(--success);
+  animation: modalEnter 0.3s var(--ease-spring) both;
 }
 
 @media (max-width: 500px) {

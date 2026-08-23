@@ -1,66 +1,343 @@
 /* ==========================================================
-   WISAXIS RESUME MAKER — ANIMATIONS & GLOBAL EFFECTS
-   All keyframes, entrance animations, scroll effects, cards.
-   Replaces: base/global-effects.css
+   WISAXIS RESUME MAKER — ANIMATIONS & GLOBAL MOTION SYSTEM
+   Physics-based keyframes, entrance animations, scroll choreography,
+   staggered grids, shimmer states, and micro-interactions (2026).
    ========================================================== */
 
-/* ===== PAGE ENTRY ===== */
+/* ===== 1. CORE PAGE & VIEWPORT ENTRANCES ===== */
 .page-enter {
-  animation: pageReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: pageReveal 0.65s var(--ease-out-smooth) both;
 }
 
 @keyframes pageReveal {
   from {
     opacity: 0;
-    transform: translateY(22px);
+    transform: translateY(20px) scale(0.99);
   }
   to {
     opacity: 1;
-    transform: none;
+    transform: translateY(0) scale(1);
   }
 }
 
-/* ===== CINEMATIC REVEAL (scroll-triggered) ===== */
-.cinematic-reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-
-.cinematic-reveal.active,
-.cinematic-reveal.visible {
-  opacity: 1;
-  transform: none;
-}
-
-@media (max-width: 768px) {
-  .cinematic-reveal {
-    transform: translateY(16px);
-  }
-}
-
-/* ===== FADE UP (home page sections) ===== */
+/* Scroll-triggered reveal */
+.cinematic-reveal,
+.reveal,
 .fade-up {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition:
+    opacity 0.6s var(--ease-out-smooth),
+    transform 0.6s var(--ease-out-smooth);
+  will-change: opacity, transform;
 }
 
-.fade-up.visible,
-.fade-up.active {
+.cinematic-reveal.active,
+.cinematic-reveal.visible,
+.reveal.active,
+.reveal.visible,
+.fade-up.active,
+.fade-up.visible {
   opacity: 1;
-  transform: none;
+  transform: translateY(0);
 }
 
-/* ===== GLASS CARD ===== */
+@media (max-width: 768px) {
+  .cinematic-reveal,
+  .reveal,
+  .fade-up {
+    transform: translateY(14px);
+  }
+}
+
+/* ===== 2. CHOREOGRAPHED STAGGERED GRIDS & LISTS ===== */
+.stagger-grid > *,
+.stagger-group > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.5s var(--ease-out-smooth),
+    transform 0.5s var(--ease-out-smooth);
+}
+
+.stagger-grid.active > *,
+.stagger-grid.visible > *,
+.stagger-group.active > *,
+.stagger-group.visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger item delays */
+.stagger-1,  .stagger-grid.active > *:nth-child(1),  .stagger-group.active > *:nth-child(1)  { transition-delay: 0.04s; }
+.stagger-2,  .stagger-grid.active > *:nth-child(2),  .stagger-group.active > *:nth-child(2)  { transition-delay: 0.09s; }
+.stagger-3,  .stagger-grid.active > *:nth-child(3),  .stagger-group.active > *:nth-child(3)  { transition-delay: 0.14s; }
+.stagger-4,  .stagger-grid.active > *:nth-child(4),  .stagger-group.active > *:nth-child(4)  { transition-delay: 0.19s; }
+.stagger-5,  .stagger-grid.active > *:nth-child(5),  .stagger-group.active > *:nth-child(5)  { transition-delay: 0.24s; }
+.stagger-6,  .stagger-grid.active > *:nth-child(6),  .stagger-group.active > *:nth-child(6)  { transition-delay: 0.29s; }
+.stagger-7,  .stagger-grid.active > *:nth-child(7),  .stagger-group.active > *:nth-child(7)  { transition-delay: 0.34s; }
+.stagger-8,  .stagger-grid.active > *:nth-child(8),  .stagger-group.active > *:nth-child(8)  { transition-delay: 0.39s; }
+.stagger-9,  .stagger-grid.active > *:nth-child(9),  .stagger-group.active > *:nth-child(9)  { transition-delay: 0.44s; }
+.stagger-10, .stagger-grid.active > *:nth-child(10), .stagger-group.active > *:nth-child(10) { transition-delay: 0.49s; }
+.stagger-11, .stagger-grid.active > *:nth-child(11), .stagger-group.active > *:nth-child(11) { transition-delay: 0.54s; }
+.stagger-12, .stagger-grid.active > *:nth-child(12), .stagger-group.active > *:nth-child(12) { transition-delay: 0.59s; }
+
+/* ===== 3. MODAL & DIALOG ANIMATIONS ===== */
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+@keyframes backdropFadeOut {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+}
+
+@keyframes modalIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+}
+
+@keyframes modalExit {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+}
+
+.modal-in {
+  animation: modalEnter 0.35s var(--ease-spring) forwards;
+}
+
+.modal-out {
+  animation: modalExit 0.25s var(--ease-out-smooth) forwards;
+}
+
+/* ===== 4. MULTI-STEP WIZARD DIRECTIONAL TRANSITIONS ===== */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+
+/* ===== 5. AI GENERATION & SHIMMER SKELETON LOADERS ===== */
+@keyframes shimmerSkeleton {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-loader {
+  background: var(--shimmer-bg) !important;
+  background-size: var(--shimmer-size) !important;
+  animation: shimmerSkeleton 1.8s infinite linear !important;
+  pointer-events: none;
+  position: relative;
+}
+
+/* ===== 6. INTERACTIVE SKILL CHIPS ===== */
+@keyframes chipPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.75) translateY(4px);
+  }
+  70% {
+    transform: scale(1.06) translateY(-1px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes chipPopOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.6) translateY(4px);
+  }
+}
+
+.chip-enter {
+  animation: chipPopIn 0.28s var(--ease-spring) both;
+}
+
+.chip-exit {
+  animation: chipPopOut 0.2s var(--ease-out-smooth) forwards;
+}
+
+/* ===== 7. AMBIENT & PULSE GLOWS ===== */
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 10px var(--secondary);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.85);
+    box-shadow: 0 0 4px var(--secondary);
+  }
+}
+
+@keyframes badgeFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes rippleGlow {
+  0% {
+    box-shadow: 0 0 0 0 var(--primary-glow);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}
+
+@keyframes shakeError {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.shake-error {
+  animation: shakeError 0.4s ease-in-out;
+}
+
+/* ===== 8. SPINNERS & ROTATIONS ===== */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes spin360 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spin-icon,
+.spinner {
+  animation: spin 0.9s linear infinite;
+}
+
+/* ===== 9. GLASS CARD ===== */
 .classic-card,
 .adaptive-card {
   background: var(--surface);
   border: 1px solid var(--surface-border);
   border-radius: 22px;
   box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(10px);
-  transition: var(--transition);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.3s var(--ease-out-smooth);
 }
 
 @media (hover: hover) {
@@ -68,185 +345,67 @@
   .adaptive-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-hover);
+    border-color: var(--surface-border-hover);
   }
 }
 
 @media (max-width: 768px) {
   .classic-card,
   .adaptive-card {
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 }
 
-/* ===== BUTTON BASE ===== */
-.btn-classic,
-.btn-adaptive {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 52px;
-  padding: 14px 22px;
-  border-radius: 16px;
-  font-weight: 600;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-html:not([data-theme="light"]) .btn-classic,
-html:not([data-theme="light"]) .btn-adaptive {
-  background: #fff;
-  color: #090a0f;
-}
-
-html[data-theme="light"] .btn-classic,
-html[data-theme="light"] .btn-adaptive {
-  background: #111827;
-  color: #fff;
-}
-
-@media (hover: hover) {
-  .btn-classic:hover,
-  .btn-adaptive:hover {
-    transform: translateY(-2px);
-  }
-}
-
-@media (max-width: 768px) {
-  .btn-classic,
-  .btn-adaptive {
-    width: 100%;
-  }
-}
-
-/* ===== HERO TITLE ===== */
-.hero-title {
-  font-size: clamp(2.6rem, 7vw, 5.4rem);
-  line-height: 0.95;
-  letter-spacing: -2px;
-}
-
-.hero-subtitle {
-  line-height: 1.7;
-  color: var(--text-muted);
-}
-
-/* ===== TEMPLATE SCROLL (home page infinite carousel) ===== */
-.template-scroll-wrapper {
-  overflow: hidden;
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
-  );
-}
-
-.template-scroll-track {
-  display: flex;
-  gap: 18px;
-  width: max-content;
-  animation: cinematicScroll 42s linear infinite;
-}
-
-.template-scroll-wrapper:hover .template-scroll-track {
-  animation-play-state: paused;
-}
-
-@keyframes cinematicScroll {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@media (max-width: 768px) {
-  .template-scroll-track {
-    animation-duration: 60s;
-  }
-}
-
-/* ===== RESUME TEMPLATE CARD (home scroll) ===== */
-.resume-template {
-  border-radius: 18px;
-  transition: transform 0.28s ease;
-}
-
-@media (hover: hover) {
-  .resume-template:hover {
-    transform: translateY(-5px);
-  }
-}
-
-/* ===== TEMPLATE BACKGROUND FLOAT ANIMATION ===== */
-@keyframes shellFloat {
-  0%   { transform: translate3d(0, 0, 0); }
-  50%  { transform: translate3d(0, -12px, 0); }
-  100% { transform: translate3d(0, 0, 0); }
-}
-
-/* ===== LOADING SPINNER ===== */
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-.spin-icon {
-  animation: spin 1s linear infinite;
-}
-
-/* ===== TOUCH FEEDBACK ===== */
+/* ===== 10. TACTILE PRESS & HOVER FEEDBACK ===== */
+.press-down:active,
+.btn:active,
+.btn-primary:active,
+.btn-classic:active,
+.btn-adaptive:active,
+.cta-primary:active,
+.cta-secondary:active,
+.ai-btn:active,
+.ai-pill-btn:active,
+.add-btn:active,
+.remove-btn:active,
+.download-btn:active,
 .nav-icon-btn:active,
 .user-dropdown-trigger:active,
-.download-btn:active,
 .template-thumb:active,
-.download-options .option:active,
-.template-link:active {
-  transform: scale(0.97);
-  opacity: 0.85;
+.option:active {
+  transform: scale(0.96) !important;
+  transition: transform 0.1s var(--ease-out-smooth);
 }
 
-/* ===== DOWNLOAD BUTTON LOADING STATE ===== */
-.download-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-loader {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* ===== ACCESSIBILITY — FOCUS INDICATORS ===== */
+/* Focus Indicators */
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid var(--shell-purple, #7c5cff);
+  outline: 2px solid var(--primary, #6366f1);
   outline-offset: 2px;
 }
 
-.download-btn:focus-visible,
-.nav-icon-btn:focus-visible,
-.option:focus-visible {
-  box-shadow:
-    0 16px 34px rgba(0, 0, 0, 0.24),
-    0 0 0 3px rgba(124, 92, 255, 0.4);
-}
-
-/* ===== ACCESSIBILITY — REDUCED MOTION ===== */
+/* ===== 11. ACCESSIBILITY — PREFERS REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  
+  .cinematic-reveal,
+  .reveal,
+  .fade-up,
+  .stagger-grid > *,
+  .stagger-group > * {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

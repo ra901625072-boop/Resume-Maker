@@ -16,13 +16,20 @@
   font-size: var(--text-sm);
   cursor: pointer;
   border: 1px solid transparent;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    transform 0.2s var(--ease-spring),
+    box-shadow 0.2s var(--ease-out-smooth),
+    background 0.2s ease,
+    border-color 0.2s ease,
+    filter 0.2s ease;
   user-select: none;
   white-space: nowrap;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn:active {
-  transform: scale(0.98);
+  transform: scale(0.96) !important;
 }
 
 /* ===== PRIMARY BUTTON ===== */
@@ -30,14 +37,32 @@
   background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
   color: #ffffff !important;
   box-shadow: 0 4px 16px var(--primary-glow);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   position: relative;
   overflow: hidden;
 }
 
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: skewX(-20deg);
+  transition: none;
+  pointer-events: none;
+}
+
+.btn-primary:hover::after {
+  left: 160%;
+  transition: left 0.75s ease;
+}
+
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px var(--primary-glow);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 26px var(--primary-glow);
   filter: brightness(1.08);
 }
 
@@ -182,7 +207,8 @@ html[data-theme="light"] .cta-secondary:hover {
 }
 
 /* ===== AI SPARKLE BUTTONS (Wizard / Dashboard) ===== */
-.ai-btn {
+.ai-btn,
+.ai-pill-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -194,29 +220,61 @@ html[data-theme="light"] .cta-secondary:hover {
   font-size: var(--text-xs);
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    transform 0.25s var(--ease-spring),
+    background 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.ai-btn:hover:not(:disabled) {
+.ai-btn::after,
+.ai-pill-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: skewX(-20deg);
+  transition: none;
+  pointer-events: none;
+}
+
+.ai-btn:hover::after,
+.ai-pill-btn:hover::after {
+  left: 160%;
+  transition: left 0.65s ease;
+}
+
+.ai-btn:hover:not(:disabled),
+.ai-pill-btn:hover:not(:disabled) {
   background: linear-gradient(135deg, var(--primary), var(--accent));
   color: #ffffff;
   border-color: transparent;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px var(--primary-glow);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 18px var(--primary-glow);
 }
 
-.ai-btn:disabled {
-  opacity: 0.6;
+.ai-btn:disabled,
+.ai-pill-btn:disabled {
+  opacity: 0.55;
   cursor: not-allowed;
+  transform: none !important;
 }
 
-html[data-theme="light"] .ai-btn {
+html[data-theme="light"] .ai-btn,
+html[data-theme="light"] .ai-pill-btn {
   background: rgba(79, 70, 229, 0.08);
   border-color: rgba(79, 70, 229, 0.3);
   color: var(--primary);
 }
 
-html[data-theme="light"] .ai-btn:hover:not(:disabled) {
+html[data-theme="light"] .ai-btn:hover:not(:disabled),
+html[data-theme="light"] .ai-pill-btn:hover:not(:disabled) {
   background: linear-gradient(135deg, var(--primary), var(--accent));
   color: #ffffff;
 }
@@ -234,14 +292,14 @@ html[data-theme="light"] .ai-btn:hover:not(:disabled) {
   font-weight: 700;
   font-size: var(--text-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s var(--ease-spring);
 }
 
 .add-btn:hover {
   background: var(--success);
   color: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
 }
 
 .remove-btn {
@@ -253,12 +311,14 @@ html[data-theme="light"] .ai-btn:hover:not(:disabled) {
   font-weight: 700;
   font-size: var(--text-xs);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s var(--ease-spring);
 }
 
 .remove-btn:hover {
   background: var(--danger);
   color: #ffffff;
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
 }
 
 /* ===== DOWNLOAD BUTTON (Template shell / Resume viewer) ===== */
@@ -275,17 +335,23 @@ html[data-theme="light"] .ai-btn:hover:not(:disabled) {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   cursor: pointer;
   font-weight: 700;
-  transition: all 0.25s ease;
+  transition:
+    transform 0.25s var(--ease-spring),
+    box-shadow 0.25s var(--ease-out-smooth),
+    background 0.25s ease,
+    border-color 0.25s ease;
   height: 52px;
   padding: 0 24px;
   border-radius: var(--radius-full);
   font-size: var(--text-sm);
+  position: relative;
+  overflow: hidden;
 }
 
 .download-btn:hover {
   background: var(--primary);
   border-color: var(--primary);
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.02);
   box-shadow: 0 14px 35px var(--primary-glow);
 }
 

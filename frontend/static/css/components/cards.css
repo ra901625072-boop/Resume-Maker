@@ -12,14 +12,18 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: var(--shadow-sm);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    transform 0.3s var(--ease-spring),
+    box-shadow 0.3s var(--ease-out-smooth),
+    border-color 0.3s ease;
   position: relative;
 }
 
 .adaptive-card:hover,
 .glass-card:hover {
+  transform: translateY(-4px) scale(1.008);
   border-color: var(--surface-border-hover);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-hover);
 }
 
 html[data-theme="light"] .adaptive-card,
@@ -54,7 +58,10 @@ html[data-theme="light"] .glass-card:hover {
   justify-content: space-between;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    transform 0.35s var(--ease-spring),
+    box-shadow 0.35s var(--ease-out-smooth),
+    border-color 0.35s ease;
   position: relative;
   overflow: hidden;
 }
@@ -72,7 +79,7 @@ html[data-theme="light"] .glass-card:hover {
 }
 
 .bento-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px) scale(1.01);
   border-color: var(--surface-border-hover);
   box-shadow: var(--shadow-hover);
 }

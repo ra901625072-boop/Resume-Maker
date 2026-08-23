@@ -232,12 +232,11 @@ html[data-theme="light"] .repeater-item {
 
 .form-step.active {
   display: block;
-  animation: fadeInStep 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slideInRight 0.38s var(--ease-out-smooth) both;
 }
 
-@keyframes fadeInStep {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+.form-step.slide-back {
+  animation: slideInLeft 0.38s var(--ease-out-smooth) both;
 }
 
 /* =======================

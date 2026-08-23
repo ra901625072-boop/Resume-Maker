@@ -278,7 +278,7 @@
                 <p style="margin-top: 1rem; color: var(--text-secondary);">Loading resumes...</p>
             </div>
 
-            <div v-else-if="resumes.length > 0" class="history-grid">
+            <div v-else-if="resumes.length > 0" class="history-grid stagger-grid active">
                 <div class="resume-card adaptive-card fade-up" v-for="r in resumes" :key="r.id">
                     <div class="resume-card-header">
                         <span class="resume-template-tag">{{ r.template }}</span>

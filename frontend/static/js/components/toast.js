@@ -14,12 +14,16 @@ window.showToast = function(message, type = 'success') {
   
   container.appendChild(toast);
   
+  // Trigger dismiss animation at 3.5s and remove element at 3.8s
   setTimeout(() => {
-    toast.remove();
-    if (container.children.length === 0) {
-      container.remove();
-    }
-  }, 4000);
+    toast.classList.add('toast-dismissing');
+    setTimeout(() => {
+      toast.remove();
+      if (container && container.children.length === 0) {
+        container.remove();
+      }
+    }, 300);
+  }, 3500);
 };
 
 document.addEventListener('DOMContentLoaded', () => {
