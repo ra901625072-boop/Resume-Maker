@@ -30,14 +30,18 @@ class Config:
     # ── Database ──────────────────────────────────────────────────────────────
     # Uses SQLite by default (file-based, zero infrastructure)
     BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    _db_url = os.environ.get(
-        "DATABASE_URL",
-        f"sqlite:///{os.path.join(BASE_DIR, 'instance', 'wisaxis.db')}"
-    )
-    # Render provides postgres:// but SQLAlchemy requires postgresql://
-    if _db_url.startswith("postgres://"):
-        _db_url = _db_url.replace("postgres://", "postgresql://", 1)
-    SQLALCHEMY_DATABASE_URI = _db_url
+    _raw_db_url = (os.environ.get("DATABASE_URL") or "").strip()
+    if not _raw_db_url:
+        _raw_db_url = f"sqlite:///{os.path.join(BASE_DIR, 'instance', 'wisaxis.db')}"
+    elif _raw_db_url.startswith("postgres://"):
+        _raw_db_url = _raw_db_url.replace("postgres://", "postgresql://", 1)
+    
+    # Ensure SSL mode if connecting to external PostgreSQL
+    if "render.com" in _raw_db_url and "sslmode=" not in _raw_db_url:
+        _joiner = "&" if "?" in _raw_db_url else "?"
+        _raw_db_url = f"{_raw_db_url}{_joiner}sslmode=require"
+
+    SQLALCHEMY_DATABASE_URI = _raw_db_url
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_pre_ping": True,        # detect stale connections

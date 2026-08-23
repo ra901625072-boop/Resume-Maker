@@ -16,6 +16,7 @@ Usage:
 
 import logging
 import os
+import sys
 from logging.handlers import RotatingFileHandler
 
 from flask import Flask
@@ -45,6 +46,9 @@ def create_app(config_override=None) -> Flask:
     # ── Load configuration ────────────────────────────────────────────────────
     cfg = config_override or get_config()
     app.config.from_object(cfg)
+
+    # ── Early Logging setup ───────────────────────────────────────────────────
+    _configure_logging(app)
 
     # ── Ensure instance folder exists (SQLite db + uploads live here) ────────
     os.makedirs(app.config.get("UPLOAD_FOLDER", "instance/uploads"), exist_ok=True)
@@ -87,22 +91,19 @@ def create_app(config_override=None) -> Flask:
     csrf.exempt(api_bp)
     csrf.exempt(auth_bp)
 
-
-
     # ── Global error handlers ─────────────────────────────────────────────────
     _register_error_handlers(app)
 
     # ── Database setup ────────────────────────────────────────────────────────
     with app.app_context():
-        db.create_all()
-        # Seed static template catalogue on first run
-        from backend.models import seed_templates
         try:
+            db.create_all()
+            # Seed static template catalogue on first run
+            from backend.models import seed_templates
             seed_templates()
-        except Exception:
-            pass  # idempotent — safe to call multiple times
-
-
+            app.logger.info("Database tables initialized successfully.")
+        except Exception as db_err:
+            app.logger.warning(f"Database initialization deferred/warning: {db_err}")
 
     @app.after_request
     def add_cache_control(response):
@@ -113,9 +114,6 @@ def create_app(config_override=None) -> Flask:
             response.headers["Pragma"] = "no-cache"
             response.headers["Expires"] = "-1"
         return response
-
-    # ── Logging ───────────────────────────────────────────────────────────────
-    _configure_logging(app)
 
     return app
 
@@ -160,20 +158,27 @@ def _configure_logging(app: Flask):
     level = getattr(logging, app.config.get("LOG_LEVEL", "INFO").upper(), logging.INFO)
     log_file = app.config.get("LOG_FILE", "instance/app.log")
 
-    # Ensure log directory exists
-    os.makedirs(os.path.dirname(log_file), exist_ok=True)
-
     formatter = logging.Formatter(
-        "[%(asctime)s] %(levelname)s in %(module)s: %(message)s"
+        "[%(asctime)s] [%(levelname)s] in %(module)s: %(message)s"
     )
 
-    # Rotating file handler (10 MB, keep 5 backups)
-    file_handler = RotatingFileHandler(log_file, maxBytes=10_000_000, backupCount=5)
-    file_handler.setLevel(level)
-    file_handler.setFormatter(formatter)
-
     app.logger.setLevel(level)
-    if not app.debug and not app.testing:
-        app.logger.addHandler(file_handler)
-    else:
-        file_handler.close()
+
+    # 1. Console / Stdout handler (critical for Render Live Tail & containers)
+    stream_handler = logging.StreamHandler(sys.stdout)
+    stream_handler.setLevel(level)
+    stream_handler.setFormatter(formatter)
+    app.logger.addHandler(stream_handler)
+
+    # 2. File handler (optional disk persistence)
+    try:
+        os.makedirs(os.path.dirname(log_file), exist_ok=True)
+        file_handler = RotatingFileHandler(log_file, maxBytes=10_000_000, backupCount=5)
+        file_handler.setLevel(level)
+        file_handler.setFormatter(formatter)
+        if not app.debug and not app.testing:
+            app.logger.addHandler(file_handler)
+        else:
+            file_handler.close()
+    except Exception:
+        pass  # ignore file logging errors on read-only/restricted environments
