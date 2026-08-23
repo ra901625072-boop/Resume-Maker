@@ -486,6 +486,47 @@ class JSONExtractorTestCase(unittest.TestCase):
         self.assertEqual(len(cand["education"]), 1)
         self.assertEqual(res["analysis"]["ats_score"], 94)
 
+    def test_abhay_resume_heuristic_extraction(self):
+        from backend.services.ai_service import _parse_and_validate_resume_json
+        sample_text = """ABHAYSINH         RAJPUT
+      Mechanical Engineer
+      9313690253 | rajputabhay2446@gmail.com | Chandravati, 52 Siddhapur, Gujarat - 384151
+      OBJECTIVE
+      Motivated mechanical engineering graduate seeking an entry-level role.
+      SKILLS
+       • Technical Knowledge (Mechanical Systems & Design)
+       • Analytical & Problem-Solving Skills
+      EXPERIENCE
+      19/01/2024 - 18/01/2024 Oil and Natural Gas Corporation
+      Diploma Mechanical Apprentice Supported daily preventive maintenance on high-pressure mud pumps.
+      PROJECTS
+      Mobile Jib Crane
+      Designed a flexible lifting device.
+      EDUCATION
+      B.E. Mechanical Engineering Gokul Global University 7.30 CGPA June 2026
+      Diploma, Mechanical Engineering Gokul Global University 7.68 CGPA May 2023
+      ADDITIONAL INFORMATION
+      Languages: Gujarati, Hindi, English
+      AREAS OF INTEREST
+       • Production
+      HOBBIES
+       • Volleyball"""
+        
+        res = _parse_and_validate_resume_json("", raw_fallback=sample_text)
+        cand = res["candidate"]
+        self.assertEqual(cand["personal_information"]["full_name"], "Abhaysinh Rajput")
+        self.assertEqual(cand["personal_information"]["job_title"], "Mechanical Engineer")
+        self.assertEqual(cand["personal_information"]["email"], "rajputabhay2446@gmail.com")
+        self.assertEqual(cand["personal_information"]["phone"], "9313690253")
+        self.assertEqual(cand["personal_information"]["location"]["city"], "Siddhapur")
+        self.assertEqual(cand["personal_information"]["location"]["state"], "Gujarat")
+        self.assertEqual(cand["personal_information"]["location"]["postal_code"], "384151")
+        self.assertTrue(len(cand["work_experience"]) >= 1)
+        self.assertTrue(len(cand["education"]) >= 1)
+        self.assertTrue(len(cand["projects"]) >= 1)
+        self.assertTrue(len(cand["languages"]) >= 3)
+        self.assertIn("structured_data", res)
+
     def test_extract_endpoint_unauthorized(self):
         # Attempt without auth token -> 401
         res = self.client.post("/api/extract-json")
