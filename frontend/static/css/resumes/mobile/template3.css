@@ -30,10 +30,9 @@
 ========================================= */
 
 .banner {
+  background: #e6ebdf;
   padding: 16px 14px;
-
   gap: 12px;
-
   align-items: center;
 }
 
@@ -41,11 +40,8 @@
 .placeholder-photo {
   width: 58px;
   height: 58px;
-
   min-width: 58px;
-
   border-radius: 10px;
-
   border-width: 2px;
 }
 
@@ -63,19 +59,16 @@
   white-space: pre-line;
   font-size: 18px;
   line-height: 1.1;
-
+  color: #2f3f34;
   letter-spacing: 0.2px;
-
   word-break: break-word;
 }
 
 .title {
   margin-top: 4px;
-
   font-size: 8px;
-
+  color: #666666;
   line-height: 1.3;
-
   letter-spacing: 0.5px;
 }
 
@@ -86,12 +79,10 @@
 .content {
   display: flex;
   flex-direction: row !important;
-
   gap: 10px;
-
   padding: 12px 14px;
-
   flex: 1;
+  color: #222222;
 }
 
 /* =========================================
@@ -102,10 +93,9 @@
   width: 35% !important;
   min-width: 35% !important;
   max-width: 35% !important;
-
   padding-right: 8px;
-
   border-right: 1px solid #efe6da;
+  color: #222222;
 }
 
 /* =========================================
@@ -117,8 +107,8 @@
   min-width: 65% !important;
   max-width: 65% !important;
   flex: 1 !important;
-
   padding-left: 8px;
+  color: #222222;
 }
 
 /* =========================================
@@ -131,12 +121,11 @@
 
 .sec-title {
   font-size: 8px;
-
+  color: #7b5a2b;
   margin-bottom: 6px;
-
   letter-spacing: 0.8px;
-
   line-height: 1.3;
+  font-weight: 700;
 }
 
 /* =========================================
@@ -147,11 +136,9 @@
 .skill-list li,
 .lang-list li {
   font-size: 7px;
-
   line-height: 1.4;
-
   margin: 4px 0;
-
+  color: #333333;
   word-break: break-word;
 }
 
@@ -166,10 +153,9 @@
 
 .summary {
   font-size: 7px;
-
   line-height: 1.45;
-
   margin-bottom: 10px;
+  color: #333333;
 }
 
 .summary div,
@@ -177,6 +163,7 @@
 .summary li {
   font-size: 7px !important;
   line-height: 1.45 !important;
+  color: #333333;
 }
 
 /* =========================================
@@ -189,19 +176,15 @@
 
 .edu-title {
   font-size: 8px;
-
   line-height: 1.35;
-
   font-weight: 700;
-
-  color: var(--accent);
+  color: #7b5a2b;
 }
 
 .school {
   font-size: 7px;
-
   line-height: 1.35;
-
+  color: #222222;
   margin-top: 2px;
 }
 
@@ -215,17 +198,17 @@
 
 .exp-title {
   font-size: 8px;
-
   line-height: 1.35;
-
+  color: #7b5a2b;
+  font-weight: 700;
   margin-bottom: 3px;
 }
 
 .exp-company {
   font-size: 7px;
-
   line-height: 1.35;
-
+  color: #222222;
+  font-weight: 600;
   margin-bottom: 3px;
 }
 
@@ -234,8 +217,8 @@
 .exp-body li,
 .exp-body div {
   font-size: 7px !important;
-
   line-height: 1.45 !important;
+  color: #333333;
 }
 
 /* =========================================

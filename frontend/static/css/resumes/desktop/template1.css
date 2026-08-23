@@ -4,21 +4,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;800&display=swap');
 
 /* ===============================
-   CSS Variables
+   Template 1 Design Colors
 =============================== */
-:root {
-  --primary: #2f5970;
-  --secondary: #eef4f7;
-  --text-color: #222;
-  --muted: #7d8892;
-  --white: #fff;
-  --shadow-light: rgba(0, 0, 0, 0.06);
-  --shadow-medium: rgba(0, 0, 0, 0.12);
-  --shadow-strong: rgba(0, 0, 0, 0.18);
-
-  --thumb-width: 110px;
-  --thumb-height: 130px;
-  --gap: 14px;
+.page[data-resume-root],
+[data-resume-root].page {
+  --t1-primary: #2f5970;
+  --t1-secondary: #eef4f7;
+  --t1-text: #222222;
+  --t1-muted: #7d8892;
+  --t1-white: #ffffff;
 }
 
 /* ===============================
@@ -28,33 +22,18 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Roboto', Arial, sans-serif;
-  margin: 0;
-  padding: 40px 20px;
-  display: flex;
-  justify-content: center;
-  line-height: 1.5;
-  color: var(--text-color);
-  position: relative;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Background Overlay for Depth */
-
 /* ===============================
    Resume Page Layout
 =============================== */
 .page {
   width: 210mm;
   min-height: 297mm;
-  background: var(--white);
+  background: #ffffff;
+  color: #222222;
   display: flex;
   overflow: hidden;
   border-radius: 8px;
-  box-shadow: 0 10px 30px var(--shadow-light);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
 }
 
 /* ===============================
@@ -62,8 +41,8 @@ body {
 =============================== */
 .sidebar {
   width: 78mm;
-  background: var(--primary);
-  color: var(--white);
+  background: #2f5970;
+  color: #ffffff;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -75,7 +54,7 @@ body {
   width: 130px;
   height: 130px;
   border-radius: 50%;
-  background: var(--white);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,7 +72,7 @@ body {
 .photo-placeholder {
   font-size: 32px;
   font-weight: 800;
-  color: var(--primary);
+  color: #2f5970;
 }
 
 .name {
@@ -103,6 +82,7 @@ body {
   text-transform: uppercase;
   white-space: pre-line;
   word-spacing: 100vw;
+  color: #ffffff;
 }
 
 .role {
@@ -111,6 +91,7 @@ body {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   opacity: 0.9;
+  color: #ffffff;
 }
 
 hr {
@@ -124,6 +105,7 @@ hr {
   letter-spacing: 1px;
   margin-bottom: 8px;
   font-weight: 700;
+  color: #ffffff;
 }
 
 .side-list {
@@ -134,6 +116,7 @@ hr {
 .side-list li {
   font-size: 13px;
   margin-bottom: 8px;
+  color: #ffffff;
 }
 
 .side-list li::before {
@@ -146,6 +129,7 @@ hr {
 .content {
   flex: 1;
   padding: 28px 36px;
+  color: #222222;
 }
 
 .section {
@@ -155,7 +139,7 @@ hr {
 .section h2 {
   font-size: 16px;
   font-weight: 700;
-  color: var(--primary);
+  color: #2f5970;
   border-bottom: 1px solid rgba(47, 89, 112, 0.3);
   padding-bottom: 6px;
   margin-top: 0;
@@ -170,16 +154,22 @@ hr {
 
 .job-title {
   font-weight: 700;
+  color: #222222;
+}
+
+.job-company {
+  color: #444444;
 }
 
 .job-desc {
   padding-left: 14px;
-  border-left: 2px solid var(--secondary);
+  border-left: 2px solid #eef4f7;
   margin-top: 6px;
+  color: #333333;
 }
 
 .muted {
-  color: var(--muted);
+  color: #7d8892;
   font-size: 13px;
 }
 

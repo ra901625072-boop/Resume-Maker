@@ -1,10 +1,7 @@
 /* ===============================
-   Root Variables
+   Template 2 Design Tokens
 =============================== */
 :root {
-  --accent: #2f5363;
-  --accent-dark: #254650;
-  --muted: #6b6f75;
   --sidebar-width: 300px;
   --gutter: 32px;
   --page-width: 210mm;
@@ -33,30 +30,13 @@ body {
 }
 
 /* ===============================
-   Body
-=============================== */
-body {
-  font-family: "Open Sans", Arial, sans-serif;
-  color: #222;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  display: flex;
-  justify-content: center;
-  padding: 40px 20px;
-  position: relative;
-  min-height: 100vh;
-}
-
-/* Background Overlay for Depth */
-
-/* ===============================
    Page Container (A4)
 =============================== */
 .page {
   width: var(--page-width);
   min-height: var(--page-height);
   background: #ffffff;
+  color: #222222;
   display: flex;
   flex-direction: column;
   font-size: 13px;
@@ -67,8 +47,8 @@ body {
    Header
 =============================== */
 .header {
-  background: linear-gradient(180deg, var(--accent), var(--accent-dark));
-  color: #fff;
+  background: linear-gradient(180deg, #2f5363, #254650);
+  color: #ffffff;
   padding: 26px 28px;
   display: flex;
   gap: 20px;
@@ -105,6 +85,7 @@ body {
   font-size: 30px;
   margin-bottom: 6px;
   letter-spacing: -0.5px;
+  color: #ffffff;
 }
 
 .title {
@@ -112,6 +93,7 @@ body {
   opacity: 0.95;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  color: #ffffff;
 }
 
 /* ===============================
@@ -123,7 +105,7 @@ body {
   gap: var(--gutter);
   padding: 22px 28px;
   flex: 1;
-  /* ensure stacking context for pseudo lines if needed */
+  color: #222222;
   position: relative;
 }
 
@@ -131,10 +113,12 @@ body {
   width: var(--sidebar-width);
   border-right: 2px solid #e6e8ea;
   padding-right: 18px;
+  color: #222222;
 }
 
 .main {
   flex: 1;
+  color: #222222;
 }
 
 /* ===============================
@@ -146,7 +130,7 @@ body {
 
 .block h4 {
   font-size: 14px;
-  color: var(--accent-dark);
+  color: #254650;
   font-weight: 700;
   margin-bottom: 8px;
   border-bottom: 2px solid #e6e8ea;
@@ -157,6 +141,7 @@ body {
 .contact .item {
   font-size: 13px;
   margin: 9px 0;
+  color: #333333;
 }
 
 .list {
@@ -166,6 +151,7 @@ body {
 .list li {
   font-size: 13px;
   margin: 9px 0;
+  color: #333333;
 }
 
 /* ===============================
@@ -177,7 +163,7 @@ body {
 
 .section h3 {
   font-size: 18px;
-  color: var(--accent-dark);
+  color: #254650;
   margin-bottom: 10px;
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 6px;
@@ -194,19 +180,20 @@ body {
 .exp-years {
   width: 96px;
   font-weight: 700;
-  color: var(--muted);
+  color: #6b6f75;
 }
 
 .edu-body .deg,
 .exp-body .role {
   font-weight: 600;
   font-size: 14px;
+  color: #222222;
 }
 
 .edu-body .inst,
 .exp-body .company {
   font-size: 13px;
-  color: #666;
+  color: #666666;
 }
 
 /* ===============================
@@ -214,7 +201,7 @@ body {
 =============================== */
 .footer-strip {
   height: 26px;
-  background: linear-gradient(180deg, var(--accent-dark), var(--accent));
+  background: linear-gradient(180deg, #254650, #2f5363);
 }
 
 /* ===============================

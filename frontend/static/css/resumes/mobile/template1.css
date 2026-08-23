@@ -321,6 +321,7 @@ IMPORTANT FIX
 
 .job-desc {
     padding-left: 10px;
-    border-left: 2px solid var(--secondary);
+    border-left: 2px solid #eef4f7;
     margin-top: 4px;
+    color: #333333;
 }

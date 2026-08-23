@@ -12,13 +12,23 @@
   color: inherit;
 }
 
-/* Global color fix to prevent body.template-shell (#fff) from cascading into the white resume pages */
-.page, .resume-page, .container, .resume {
-  color: var(--text-color, #222);
+/* Global color fix to prevent body.template-shell theme colors from cascading into resume pages */
+[data-resume-root],
+.page,
+.resume-page,
+.wrap,
+.container,
+.resume {
+  color: #222222;
 }
 
-.content, .right {
-  color: var(--text-color, #222);
+[data-resume-root] .content,
+[data-resume-root] .right,
+[data-resume-root] .main,
+[data-resume-root] .body,
+[data-resume-root] .left,
+[data-resume-root] .sidebar:not([class*="sidebar-dark"]):not([style*="background"]):not([class*="sidebar"]) {
+  color: #222222;
 }
 
 /* ===== TEMPLATE SCROLL SIDEBAR ===== */

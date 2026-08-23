@@ -1,10 +1,7 @@
 /* ===============================
-   Root Variables
+   Template 3 Design Tokens
 =============================== */
 :root {
-  --banner: #e6ebdf;
-  --accent: #7b5a2b;
-  --muted: #666;
   --gap: 28px;
   --sidebar-width: 280px;
   --page-w: 210mm;
@@ -31,66 +28,24 @@ body {
 }
 
 /* ===============================
-   Body
-=============================== */
-body {
-  font-family: "Open Sans", Arial, sans-serif;
-  color: #222;
-  display: flex;
-  justify-content: center;
-  padding: 40px 20px;
-  position: relative;
-  min-height: 100vh;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
-
-/* Background Overlay for Depth */
-
-/* ===============================
-   Template Thumbnails (fixed)
-=============================== */
-:root {
-  --thumb-width: 110px;
-  --thumb-height: 130px;
-  --gap: 14px;
-}
-
-/* Container */
-
-/* Track */
-
-/* Thumbnails */
-
-
-/* Images */
-
-
-
-
-
-
-
-
-/* ===============================
    Resume Wrapper (A4)
 =============================== */
 .wrap {
   width: var(--page-w);
   min-height: var(--page-h);
-  background: #fff;
+  background: #ffffff;
+  color: #222222;
   display: flex;
   flex-direction: column;
   overflow: visible;
-  /* ðŸ”¥ REQUIRED FOR MULTI-PAGE */
+  /* REQUIRED FOR MULTI-PAGE */
 }
-
 
 /* ===============================
    Banner
 =============================== */
 .banner {
-  background: var(--banner);
+  background: #e6ebdf;
   padding: 34px var(--padding);
   display: flex;
   align-items: flex-end;
@@ -114,7 +69,7 @@ body {
 .title {
   margin-top: 6px;
   font-weight: 600;
-  color: var(--muted);
+  color: #666666;
   letter-spacing: 1px;
 }
 
@@ -151,17 +106,19 @@ body {
   gap: var(--gap);
   padding: 26px var(--padding);
   flex: 1;
+  color: #222222;
 }
 
 .left {
   width: var(--sidebar-width);
-  /* border-right: 3px solid #efe6da; */
   padding-right: 22px;
+  color: #222222;
 }
 
 .right {
   flex: 1;
   padding-left: 24px;
+  color: #222222;
 }
 
 /* ===============================
@@ -172,7 +129,7 @@ body {
 }
 
 .sec-title {
-  color: var(--accent);
+  color: #7b5a2b;
   font-weight: 700;
   letter-spacing: 1px;
   font-size: 13px;
@@ -186,19 +143,20 @@ body {
 .skill-list li,
 .lang-list li {
   font-size: 13px;
-  color: #333;
+  color: #333333;
   margin: 9px 0;
 }
 
 .edu-item,
 .exp-item {
   font-size: 13px;
-  color: #333;
+  color: #333333;
   margin: 6px 0;
 }
 
 .edu-item .school {
   font-weight: 600;
+  color: #222222;
 }
 
 .skill-list,
@@ -214,7 +172,7 @@ body {
 }
 
 .exp-title {
-  color: var(--accent);
+  color: #7b5a2b;
   font-weight: 700;
   margin-bottom: 6px;
 }
@@ -222,10 +180,12 @@ body {
 .exp-company {
   font-weight: 600;
   margin-bottom: 6px;
+  color: #222222;
 }
 
 .exp-body {
   line-height: 1.5;
+  color: #333333;
 }
 
 /* ===============================
@@ -235,6 +195,7 @@ body {
   font-size: 13px;
   line-height: 1.5;
   margin-bottom: 18px;
+  color: #333333;
 }
 
 /* ===============================
