@@ -24,11 +24,34 @@
   border-radius: var(--radius-2xl);
   width: 100%;
   max-width: 480px;
+  max-height: calc(100vh - 48px);
   box-shadow: var(--glass-shadow);
-  overflow: hidden;
+  overflow-y: auto;
   position: relative;
   animation: modalEnter 0.35s var(--ease-spring) both;
   transform-origin: center center;
+}
+
+@media (max-width: 600px) {
+  .modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .modal-card {
+    max-width: 100%;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-radius: 24px 24px 0 0;
+    max-height: 85vh;
+    animation: modalSheetUp 0.35s var(--ease-spring) both;
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+  }
+
+  @keyframes modalSheetUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
 }
 
 html[data-theme="light"] .modal-overlay {
@@ -65,14 +88,22 @@ html[data-theme="light"] .modal-card {
   font-size: 1.5rem;
   cursor: pointer;
   line-height: 1;
-  padding: 4px 8px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--radius-sm);
   transition: color 0.2s, transform 0.2s var(--ease-spring);
+  -webkit-tap-highlight-color: transparent;
 }
 
-.modal-close-btn:hover {
+.modal-close-btn:hover,
+.modal-close-btn:active {
   color: var(--text-main);
-  transform: scale(1.15) rotate(90deg);
+  transform: scale(1.1);
 }
 
 .modal-body {
@@ -89,6 +120,7 @@ html[data-theme="light"] .modal-card {
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 /* ===== TOAST CONTAINER ===== */

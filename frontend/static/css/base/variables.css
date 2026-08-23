@@ -229,18 +229,26 @@
   --input-focus-bg: rgba(255, 255, 255, 0.05);
   --input-focus-border: #6366f1;
 
+  /* ===== TOUCH TARGETS & MOBILE ERGONOMICS ===== */
+  --touch-target-min: 44px;
+  --touch-target-large: 48px;
+  --safe-top: max(0px, env(safe-area-inset-top, 0px));
+  --safe-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+  --safe-left: max(0px, env(safe-area-inset-left, 0px));
+  --safe-right: max(0px, env(safe-area-inset-right, 0px));
+
   /* ===== LAYOUT ===== */
   --section-padding: 4rem;
   --container-max-width: 1240px;
 
   /* ===== TEMPLATE LAYOUT DIMENSIONS ===== */
   --g: 16px;
-  --mobile-navbar-height: 72px;
-  --mobile-template-height: 128px;
-  --mobile-download-height: 54px;
-  --mobile-bottom-space: 96px;
-  --mobile-header-gap: 14px;
-  --mobile-radius: 20px;
+  --mobile-navbar-height: 64px;
+  --mobile-template-height: 120px;
+  --mobile-download-height: 52px;
+  --mobile-bottom-space: 90px;
+  --mobile-header-gap: 12px;
+  --mobile-radius: 16px;
   --mobile-bg: #07090e;
   --mobile-glass: linear-gradient(180deg, rgba(13, 17, 28, 0.96), rgba(7, 9, 14, 0.92));
   --mobile-border: 1px solid rgba(255, 255, 255, 0.08);
@@ -260,8 +268,13 @@
 @media (max-width: 768px) {
   :root {
     --card-radius: 16px;
-    --input-radius: 10px;
+    --input-radius: 12px;
+    --btn-radius: 12px;
     --section-padding: 1.5rem;
+    --space-5: 16px;
+    --space-6: 24px;
+    --space-7: 32px;
+    --space-8: 48px;
   }
 }
 

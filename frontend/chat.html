@@ -18,9 +18,11 @@
     <link rel="stylesheet" href="/static/css/base/background.css">
     <!-- 5. Components -->
     <link rel="stylesheet" href="/static/css/components/header.css">
+    <link rel="stylesheet" href="/static/css/components/buttons.css">
+    <link rel="stylesheet" href="/static/css/components/modals.css">
     <!-- 6. Page-specific -->
     <link rel="stylesheet" href="/static/css/pages/chat-desktop.css">
-    <link rel="stylesheet" media="screen and (max-width: 500px)" href="/static/css/pages/chat-mobile.css">
+    <link rel="stylesheet" media="screen and (max-width: 768px)" href="/static/css/pages/chat-mobile.css">
     <!-- 7. Utilities -->
     <link rel="stylesheet" href="/static/css/utilities/utilities.css">
 
@@ -381,8 +383,8 @@
             if (chatHistory.length === 0) return;
             const confirmToast = document.createElement('div');
             confirmToast.className = 'modal-card fade-up';
-            confirmToast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--surface-paper);border:1px solid var(--border-strong);color:var(--text-main);padding:14px 22px;border-radius:14px;font-size:var(--text-sm);font-weight:600;z-index:9999;display:flex;gap:14px;align-items:center;box-shadow:var(--glass-shadow);backdrop-filter:blur(16px);';
-            confirmToast.innerHTML = `<span>Clear all chat history?</span><button type="button" onclick="doClearChat();this.closest('div').remove();" class="remove-btn" style="padding:6px 14px;font-size:var(--text-xs);border-radius:var(--radius-sm);">Clear</button><button type="button" onclick="this.closest('div').remove();" class="modal-close-btn" style="font-size:1.2rem;line-height:1;">&times;</button>`;
+            confirmToast.style.cssText = 'position:fixed;bottom:calc(70px + env(safe-area-inset-bottom, 16px));left:50%;transform:translateX(-50%);background:var(--surface-paper);border:1px solid var(--border-strong);color:var(--text-main);padding:12px 18px;border-radius:14px;font-size:var(--text-sm);font-weight:600;z-index:9999;display:flex;gap:12px;align-items:center;box-shadow:var(--glass-shadow);backdrop-filter:blur(16px);width:max-content;max-width:calc(100vw - 32px);box-sizing:border-box;';
+            confirmToast.innerHTML = `<span>Clear chat history?</span><button type="button" onclick="doClearChat();this.closest('div').remove();" class="remove-btn" style="padding:6px 14px;font-size:var(--text-xs);border-radius:var(--radius-sm);">Clear</button><button type="button" onclick="this.closest('div').remove();" class="modal-close-btn" style="font-size:1.2rem;line-height:1;width:32px;height:32px;min-width:32px;min-height:32px;">&times;</button>`;
             document.body.appendChild(confirmToast);
             setTimeout(() => { if (confirmToast.parentNode) confirmToast.remove(); }, 6000);
         }

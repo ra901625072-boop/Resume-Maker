@@ -147,6 +147,41 @@ html[data-theme="light"] .bento-card {
   }
 }
 
+@media (max-width: 768px) {
+  .adaptive-card,
+  .glass-card {
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+  }
+
+  .bento-grid {
+    gap: 1rem;
+  }
+
+  .bento-card {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .bento-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: var(--radius-md);
+  }
+
+  .bento-title {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .bento-card {
+    padding: 1.25rem;
+  }
+}
+
 /* ===== HOME PAGE CAROUSEL CARD ===== */
 .template-card {
   width: 250px;

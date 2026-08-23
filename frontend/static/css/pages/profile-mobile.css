@@ -1,159 +1,174 @@
 /* ==========================================================
-   WISAXIS RESUME MAKER - MOBILE RESPONSIVE PROFILE
+   WISAXIS RESUME MAKER — PROFILE & RESUME HUB MOBILE STYLES (2026 SaaS)
+   Profile Hero Banner, Resume History Cards, 4-Action Grid, Modals.
    ========================================================== */
 
-
-.history-grid {
-  grid-template-columns: 1fr;
+/* Main Container */
+.profile-container {
+  padding: calc(var(--mobile-navbar-height, 64px) + 1rem) var(--space-3) calc(3rem + env(safe-area-inset-bottom, 16px)) !important;
+  max-width: 100% !important;
 }
 
-/* Profile page overrides */
-html body .profile-container,
-html body .profile-card {
-  padding: var(--space-4);
-  margin: var(--space-2) auto;
-  border-radius: var(--card-radius);
-}
-
-html body .profile-stat {
-  padding-left: 0;
-  padding-top: var(--space-3);
-  border-left: none;
-  border-top: 1px solid var(--border-subtle);
-  width: 100%;
-}
-
-html body .resume-actions {
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-2);
-}
-
-html body .clone-row {
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-html body .clone-row select,
-html body .clone-row .btn-duplicate {
-  width: 100%;
-  min-height: 48px;
-}
-
-
-@media (max-width: 540px) {
-  .profile-hero {
-    flex-direction: column;
-    text-align: center;
-  }
-  .profile-stat {
-    border-left: none;
-    border-top: 1px solid var(--border-medium);
-    padding-left: 0;
-    padding-top: var(--space-3);
-    width: 100%;
-  }
-}
-
-/* ==========================================================
-   JSON Features Mobile Optimizations
-   ========================================================== */
-html body .json-features-container {
-  padding: var(--space-2) var(--space-4) var(--space-6) !important;
-  box-sizing: border-box !important;
-}
-
-html body .page-header {
-  margin-bottom: var(--space-4) !important;
-  box-sizing: border-box !important;
-}
-
-html body .page-title {
-  font-size: 1.75rem !important;
-}
-
-html body .page-subtitle {
-  font-size: 0.85rem !important;
-}
-
-html body .json-utilities {
-  padding: var(--space-5) var(--space-4) !important;
-  margin-top: var(--space-4) !important;
-  border-radius: 16px !important;
-  box-sizing: border-box !important;
-}
-
-html body .json-utilities h2 {
-  font-size: 1.4rem !important;
-  margin-bottom: var(--space-2) !important;
-}
-
-html body .json-utilities p {
-  margin-bottom: var(--space-4) !important;
-  font-size: var(--text-sm) !important;
-}
-
-html body .upload-zone {
-  padding: var(--space-6) var(--space-4) !important;
-  margin-bottom: var(--space-5) !important;
-  gap: var(--space-3) !important;
-  border-radius: 14px !important;
-  box-sizing: border-box !important;
-  width: 100% !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-html body .upload-zone svg {
-  width: 40px !important;
-  height: 40px !important;
-}
-
-html body .upload-text {
-  font-size: var(--text-sm) !important;
-  text-align: center !important;
-}
-
-html body .upload-hint {
-  font-size: var(--text-xs) !important;
-  text-align: center !important;
-}
-
-html body .process-btn {
-  width: 100% !important;
-  min-width: unset !important;
-  padding: var(--space-3) var(--space-4) !important;
-  font-size: var(--text-sm) !important;
-  border-radius: 12px !important;
-  box-sizing: border-box !important;
-}
-
-html body .schema-card {
-  padding: var(--space-4) !important;
-  margin-top: var(--space-4) !important;
-  border-radius: 16px !important;
-  box-sizing: border-box !important;
-}
-
-html body .schema-header {
+/* ===== PROFILE HERO BANNER ===== */
+.profile-hero {
   flex-direction: column !important;
-  align-items: flex-start !important;
-  gap: var(--space-2) !important;
-  padding-bottom: var(--space-2) !important;
-  box-sizing: border-box !important;
+  text-align: center !important;
+  padding: 1.5rem 1.25rem !important;
+  gap: 1.25rem !important;
+  border-radius: var(--radius-xl) !important;
+  margin-bottom: 2rem !important;
 }
 
-html body .schema-title {
+.profile-avatar {
+  width: 72px !important;
+  height: 72px !important;
+  min-width: 72px !important;
+  font-size: 1.75rem !important;
+  margin: 0 auto !important;
+}
+
+.profile-name {
+  font-size: 1.5rem !important;
+  margin-bottom: 4px !important;
+}
+
+.profile-email {
+  font-size: var(--text-xs) !important;
+}
+
+.profile-actions-bar {
+  justify-content: center !important;
+  gap: 8px !important;
+  margin-top: 1rem !important;
+}
+
+.btn-profile-pill {
+  min-height: 38px !important;
+  padding: 0 14px !important;
+  font-size: 12px !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.btn-profile-pill:active {
+  transform: scale(0.96) !important;
+}
+
+/* Symmetrical Stat Chips */
+.profile-hero-stats {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin-top: 0.5rem !important;
+}
+
+.profile-stat-item {
+  padding: 0.65rem 0.5rem !important;
+  min-width: unset !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.profile-stat-num {
+  font-size: 1.25rem !important;
+}
+
+.profile-stat-lbl {
+  font-size: 10px !important;
+}
+
+/* ===== RESUME HISTORY SECTION ===== */
+.section-header {
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 1.25rem !important;
+  gap: 12px !important;
+}
+
+.section-header h2 {
+  font-size: 1.35rem !important;
+}
+
+/* History Grid */
+.history-grid {
+  grid-template-columns: 1fr !important;
+  gap: 1.25rem !important;
+}
+
+/* Resume History Card */
+.resume-card {
+  padding: 1.25rem !important;
+  border-radius: var(--radius-lg) !important;
+}
+
+.resume-title {
+  font-size: 1.15rem !important;
+}
+
+.resume-subtitle {
+  font-size: var(--text-xs) !important;
+  margin-bottom: 1rem !important;
+}
+
+/* 2x2 Touch Action Grid */
+.resume-actions {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 8px !important;
+  margin-bottom: 0.85rem !important;
+}
+
+.btn-action {
+  flex-direction: row !important;
+  gap: 6px !important;
+  padding: 0.65rem 0.75rem !important;
+  min-height: 44px !important;
+  font-size: 12px !important;
+  border-radius: var(--radius-md) !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.btn-action:active {
+  transform: scale(0.96) !important;
+}
+
+.btn-action svg {
+  width: 15px !important;
+  height: 15px !important;
+}
+
+/* Clone / Duplicate Row */
+.clone-row {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 8px !important;
+}
+
+.clone-row select {
+  flex: 1 !important;
+  min-height: 42px !important;
+  padding: 0.5rem 0.75rem !important;
+  font-size: 13px !important;
+}
+
+.btn-duplicate {
+  min-height: 42px !important;
+  padding: 0 16px !important;
+  font-size: 12px !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  padding: 3rem 1.25rem !important;
+  border-radius: var(--radius-xl) !important;
+}
+
+.empty-title {
+  font-size: 1.4rem !important;
+}
+
+.empty-desc {
   font-size: var(--text-sm) !important;
 }
 
-html body .schema-badge {
-  font-size: 10px !important;
-  padding: 2px 8px !important;
-}
-
-html body .code-block {
-  padding: var(--space-3) !important;
-  font-size: 0.75rem !important;
-  border-radius: 10px !important;
-  box-sizing: border-box !important;
-}

@@ -1,0 +1,298 @@
+/* ==========================================================
+   WISAXIS RESUME MAKER — AI JSON EXTRACTOR MOBILE STYLES (2026 SaaS)
+   Touch dropzone, segmented tabs, responsive IDE viewer, cards.
+   ========================================================== */
+
+/* Main Container */
+.json-features-container {
+    padding: var(--space-3) var(--space-3) calc(3rem + env(safe-area-inset-bottom, 16px)) !important;
+    max-width: 100% !important;
+}
+
+/* ── Page Header ── */
+.page-header {
+    margin-bottom: 1.5rem !important;
+}
+
+.ai-model-badge {
+    font-size: 11px !important;
+    padding: 4px 12px !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.page-title {
+    font-size: 1.6rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.page-subtitle {
+    font-size: var(--text-xs) !important;
+    line-height: 1.5 !important;
+    margin-bottom: 12px !important;
+}
+
+.header-feature-pills {
+    gap: 6px !important;
+    margin-top: 10px !important;
+}
+
+.header-pill {
+    font-size: 10px !important;
+    padding: 3px 10px !important;
+}
+
+/* ── Upload Card ── */
+.ai-upload-card {
+    padding: 1.25rem !important;
+    border-radius: var(--radius-lg) !important;
+    margin-bottom: 1.25rem !important;
+}
+
+.upload-controls-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+}
+
+.mode-selector-wrap {
+    justify-content: space-between !important;
+    width: 100% !important;
+}
+
+.mode-select {
+    flex: 1 !important;
+    min-height: 42px !important;
+    font-size: 13px !important;
+}
+
+/* Upload Zone */
+.upload-zone {
+    padding: 28px 16px !important;
+    border-radius: var(--radius-md) !important;
+}
+
+.upload-icon-wrap {
+    width: 52px !important;
+    height: 52px !important;
+    font-size: 1.25rem !important;
+    margin-bottom: 10px !important;
+}
+
+.upload-text {
+    font-size: 0.95rem !important;
+}
+
+.upload-hint {
+    font-size: 11px !important;
+    margin-bottom: 12px !important;
+}
+
+.file-type-badges {
+    gap: 6px !important;
+}
+
+.file-type-badge {
+    font-size: 10px !important;
+    padding: 3px 8px !important;
+}
+
+.paste-tip {
+    display: none !important; /* Hide keyboard shortcut on touch mobile */
+}
+
+/* File Preview Strip */
+.file-preview-strip {
+    padding: 10px 14px !important;
+    gap: 10px !important;
+    border-radius: var(--radius-md) !important;
+}
+
+.file-preview-strip .fp-icon {
+    font-size: 1.5rem !important;
+}
+
+.file-preview-strip .fp-name {
+    font-size: var(--text-xs) !important;
+}
+
+.fp-remove {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+}
+
+/* Extract Button */
+.extract-btn {
+    min-height: 48px !important;
+    font-size: var(--text-sm) !important;
+    padding: 12px 20px !important;
+    border-radius: var(--radius-md) !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.extract-btn:active {
+    transform: scale(0.97) !important;
+}
+
+/* ── Result Section ── */
+.result-section {
+    margin-top: 1.5rem !important;
+}
+
+.result-card {
+    border-radius: var(--radius-lg) !important;
+}
+
+.result-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 14px 16px !important;
+    gap: 12px !important;
+}
+
+.result-header h3 {
+    font-size: var(--text-sm) !important;
+}
+
+.result-header-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+}
+
+.result-header-actions button,
+.result-header-actions a {
+    min-height: 42px !important;
+    justify-content: center !important;
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+    border-radius: var(--radius-md) !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.btn-action-primary:active,
+.btn-action-builder:active {
+    transform: scale(0.96) !important;
+}
+
+/* ── Symmetrical Result View Tabs ── */
+.result-view-tabs {
+    padding: 4px !important;
+    gap: 4px !important;
+}
+
+.view-tab {
+    padding: 10px 8px !important;
+    font-size: 11px !important;
+    min-height: 40px !important;
+    gap: 4px !important;
+    flex-direction: column !important;
+}
+
+.view-tab-icon {
+    font-size: 12px !important;
+}
+
+.view-tab-text {
+    font-size: 10px !important;
+}
+
+.view-tab-badge {
+    display: none !important;
+}
+
+.view-panel {
+    padding: 14px 12px !important;
+}
+
+/* ── IDE Code Editor Mobile ── */
+.json-code-wrap {
+    border-radius: var(--radius-md) !important;
+}
+
+.json-code-toolbar {
+    padding: 8px 12px !important;
+    font-size: 10px !important;
+}
+
+.editor-body {
+    max-height: 400px !important;
+}
+
+.editor-gutter {
+    width: 36px !important;
+    font-size: 11px !important;
+    padding: 12px 6px 12px 0 !important;
+}
+
+.json-code-block {
+    padding: 12px !important;
+    font-size: 12px !important;
+}
+
+/* ── Raw Text OCR Inspector Mobile ── */
+.rawtext-wrap {
+    border-radius: var(--radius-md) !important;
+}
+
+.rawtext-toolbar {
+    padding: 10px 14px !important;
+}
+
+.rawtext-body {
+    padding: 14px !important;
+    max-height: 400px !important;
+}
+
+.rawtext-content {
+    font-size: 12.5px !important;
+}
+
+/* ── Visual Dashboard Grid Mobile ── */
+.visual-dashboard-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+}
+
+.visual-column {
+    gap: 14px !important;
+}
+
+.visual-card {
+    padding: 14px !important;
+    border-radius: var(--radius-md) !important;
+}
+
+.visual-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+}
+
+.visual-item {
+    padding: 8px 12px !important;
+}
+
+/* ── Schema Card Mobile ── */
+.schema-card {
+    padding: 16px 14px !important;
+    border-radius: var(--radius-lg) !important;
+    margin-top: 1.5rem !important;
+}
+
+.schema-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+}
+
+.schema-title {
+    font-size: var(--text-sm) !important;
+}
+
+.code-block {
+    padding: 12px !important;
+    font-size: 11px !important;
+    border-radius: var(--radius-md) !important;
+}

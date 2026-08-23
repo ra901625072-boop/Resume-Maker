@@ -350,22 +350,72 @@ html[data-theme="light"] .template-section {
 /* ===== RESPONSIVE BREAKPOINTS ===== */
 @media (max-width: 768px) {
   .hero {
-    padding: 3.5rem var(--space-4) 3rem;
+    padding: 2.75rem var(--space-4) 2.25rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 2.75rem);
+    margin-bottom: 1rem;
+  }
+
+  .hero-lead {
+    font-size: 0.95rem;
+    margin-bottom: 1.75rem;
+    line-height: 1.6;
   }
 
   .hero-actions {
     flex-direction: column;
     width: 100%;
-    max-width: 320px;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 100%;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions .cta-primary,
+  .hero-actions .cta-secondary {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .trust-badges {
+    gap: 0.5rem;
+  }
+
+  .trust-badge {
+    font-size: 11px;
+    padding: 4px 10px;
   }
 
   .template-section {
-    padding: 4rem 0;
+    padding: 3.5rem 0;
+  }
+
+  .section-header {
+    margin-bottom: 2.25rem;
+    padding: 0 var(--space-4);
+  }
+
+  .section-title {
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+  }
+
+  .section-desc {
+    font-size: var(--text-sm);
   }
 
   .features-section {
-    padding: 4rem var(--space-4);
+    padding: 3.5rem var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 2rem var(--space-3) 1.75rem;
+  }
+
+  .hero-badge {
+    font-size: 11px;
+    padding: 4px 14px;
   }
 }

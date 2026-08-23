@@ -136,7 +136,7 @@ html[data-theme="light"] .footer-brand h4 span {
 /* ===== MOBILE FOOTER ===== */
 @media (max-width: 768px) {
   .app-footer {
-    padding: 3rem var(--space-4) 0;
+    padding: 2.5rem var(--space-4) calc(1.5rem + env(safe-area-inset-bottom, 0px));
   }
 
   .footer-top {
@@ -145,13 +145,37 @@ html[data-theme="light"] .footer-brand h4 span {
   }
 
   .footer-cols {
-    gap: 2.5rem;
+    gap: 2rem;
     width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-col a {
+    padding: 6px 0;
+    font-size: var(--text-sm);
   }
 
   .footer-bottom {
     flex-direction: column;
     text-align: center;
     gap: 1rem;
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+  }
+
+  .footer-bottom-links {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-bottom-links a {
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  .footer-cols {
+    grid-template-columns: 1fr;
   }
 }

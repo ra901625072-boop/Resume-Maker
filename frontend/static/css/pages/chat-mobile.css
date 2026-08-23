@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Wisaxis AI Resume Assistant Chat Stylesheet (Premium Redesign - Mobile)
+   WISAXIS AI RESUME ASSISTANT CHAT — MOBILE STYLES (2026 SaaS)
    ========================================================================== */
 
 /* Full mobile layout lock and viewport matching */
@@ -8,14 +8,16 @@ body.chat-page {
     position: fixed;
     width: 100%;
     height: 100vh;
+    height: 100dvh;
 }
 
 .chat-container {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
-    gap: 0.75rem;
-    padding: calc(70px + 0.5rem) 0.50rem 0.50rem; /* Clears fixed glass header perfectly */
+    gap: 0.5rem;
+    padding: calc(var(--mobile-navbar-height, 64px) + 0.5rem) 0.5rem calc(0.5rem + env(safe-area-inset-bottom, 0px));
     height: 100vh;
+    height: 100dvh;
     box-sizing: border-box;
 }
 
@@ -27,23 +29,24 @@ body.chat-page {
     flex-direction: row !important;
     overflow-x: auto !important;
     overflow-y: hidden !important;
-    padding: 0.2rem 0.5rem !important;
+    padding: 0.25rem 0.25rem !important;
     gap: 0.5rem !important;
     height: auto !important;
     border-radius: 0 !important;
     align-items: center !important;
     white-space: nowrap;
-    scrollbar-width: none; /* Hide scrollbar for clean visual aesthetic */
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 .chat-sidebar::-webkit-scrollbar {
-    display: none; /* Webkit browser scrollbar hiding */
+    display: none;
 }
 
 .sidebar-title,
 .assistant-info-box,
 .sidebar-section h4 {
-    display: none !important; /* Hide layout clutter to save space on mobile */
+    display: none !important;
 }
 
 .sidebar-section {
@@ -55,89 +58,86 @@ body.chat-page {
 
 .suggestion-pill {
     background: var(--surface-card);
-    border: 1px solid var(--glass-border);
-    padding: 0.55rem 0.95rem;
-    font-size: 0.76rem;
+    border: 1px solid var(--border-default);
+    padding: 0.5rem 0.95rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    border-radius: 20px; /* High rounding pill style for mobile touch targets */
+    border-radius: var(--radius-full);
     white-space: nowrap;
     display: inline-block;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-}
-
-.suggestion-pill::before {
-    display: none; /* Hide side-accent bars to optimize mobile width */
+    box-shadow: var(--shadow-sm);
+    min-height: 34px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .suggestion-pill:hover,
 .suggestion-pill:active {
-    transform: scale(0.96); /* Touch feedback bounce */
-    background: rgba(99, 102, 241, 0.06);
+    transform: scale(0.96);
+    background: var(--primary-light);
     border-color: var(--primary);
+    color: var(--primary);
 }
 
 /* Chat window mobile adaptation */
 .chat-window {
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     height: 100%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-sm);
 }
 
 .chat-header {
-    padding: 0.8rem 1rem;
-    background: var(--surface-card);
-    border-bottom: 1px solid var(--glass-border);
+    padding: 0.75rem 1rem;
+    background: var(--surface-header);
+    border-bottom: 1px solid var(--border-default);
 }
 
 .assistant-avatar {
     width: 36px;
     height: 36px;
-    border-radius: 10px;
-    font-size: 1rem;
-    background-image: url('/static/images/CSK.webp');
-    background-size: cover;
-    background-position: center;
+    border-radius: var(--radius-md);
+    font-size: 1.1rem;
 }
 
 .assistant-name {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 800;
 }
 
 .assistant-status {
-    font-size: 0.68rem;
+    font-size: 0.7rem;
 }
 
 .btn-clear-chat {
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     padding: 6px 12px;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
+    min-height: 34px;
 }
 
 /* Message pane bounds and scaling */
 .chat-messages {
-    padding: 1rem 0.85rem;
+    padding: 1rem 0.75rem;
     gap: 1.25rem;
 }
 
 .chat-bubble-wrap {
     max-width: 90%;
-    gap: 10px;
+    gap: 8px;
 }
 
 .bubble-icon {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    font-size: 0.82rem;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
 }
 
 .chat-bubble {
-    padding: 0.85rem 1.05rem;
-    font-size: 0.86rem;
+    padding: 0.85rem 1rem;
+    font-size: 0.88rem;
     line-height: 1.55;
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
 }
 
 .chat-bubble code {
@@ -147,40 +147,59 @@ body.chat-page {
 
 .chat-bubble pre {
     padding: 0.85rem;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     margin: 8px 0;
 }
 
 /* Action widgets position */
 .bubble-actions {
-    bottom: -20px;
+    bottom: -22px;
 }
 
 .btn-bubble-action {
-    padding: 1px 6px;
-    font-size: 0.64rem;
+    padding: 2px 8px;
+    font-size: 0.68rem;
+    min-height: 24px;
 }
 
 /* Input Area Float */
 .chat-input-area {
-    padding: 0.75rem 0.85rem;
-    border-top: 1px solid var(--glass-border);
+    padding: 0.75rem 0.75rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--border-default);
     background: var(--surface-paper);
 }
 
 .chat-form {
-    gap: 10px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.chat-input-wrapper {
+    flex: 1;
 }
 
 .chat-input {
-    padding: 12px 16px;
-    font-size: 0.88rem;
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 16px !important; /* Strictly 16px to prevent iOS auto-zoom */
     height: 46px;
-    border-radius: 12px;
+    border-radius: var(--radius-md);
+    box-sizing: border-box;
 }
 
 .chat-submit-btn {
     width: 46px;
     height: 46px;
-    border-radius: 12px;
+    min-width: 46px;
+    min-height: 46px;
+    border-radius: var(--radius-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.chat-submit-btn:active {
+    transform: scale(0.94);
 }

@@ -280,12 +280,46 @@ html[data-theme="light"] .form-input:focus {
 }
 
 @media (max-width: 500px) {
+  .auth-wrapper {
+    padding: calc(var(--mobile-navbar-height, 64px) + 1.25rem) var(--space-3) calc(2rem + env(safe-area-inset-bottom, 0px));
+  }
+
   .auth-card {
-    padding: 2rem 1.5rem;
+    padding: 1.75rem 1.25rem;
     border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
   }
   
   .auth-title {
     font-size: 1.5rem;
   }
+
+  .form-input {
+    font-size: 16px !important; /* Prevents iOS auto-zoom */
+    padding: 0.85rem 1rem 0.85rem 2.6rem;
+    min-height: var(--touch-target-large, 48px);
+  }
+
+  .pw-toggle-btn {
+    width: 44px;
+    height: 44px;
+    right: 4px;
+  }
+
+  .btn-auth-submit {
+    min-height: 50px;
+    font-size: 1rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+.auth-footer-simple {
+  padding: 1.5rem 1rem max(1.5rem, env(safe-area-inset-bottom, 16px));
+  text-align: center;
+}
+
+.auth-footer-simple p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
 }

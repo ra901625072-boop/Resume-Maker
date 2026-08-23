@@ -18,11 +18,13 @@
     <link rel="stylesheet" href="/static/css/base/background.css">
     <!-- 5. Components -->
     <link class="hdr-css" rel="stylesheet" href="/static/css/components/header.css">
+    <link rel="stylesheet" href="/static/css/components/footer.css">
     <link rel="stylesheet" href="/static/css/components/buttons.css">
     <link rel="stylesheet" href="/static/css/components/cards.css">
     <link rel="stylesheet" href="/static/css/components/modals.css">
     <!-- 6. Page specific -->
     <link rel="stylesheet" href="/static/css/pages/profile-desktop.css">
+    <link rel="stylesheet" media="screen and (max-width: 768px)" href="/static/css/pages/profile-mobile.css">
     <!-- 7. Utilities -->
     <link rel="stylesheet" href="/static/css/utilities/utilities.css">
 
@@ -32,62 +34,6 @@
     <script src="/static/js/core/auth-guard.js"></script>
     <script src="/static/js/core/api-client.js"></script>
     <script src="/static/js/core/theme-controller.js"></script>
-
-    <style>
-        .profile-hero-stats {
-            display: flex;
-            gap: 1.25rem;
-            flex-wrap: wrap;
-        }
-        .profile-stat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: var(--surface-2);
-            border: 1px solid var(--surface-border);
-            border-radius: 12px;
-            padding: 0.75rem 1.25rem;
-            min-width: 85px;
-        }
-        .profile-stat-num {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            font-family: var(--font-heading);
-        }
-        .profile-stat-lbl {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .profile-actions-bar {
-            display: flex;
-            gap: 10px;
-            margin-top: 0.85rem;
-            flex-wrap: wrap;
-        }
-        .btn-profile-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            border-radius: 99px;
-            font-size: 0.8125rem;
-            font-weight: 600;
-            background: var(--surface-2);
-            border: 1px solid var(--surface-border);
-            color: var(--text-main);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .btn-profile-pill:hover {
-            background: var(--surface-3);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-    </style>
 </head>
 
 <body>
